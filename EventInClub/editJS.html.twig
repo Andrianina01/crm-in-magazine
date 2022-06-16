@@ -1,0 +1,62 @@
+<!-- dodson 20190201 -->
+
+<!-- dodson 20190314 -->
+{% set dates = evenement | dates_busy %}
+{% set txt = '' %}
+{% if dates | length > 0 %}
+  {% for d in dates %}
+    {% set txt = txt ~ d %}
+    {% if loop.last == 0 %}
+      {% set txt = txt ~ ',' %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+<input type="hidden" id="datesBusy" value="{{txt}}">
+<!-- dodson end -->
+
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+        // dodson 20190314
+        var debutDate = new Date("{{ evenement.datet | date('Y-m-d') }}");
+        var finDate = new Date("{{ evenement.datetEnd | date('Y-m-d') }}");
+
+        // dodson 20190314
+        var tab = $("#datesBusy").val().split(",");
+        var datesBusy = [];
+        for (var i = 0; i < tab.length; i++) {
+          datesBusy[i] = new Date(tab[i]);
+        }
+        // end dodson
+
+        // dodson 20190314 select nb de place dispo
+        $('.form_date').change(function(){
+          var url = $(this).attr('ajax-url');
+          var date = $("#reservation_edit_myDatePredilection").val();
+          var mySelect = $("#reservation_edit_nbPlace");
+          if (date.length != 0) {
+            $.get(url,{
+                date: date
+              },function(data){
+                var n = parseInt(data);
+                var options = "";
+                if (n == 0) {
+                  mySelect.html('');
+                }else{
+                  for (i = 1; i <= n; i++) {
+                    options += "<option value='"+i+"'>"+i+"</option>";
+                  }
+                  mySelect.html(options);
+                }
+            });
+          }else{
+            mySelect.html('');
+          }
+        });
+        // end dodson
+
+
+	})
+</script>
+<!-- end dodson -->

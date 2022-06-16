@@ -1,0 +1,402 @@
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		var stringDate = $("#softivendor_crmbundle_game_dateBeginTemp2").val();
+		var stringDateOk = getDateInFormat(stringDate);
+		var d = new Date(stringDateOk);
+	
+		$("#softivendor_crmbundle_game_gamePlaces label").each(function(index) {
+            var j = (d.getDate() < 10)?'0'+d.getDate():d.getDate();
+            var x = d.getMonth() + 1;
+            var m = (x < 10)?'0'+x:x;
+            var Y = d.getFullYear();
+            var date_format1 = (j+'/'+m+'/'+Y);
+            var date_format2 = Y+'-'+m+'-'+j;
+            var inputDate = $(this).parent().next();
+		  	var value = inputDate.val().replace(/__date_value__/g, date_format2);
+		  	var label = $(this).text().replace(/__date__/g, date_format1);
+            $(this).text(label);
+            inputDate.val(value);
+		  	d.setDate(d.getDate() + 1);   
+		});
+		
+		 // tableau mois
+        function getDateInFormat(date,format = '')
+        {
+            var monthsArray = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+            var tabDate = date.split(" ");
+            var d = tabDate[0];
+            var x = parseInt(jQuery.inArray(tabDate[1], monthsArray));
+            var m = (x + 1) < 10 ? '0'+ (x + 1) : x + 1;
+            var Y = tabDate[2];
+            if (format == 'dd/mm/YYYY') {
+                return d+'/'+m+'/'+Y;
+            }
+            return Y+'-'+m+'-'+d;
+        }
+
+        // remplir dtp_input2 et dtp_input3
+        var val1 = $("#softivendor_crmbundle_game_dateBeginTemp2").val();
+        var val2 = $("#softivendor_crmbundle_game_dateEnd").val();
+        if(val1 != '')
+        {
+        	$("#dtp_input3").val(getDateInFormat(val1));
+        }
+        if(val2 != '')
+        {
+        	$("#dtp_input2").val(getDateInFormat(val2));
+        }
+	});
+</script>
+
+<script>
+
+		//fonction pour l'api google maps
+      function initMap() {
+        var ville = /** @type {!HTMLInputElement} */(
+            document.getElementById('softivendor_crmbundle_game_ville'));
+
+         var input = /** @type {!HTMLInputElement} */(
+            document.getElementById('softivendor_crmbundle_game_adresse'));
+
+        var types = document.getElementById('type-selector');
+
+        var autocomplete = new google.maps.places.Autocomplete(input);//permet l'autocompletion
+        var autocompleteville = new google.maps.places.Autocomplete(ville);//permet l'autocompletion
+        
+
+        autocomplete.addListener('place_changed', function() {
+          var placess = autocomplete.getPlace();
+          var latss = placess.geometry.location.lat();
+          var lngss = placess.geometry.location.lng();
+          console.log(latss);
+          console.log(lngss);
+          var inputlat = document.getElementById('softivendor_crmbundle_game_lat');
+          var inputlong = document.getElementById('softivendor_crmbundle_game_longit');
+           $('#softivendor_crmbundle_game_lat').val(latss);
+              $('#softivendor_crmbundle_game_longit').val(lngss);
+        });
+        //autocomplete ville
+        autocompleteville.addListener('place_changed', function() {
+            var addr = document.getElementById('softivendor_crmbundle_game_adresse');
+            var inputlat = document.getElementById('softivendor_crmbundle_game_lat');
+              var inputlong = document.getElementById('softivendor_crmbundle_game_longit');
+            console.log('val');
+            console.log(inputlat.value);
+            console.log(inputlong.value);
+            console.log(addr.value);
+            if ( 
+                inputlat.value == ""  ||
+                inputlong.value == "" ||
+                addr.value == ""
+            ){
+              var placess = autocompleteville.getPlace();
+              var latss = placess.geometry.location.lat();
+              var lngss = placess.geometry.location.lng();
+              console.log(latss);
+              console.log(lngss);
+
+              $('#softivendor_crmbundle_game_lat').val(latss);
+              $('#softivendor_crmbundle_game_longit').val(lngss);
+          }
+        });
+
+
+      }
+</script>
+
+
+
+
+<script type="text/javascript">
+	//tinymce listener
+	function callback_tinymce_init(editor) {
+	    //console.log(editor);
+	}
+
+	//datepicker
+    // $('.form_datetime').datetimepicker({
+    //     language:  'fr',
+    //     weekStart: 1,
+    //     todayBtn:  1,
+    //     autoclose: 1,
+    //     todayHighlight: 1,
+    //     startView: 2,
+    //     forceParse: 0,
+    //     //showMeridian: 1,
+    // });
+
+    // $('.form_date').datetimepicker({
+    //     language:  'fr',
+    //     weekStart: 1,
+    //     todayBtn:  1,
+    //     autoclose: 1,
+    //     todayHighlight: 1,
+    //     startView: 2,
+    //     minView: 2,
+    //     forceParse: 0,
+    //     onSelect: function() {
+    //         $(this).change();
+    //     }
+    // });
+
+	$('document').ready(function() {
+
+		$('#softivendor_crmbundle_game_titre').change(function() {
+			updateMetaTitle();
+		});
+        toggle_period();
+        $("#softivendor_crmbundle_game_privateGame").parent().hide();
+       /* $("#softivendor_crmbundle_game_privateGame").change(function(){
+            
+        });*/
+        console.log('aot');
+
+        function toggle_period()
+        {   console.log('sdf');
+            var gamePrivate = $("#softivendor_crmbundle_game_privateGame").get(0).checked;
+            if (gamePrivate === true) {
+                $(".game-period").removeClass('is_hide');
+                $("#softivendor_crmbundle_game_prixInvite").prop('disabled', true);
+                $("#softivendor_crmbundle_game_prixCollaborateur").prop('disabled', true);
+            }else{
+                $(".game-period").addClass('is_hide');
+                $("#softivendor_crmbundle_game_period").prop('checked', false);
+                $("#softivendor_crmbundle_game_prixInvite").prop('disabled', false);
+                $("#softivendor_crmbundle_game_prixCollaborateur").prop('disabled', false);
+            }
+            show_date_fin();
+        }
+        console.log('fin');
+        toggle_period();
+        console.log('fin2');
+        // dodson go
+        show_date_fin();
+        $("#softivendor_crmbundle_game_period").change(function(){
+            show_date_fin();
+        });
+        console.log('fin3');
+
+        function show_date_fin()
+        {
+            var check = $("#softivendor_crmbundle_game_period").get(0).checked,
+                ds = $(".simple-date"),
+                dp = $(".period-date"),
+                input1 = $("#softivendor_crmbundle_game_dateBeginTemp1"),
+                input2 = $("#softivendor_crmbundle_game_dateBeginTemp2");
+                input3 = $("#softivendor_crmbundle_game_dateEnd");
+                nbPlace = $("#softivendor_crmbundle_game_nbPlace"),
+                nbPlaceParent = $('.nb-place');
+            if(check === true) {
+                ds.removeClass('is_visible')
+                dp.addClass('is_visible');
+                input1.removeAttr('required');
+                input2.attr('required','required');
+                input3.attr('required','required');
+                // dodson 20190311
+                (nbPlace.val().trim() == '')?nbPlace.val(0):nbPlace.val(nbPlace.val());
+                nbPlace.prop('disabled', true);
+                nbPlaceParent.hide();
+
+            }else{
+                dp.removeClass('is_visible')
+                ds.addClass('is_visible');
+                input1.attr('required','required');
+                input2.removeAttr('required');
+                input3.removeAttr('required');
+                // dodson 20190311
+                (nbPlace.val().trim() == '')?nbPlace.val(0):nbPlace.val(nbPlace.val());
+                nbPlace.prop('disabled', false);
+                nbPlaceParent.show();
+            }
+        }
+        // dodson end
+
+		//js validation
+		$('.save').on('click', function callback_tinymce_init(editor) {
+			console.log(editor);
+			tinyMCE.triggerSave();
+
+			//validation enseigne
+            var valideTitre = 1;
+            var titre = $('#softivendor_crmbundle_game_titre');
+            var msgErrorTitre = $('.error-titre');
+            if ( titre.val().trim() == "" ){
+                valideTitre = 0;
+                msgErrorTitre.text('Veuillez complétez le champ Titre s\'il vous plait');
+            }else{
+                valideTitre = 1;
+                msgErrorTitre.text('');
+            }
+            //validation description
+            var valideDescription = 1;
+            var description = $(".tinymce");
+            var msgErrorDescription = $('.error-description');
+            if (description.val().trim() == ""){
+                valideDescription = 0;
+                msgErrorDescription.text('Veuillez complétez le champ Description s\'il vous plait');
+            }else{
+                valideDescription = 1;
+                msgErrorDescription.text('');
+            }
+            //validation bandeau
+            var valideBandeau = 1;
+            var bandeau = $('#softivendor_crmbundle_game_fileBandeau');
+            var msgErrorBandeau = $('.error-fileBandeau');
+            if (bandeau.val().trim() == "" && $('#bandeauImg').length == 0){
+                valideBandeau = 0;
+                msgErrorBandeau.text('Veuillez selectionnez votre  Bandeau s\'il vous plait');
+            }else{
+                valideBandeau = 1;
+                msgErrorBandeau.text('');
+            }
+
+            //dodson
+            var period = $("#softivendor_crmbundle_game_period").get(0).checked;
+            var valideDateBegin1 = 1;
+            var valideDateBegin2 = 1;
+            var valideDateEnd = 1;
+            var msgErrorDateBegin1 = $('.error-date-begin-1');
+            var msgErrorDateBegin2 = $('.error-date-begin-2');
+            var msgErrorDateEnd = $('.error-date-end');
+            var dateBegin1 = $('#softivendor_crmbundle_game_dateBeginTemp1');
+            var dateBegin2 = $('#softivendor_crmbundle_game_dateBeginTemp2');
+            var dateEnd = $('#softivendor_crmbundle_game_dateEnd');
+            if (period) {
+                if ( dateBegin2.val().trim() == "" ){
+                    valideDateBegin2 = 0;
+                    msgErrorDateBegin2.text('Veuillez completez le champ Date début s\'il vous plait');
+                }else{
+                    valideDateBegin2 = 1;
+                    msgErrorDateBegin2.text('');
+                }
+
+                if ( dateEnd.val().trim() == "" ){
+                    valideDateEnd = 0;
+                    msgErrorDateEnd.text('Veuillez completez le champ Date fin s\'il vous plait');
+                }else{
+                    valideDateEnd = 1;
+                    msgErrorDateEnd.text('');
+                }
+            }else{
+                if ( dateBegin1.val().trim() == "" ){
+                    valideDateBegin1 = 0;
+                    msgErrorDateBegin1.text('Veuillez completez le champ Date s\'il vous plait');
+                }else{
+                    valideDateBegin1 = 1;
+                    msgErrorDateEnd.text('');
+                }
+            }
+            //dodson
+            //validation Ville
+            var valideVille = 1;
+            var ville = $('#softivendor_crmbundle_game_ville');
+            var msgErrorVille =$('.error-ville');
+
+            if ( ville.val().trim() == "" ){
+                valideVille = 0;
+                msgErrorVille.text('Veuillez completez le champ Ville s\'il vous plait');
+            }else{
+                valideVille = 1;
+                msgErrorVille.text('');
+            }
+            //validation Adresse
+            var valideAdresse = 1;
+            var adresse = $('#softivendor_crmbundle_game_adresse');
+            var msgErrorAdresse =$('.error-adresse');
+
+            if ( adresse.val().trim() == "" ){
+                valideAdresse = 0;
+                msgErrorAdresse.text('Veuillez completez le champ Adresse s\'il vous plait');
+            }else{
+                valideAdresse = 1;
+                msgErrorAdresse.text('');
+            }
+            //validation Country
+            var valideCountry = 1;
+            var country = $('[name="country"]');
+            var msgErrorCountry =$('.error-country');
+
+            if ( country.val().trim() == "" ){
+                valideCountry = 0;
+                msgErrorCountry.text('Veuillez completez le champ Country s\'il vous plait');
+            }else{
+                valideCountry = 1;
+                msgErrorCountry.text('');
+            }
+            //validation nbPlace
+            var valideNbPlace = 1;
+            var nbPlace = $('#softivendor_crmbundle_game_nbPlace');
+            var msgErrorNbPlace =$('.error-nbPlace');
+
+            if ( nbPlace.val().trim() == "" ){
+                valideNbPlace = 0;
+                msgErrorNbPlace.text('Veuillez completez le champ Nombre de place s\'il vous plait');
+            }else{
+                valideNbPlace = 1;
+                msgErrorNbPlace.text('');
+            }
+             //validation lat
+            var valideLat = 1;
+            var lat = $('#softivendor_crmbundle_game_lat');
+            var msgErrorLat =$('.error-lat');
+
+            if ( lat.val().trim() == "" ){
+                valideLat = 0;
+                msgErrorLat.text('Veuillez completez le champ Latitude s\'il vous plait');
+            }else{
+                valideLat = 1;
+                msgErrorLat.text('');
+            }
+            //validation longit
+            var valideLongit = 1;
+            var longit = $('#softivendor_crmbundle_game_longit');
+            var msgErrorLongit =$('.error-longit');
+
+            if ( longit.val().trim() == "" ){
+                valideLongit = 0;
+                msgErrorLongit.text('Veuillez completez le champ Longitude s\'il vous plait');
+            }else{
+                valideLongit = 1;
+                msgErrorLongit.text('');
+            }
+
+            if (valideTitre == 0 ||
+            	valideDescription == 0 ||
+            	valideBandeau == 0 ||
+                valideVille == 0 ||
+                valideCountry == 0 ||
+                valideNbPlace == 0 ||
+                valideLat == 0 ||
+                valideLongit == 0 ||
+                valideAdresse == 0  ||
+            	valideDateBegin1 == 0 ||
+                valideDateBegin2 == 0 ||
+                valideDateEnd == 0
+            ){
+            	console.log('non valide');
+                $('.global-error').css('display','block');
+                return false;
+            }else{
+            	console.log('valide');
+                $('.global-error').css('display','none');
+                var formgame = $('#gameCreate');
+                formgame.submit();
+            }
+
+            $('form[name = "softivendor_crmbundle_game"]').submit();
+         });
+	});
+
+	function updateMetaTitle() {
+		titre = $('#softivendor_crmbundle_game_titre').val();
+		$('#softivendor_crmbundle_game_metaTitle').val(titre);
+	}
+	function updateMetaDescription() {
+		// description = $('#softivendor_crmbundle_game_description').val()
+		// $('#softivendor_crmbundle_game_metaDescription').val(description);
+	}
+
+
+
+</script>

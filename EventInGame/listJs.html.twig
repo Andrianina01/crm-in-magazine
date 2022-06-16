@@ -1,0 +1,304 @@
+<script type="text/javascript" >
+  
+$(document).ready(function(){
+
+$('.newuser').on('click',function()
+  {
+    var busnessId = $(this).data('idbus');
+
+    var dateEvent = $(this).data('event-date');
+
+    var userId = $(this).data('user-id');
+
+    var selectId = $(this).data('id-select');
+
+    var idEventAjx = $(this).data('event');
+
+    var userReplaceId = $(this).parent().parent().find('.selectedRemplacant').val();
+   
+    $('#bussnessId').val(busnessId);
+    $('#dateEvent').val(dateEvent);
+    $('#userId').val(userId);
+    $('#selectId').val(selectId);
+    $('#idEventAjx').val(idEventAjx);
+
+  })
+
+
+
+$('.saveUserNew').on('click', function(){
+ $("#myModalLabel").text('Ajout avec succès')
+  // $('form[name="softivendor_crmbundle_usergames"]').submit();
+
+ // $($("#selectId ").val()).load(location.href) ;
+
+
+   var fileInput = document.querySelector('input[type=file]');
+   var path = fileInput.value;
+   var fileName = path.split(/(\\|\/)/g).pop();
+ 
+   var form_data = new FormData(); 
+
+   form_data.append('nom', $('#nom').val());
+   form_data.append('prenom', $('#prenom').val());
+   form_data.append('civilite', $('#selectCiviliter').val());
+   form_data.append('logo', fileName);
+   form_data.append('bussnessId', $('#bussnessId').val());
+   form_data.append('dateEvent', $('#dateEvent').val());
+   form_data.append('idEventAjx', $('#idEventAjx').val());
+
+   var eventId = form_data.get('idEventAjx');
+   var bussnessId = form_data.get('bussnessId');
+
+
+
+   $.ajax({
+       method: "POST",
+       url: "{{ path('softivendor_crm_event_ingames_saveNewUser') }}",
+       processData: false,
+       contentType: false,
+       data: form_data
+   }).done(function( reponse ) {
+
+      rp = (JSON.parse(reponse));
+      $('#selectUser_'+ eventId +'_'+ bussnessId ).each(function(){
+          $(this).append('<option value = "'+ rp.idUser +'"> '+ rp.nom +' '+ rp.prenom+'</option> ')
+      })
+
+            $('.modal-contrat-modif').fadeIn(800, function(){
+                $(this).children().fadeIn(500)
+                }).delay(1000).fadeOut(800)
+
+      });
+
+
+  })
+
+
+
+
+
+// $('.table-in-game tr').each(function (){
+
+//   var eventId = $(this).find('input').attr('data-event-id');
+//   var userId = $(this).find('input').attr('data-id');
+
+
+//   $('.selectUser').prop('disabled',true);
+
+
+//   $(this).find('.Remplacer input[name="presence_'+userId+'_'+eventId+'"]').click(function(){
+
+//      // alert($('input[name="presence_'+userId+'_'+eventId+'"]').val());
+//      $('.selectUser').prop('disabled',false);
+//   })
+  
+// })
+
+})
+
+</script>  
+
+<script type="text/javascript" >
+  
+$(document).ready(function(){
+   $(document).on('click','.saveUser',function(){
+     $("#myModalLabel").text('Modification faite avec succès')
+     var status = $(this).parent().parent().find($( "input:checked" )).val();
+     var idRemplacant = $(this).parent().parent().find('.selectUser').val();
+     var userParent = $(this).parent().parent().find('.remplacant').attr('data-id');
+     var eventId = $(this).parent().parent().find('.remplacant').attr('data-event-id');
+
+     if(status == "Present"){
+
+      $.ajax({
+
+            method: "POST",
+            url: "{{ path('softivendor_crm_event_ingames_user_status') }}",
+            data: {
+                userParent: userParent,
+                status : status,
+                eventId : eventId,
+                idRemplacant : idRemplacant,
+            }
+
+          }).done(function(data) {
+               $(".nbr_part_"+eventId).load(location.href + " .count_"+eventId);
+               
+               $('.modal-contrat-modif').fadeIn(800, function(){
+                  
+                $(this).children().fadeIn(500)
+                }).delay(1000).fadeOut(800)
+
+             
+          })   
+        
+
+        
+        
+     }else if(status == "Absent"){
+
+       $.ajax({
+
+            method: "POST",
+            url: "{{ path('softivendor_crm_event_ingames_user_status') }}",
+            data: {
+                userParent: userParent,
+                status : status,
+                eventId : eventId,
+                idRemplacant : idRemplacant,
+            }
+
+          }).done(function(data) {
+               $(".nbr_part_"+eventId).load(location.href + " .count_"+eventId);
+               
+               $('.modal-contrat-modif').fadeIn(800, function(){
+                $(this).children().fadeIn(500)
+                }).delay(1000).fadeOut(800)
+
+             
+          })   
+
+     }else{
+
+        $.ajax({
+
+        method: "POST",
+        url: "{{ path('softivendor_crm_event_ingames_user_status_remplacant') }}",
+        data: {
+            idRemplacant: idRemplacant,
+            userParent: userParent,
+            status : status,
+            eventId : eventId,
+            // remplacantId : remplacantId,
+        }
+
+      }).done(function(data) {
+
+          $(".nbr_part_"+eventId).load(location.href + " .count_"+eventId);
+
+           $('.modal-contrat-modif').fadeIn(800, function(){
+                $(this).children().fadeIn(500)
+                }).delay(1000).fadeOut(800)
+              
+      })
+
+     }
+     
+
+
+
+        
+  });
+
+})
+</script>    
+
+
+<script type="text/javascript" >
+  
+$(document).ready(function(){
+  // $('.hideme').on('click',function(){
+  //   // $('form[name="softivendor_crmbundle_usergames"]').submit();
+  // });
+
+
+})
+</script>    
+
+
+
+
+  <script type="text/javascript">
+      
+      var exportAllGuestInOneEventInXlsx_option_path = "{{path('softivendor_crm_event_ingames_exportAllGuestInOneEventInXlsx')}}";
+      var exportAllFactureInXlsx_path = "{{path('softivendor_event_reservation_exportAllFactureInXlsx')}}";
+      var exportAllFactureInOneEventInXlsx_path = "{{path('softivendor_event_reservation_exportAllFactureInOneEventInXlsx')}}";
+      var exportAllFactureInPdf_path = "{{path('softivendor_event_reservation_exportAllFactureInPdf')}}";
+      var exportAllFactureInOneEventInPdf_path = "{{path('softivendor_event_reservation_exportAllFactureInOneEventInPdf')}}";
+      var exportAllGuestInOneEventInPdf_path="{{path('softivendor_crm_event_ingames_exportAllGuestInOneEventInPdf')}}"; //04 10 2021
+
+      var $export_button = $('#export_button');
+      var $export_option = $('#export_option'); 
+      var $voir_export_event = $('.voir_export_event');
+      var exportAllEventInXlsx_option_value = '1';
+      var exportAllFactureInXlsx_option_value = '2';
+      var exportAllFactureInPdf_option_value = '3';
+      var exportAllGuestInOneEventInXlsx_option_value = '1';
+      var exportAllFactureInOneEventInXlsx_option_value = '2';
+      var exportAllFactureInOneEventInPdf_option_value = '3';
+      var exportAllGuestInOneEventInPdf_option_value = '4'; //04 10 2021
+      var testGenerateXlsx_option_value = '99';
+
+      $(function () {
+          onClickExportButtonDoExport(); 
+      });
+
+      function onClickExportButtonDoExport () {
+          onClickExportForAllEvent ();
+          onClickExportForOneEvent ();
+      }
+
+      function onClickExportForAllEvent () {
+          $export_button.click(function () {
+              exportByExportOptionVal ();
+          });
+      }
+
+      function onClickExportForOneEvent() {
+          $voir_export_event.click(function () {
+              var event_id = $(this).next('.event_id').val(); 
+              var export_option_event = $(this).prev('.export_option_event').val();
+              console.log(event_id);
+              exportByExportOptionValForOneEvent (event_id, export_option_event);
+          });
+      }
+
+      function exportByExportOptionVal () {
+          switch ($export_option.val()) {
+              case exportAllEventInXlsx_option_value:
+                  openNewTabToPath (exportAllEventInXlsx_path); 
+                  break;
+              case testGenerateXlsx_option_value:
+                  openNewTabToPath (testGenerateXlsx_path); 
+                  break;
+              case exportAllFactureInXlsx_option_value:
+                  openNewTabToPath (exportAllFactureInXlsx_path); 
+                  break;
+              case exportAllFactureInPdf_option_value:
+                  openNewTabToPath (exportAllFactureInPdf_path); 
+                  break; 
+              
+              default: 
+                  console.log(exportAllEventInXlsx_path);
+                  break;
+          }
+      }
+
+      function exportByExportOptionValForOneEvent (event_id, export_option_event) {  
+          switch (export_option_event) {
+              case exportAllGuestInOneEventInXlsx_option_value:
+                  openNewTabToPath (exportAllGuestInOneEventInXlsx_option_path + '?eventid=' + event_id); 
+                  break; 
+              case exportAllFactureInOneEventInXlsx_option_value:
+                  openNewTabToPath (exportAllFactureInOneEventInXlsx_path + '?eventid=' + event_id); 
+                  break;
+              case exportAllFactureInOneEventInPdf_option_value:
+                  openNewTabToPath (exportAllFactureInOneEventInPdf_path + '?eventid=' + event_id); 
+                  break;
+
+              case exportAllGuestInOneEventInPdf_option_value:
+                  openNewTabToPath (exportAllGuestInOneEventInPdf_path + '?eventid=' + event_id); 
+                  break;
+
+              default: 
+                  console.log(exportAllEventInXlsx_path);
+                  break;
+          }
+      }
+
+      function openNewTabToPath (path) {
+          window.open(path, '_blank');
+      }
+
+      </script>   

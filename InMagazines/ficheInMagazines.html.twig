@@ -1,0 +1,501 @@
+{% extends ':crm:layout.html.twig' %} {% block header %}
+
+<!--logo end-->
+<div class="nav notify-row" id="top_menu">
+    <ul class="nav top-menu">
+
+        {#
+        <li>
+            <a class="list-entreprise" href="{{ path('softivendor_crm_business_fiche_central_ajout') }}">
+                <i class="fa fa-text-o"></i> AJOUTER
+            </a>
+        </li> #}
+        <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+        <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_inmagazines') }}">
+                <i class="fa fa-file-text-o"></i> FICHE
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_business_list',{type : 'in_magazines'}) }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="top-menu fiche_btn">
+    <ul class="nav pull-left top-menu">
+        {% if prev != false %}
+        <li><a href="{{ path('softivendor_crm_business_fiche_inmagazines') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+        {% endif %} {% if next != false %}
+        <li><a href="{{ path('softivendor_crm_business_fiche_inmagazines') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %} {% block body %} {% for key, messages in app.session.flashbag.all() %} {#
+<div class="ui alert-{{ key }} alert alert-success slide-right">
+    {% for message in messages %} - {{ message }} <br /> {% endfor %}
+</div>
+<div class="clearing ui divider"></div> #}
+
+
+<div class="modal-contrat-suppr-2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header text-center">
+                <h4 class="modal-title" id="myModalLabel"> {% for message in messages %} {{ message }} <br /> {% endfor %}</h4>
+            </div>
+            <div class="modal-body">
+                <i class="fa fa-check-circle true"></i>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="container-fluid">
+    <div class="row formulaire-add in-magazine-fiche">
+        <div class="col-lg-12 main-chart">
+
+            <input type="hidden" id="id_business" value="{{business.id}}">
+
+            <div class="row">
+                <div class="col-sm-3 pl-5 pt-3">
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail">
+                            {% if business.logo %}
+                            <img src=" {{app.request.basepath}}/img/logo/{{business.logo}}"> {% else %}
+                            <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9 pt-3">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="showback">
+                                <h2>{{ business.societe }}</h2>
+                            </div>
+                            <div class="d-flex">
+                                {{ activeHeaderContrat(business.id) }}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <article>
+                                <div class="bouton_crud">
+                                    <div class="checkbox">
+                                        <label>
+                                            {# {{ form_widget(form.partenaire) }} #}
+                                            {% if business.Partenaire != 0 %}
+                                            <span class="checkbox_case">
+                                                <input type="checkbox" id="partenaire" name="partenaire" checked>
+                                                    <span class="check"></span>
+                                                </span>
+                                            {% else %}
+                                                <span class="checkbox_case">
+                                                <input type="checkbox" id="partenaire" name="partenaire">
+                                                    <span class="check"></span>
+                                                </span>
+                                            {% endif %}
+                                            Partenaire
+                                            </label>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="row right-column-top none-md">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-3">
+
+                            <div class="pt-2 lg-3 bloc-right" style="">
+                                <div class="list-group historique">
+                                  <h4><i class="fa fa-angle-right"></i> Date signature</h4>
+                                    {% if dateSignature is empty %} Aucun contrat signé {% else %} {% for date in dateSignature %} {{date.dateSignature|date("d/m/Y")}} {% endfor %} {% endif %}
+
+                                    <h4><i class="fa fa-angle-right"></i> Date fin d'adhésion</h4>
+                                    {% if dateSignature is empty %} Aucun contrat signé {% else %} {% for date in dateFinAdhesion %} {{date.dateFinAdhesion|date("d/m/Y")}} {% endfor %} {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="bloc-right">
+                                <div class="list-group">
+
+                                    <article>
+                                        <h4> Référent commercial</h4>
+                                       
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-7 pt-3">
+                    <h3><i class="fa fa-angle-right"></i> Coordonnées & infos </h3>
+
+                    <div class="form-panel pt-3 liste-collaborateur">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <form class="form-horizontal style-form in-magazine-form" method="get">
+                                    <div class="form-group mt-3">
+                                        <label class="col-sm-2 control-label">Enseigne :</label>
+                                        <div class="col-sm-4">
+                                            <!--  <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.enseigne}}</p>
+                                        </div>
+
+                                        <label class="col-sm-2 control-label">Adresse :</label>
+                                        <div class="col-sm-4">
+                                            <!-- <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.adresse}}</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group mt-3">
+
+                                        <label class="col-sm-2 control-label">Tel :</label>
+                                        <div class="col-sm-4">
+                                            <!--  <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.tel}}</p>
+                                        </div>
+                                        <label class="col-sm-2 control-label">Mail :</label>
+                                        <div class="col-sm-4">
+                                            <!-- <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.email}}</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group mt-3">
+
+                                        <label class="col-sm-2 control-label">Ville :</label>
+                                        <div class="col-sm-4">
+                                            <!--  <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.ville}}</p>
+                                        </div>
+                                        <label class="col-sm-2 control-label">Site :</label>
+                                        <div class="col-sm-4">
+                                            <!-- <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.siteWeb}}</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group mt-3">
+
+                                        <label class="col-sm-2 control-label">Code postal :</label>
+                                        <div class="col-sm-4">
+                                            <!--  <input type="text" class="form-control" disabled value=""> -->
+                                            <p>{{business.codePostal}}</p>
+                                        </div>
+                                        
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-5  pt-3  right-column">
+                   
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <div class="bloc-right">
+                                <div class="list-group">
+                                    <h4><i class="fa fa-angle-right"></i> Suivi "automatique" du contact</h4>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="bloc-right">
+                                <div class="list-group">
+                                    <h4><i class="fa fa-angle-right"></i> Infos / Suivi</h4>
+                                    <article>
+
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-12">
+
+                    <h3><i class="fa fa-angle-right"></i> Parutions IN Magazine </h3>
+                    <div class="in-magazine-parutions">
+                        <div class="filtre row">
+                            <div class="col-md-3 col-lg-2">
+                                <label class="control-label">Filtre par année :</label>
+                                <div class="filtre_date">
+                                    <form action="{{path('softivendor_crm_business_fiche_inmagazines',{next : business.id , selectDate : datet }) }}" method="get" name="form_date">
+
+                                        <input type="hidden" name="next" value="{{business.id}}">
+
+                                        <select class="form-control date" name="selectDate" onChange="this.form.submit() ">
+                            {% for date in dateBegin %}
+                            <option  value="{{ date }}" {% if datet == date%}selected{% endif %}>{{ date}}</option>
+                            {% endfor %}
+                            <option  value="{{ dateEnd|date("Y") }}" {% if datet == dateEnd|date("Y")%}selected{% endif %}>{{ dateEnd|date("Y") }}</option>
+                              
+                        </select>
+
+                                    </form>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 table-responsive">
+                                <table class=" table table-parution">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">Parutions</th>
+                                            <th width="15%">Format</th>
+                                            <th width="20%">Informations complémentaire</th>
+                                            <th width="20%">Url parutions</th>
+                                            <th width="25%">PDF parution</th>
+                                            <th width="10%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% for magazine in magazines%}
+                                        <tr>
+                                            <form name="parution_{{magazine.id}}" method="POST" action="{{path('softivendor_crm_business_fiche_inmagazines',{next : business.id })}} " enctype="multipart/form-data">
+                                                <td>{{magazine.nom}} {{magazine.dateDebut|date("M Y")}}/{{magazine.dateFin|date("M Y")}}</td>
+                                                <input type="hidden" name="magazine" id="magazine" value="{{magazine.id}}" class="form-control">
+
+                                                <td>
+                                                    {% set texte = null %} {% set formatParution = null %} {% set url = null %} {% set file = null %} {% set idParution = "" %} {% for parution in parutions %} {% if parution.business.id == business.id and parution.magazine.id == magazine.id %} {% set texte
+                                                    = parution.texte %} {% set formatParution = parution.format %} {% set idParution = parution.id %} {% set url = parution.url %} {% set file = parution.file %} {% endif %} {% endfor %}
+
+                                                    <select name="select_format" class="form-control">
+                                                        <option value="" selected  ></option>
+                                                {% for format in formats%}
+                                                    {% if formatParution is not null and formatParution.id == format.id  %}
+                                                        <option value="{{formatParution.id}}" selected  >{{formatParution.format}}</option>
+                                                
+                                                    {% else %}
+                                                        <option value="{{format.id}}">{{format.format}}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                              </select>
+
+                                                    <input type="hidden" name="parution" id="parution" value="{{idParution}}" class="form-control">
+
+                                                </td>
+                                                <td>
+                                                    {% if texte is not null %}
+                                                    <input type="text" name="texte" value="{{ texte }}" class="form-control"> {% else %}
+                                                    <input type="text" name="texte" value="" class="form-control"> {% endif %}
+                                                </td>
+
+                                                <td class="td_4">
+                                                    {% if url is not null %}
+                                                    <input type="text" name="url" value="{{url}}" class="form-control"> <a target="_blank" href="{{url }}"><i class="fa fa-external-link"></i></a> {% else %}
+                                                    <input type="text" name="url" value="" class="form-control"> {% endif %}
+                                                </td>
+
+                                                <td>
+                                                    <ul class="list-inline inmagazine">
+                                                        <li class="liste-{{idParution}}">
+                                                            {% if file is not empty %}
+                                                            <div class="Editer_suppr">
+                                                                <a target="_blank" href="{{asset('/web/pdf/crm/')}}{{file }}">
+                                                                    {{file }} <i class="fa fa-search"> </i>
+                                                                </a>
+                                                                <a>
+                                                                    <i data-id="{{idParution}}" class="fa fa-trash-o deletePdf " data-toggle="modal" data-target="#myModalSuppression">
+                                                                    </i>
+                                                                </a>
+                                                            </div>
+                                                            {% else %}
+                                                            <input type="file" name="file"> 
+                                                            {% endif %}
+
+                                                        </li>
+                                                    </ul>
+
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-theme04 saveinbase " data-id="{{magazine.id}}" title="Enregistrer">Enregistrer</button>
+                                                </td>
+                                            </form>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-contrat-suppr" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header text-center">
+                <h4 class="modal-title" id="myModalLabel">Suppression faite avec succès</h4>
+            </div>
+            <div class="modal-body">
+                <i class="fa fa-check-circle true"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="myModalSuppression" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <input type="hidden" name="parutionId" id="parutionId" value="">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+            </div>
+            <div class="modal-body">
+                Voulez-vous vraiment supprimer cette pdf ?
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-dismiss="modal" class="btn btn-default delete">Oui</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        // var partenaire =$("input[name='checkbox-partenaire']:checked").val();
+        $('#partenaire').click(function() {
+            var iscked = $(this).is(':checked');
+            var id = $('#id_business').val();
+            $.ajax({
+
+                method: "POST",
+                url: "{{ path('softivendor_crm_business_fiche_ajaxByBusness') }}",
+                data: {
+                    id: id,
+                    checked: iscked
+                }
+
+            }).done(function() {
+                console.log("ok");
+            })
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.saveinbase').on('click', function() {
+            let id = $(this).data('id');
+
+            $('form[name="parution_' + id + '"]').submit();
+
+            $(this).parent().parent().submit();
+        })
+        
+        $('.td_4').each(function(){
+            let input = $(this).find('.form-control').val();
+            let link = $(this).find('a');
+
+            if(input != ""){
+                link.show();
+            }else{
+                link.hide();
+            }
+        })
+
+
+        $('.addUrl').on('click', function() {
+            let idBusiness = $(this).data('id-business');
+            let idMagazine = $(this).data('id-magazine');
+            let parutionId = $(this).data('id-parution');
+
+            $('#idBusiness').val(idBusiness);
+            $('#idMagazine').val(idMagazine);
+            $('#parutionId').val(parutionId);
+
+
+        })
+
+
+
+
+        $(document).on("click", ".deletePdf ", function() {
+
+            id = $(this).data('id');
+
+
+            $("#myModalSuppression").modal('show');
+            $('.delete').on("click", function() {
+
+                var dom = $(this);
+                var id_parution = id;
+
+
+
+                //launch ajax to suppression contrats
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_inmagazines_delete_pdf') }}",
+                    data: {
+                        id: id_parution
+                    }
+                }).done(function(reponse) {
+                    //remove html if delete is success
+                    if (reponse == "ok") {
+
+
+                        $('.modal-contrat-suppr').fadeIn(800, function() {
+                            $(this).children().fadeIn(500)
+                        }).delay(1000).fadeOut(800, function(){
+                            location.href = "{{ path('softivendor_crm_business_fiche_inmagazines',{next:business.id}) }}";
+                        })
+
+                        
+                    }
+
+
+
+                });
+                // //end suppression
+            })
+        });
+
+    });
+</script>
+
+
+{% endblock %}

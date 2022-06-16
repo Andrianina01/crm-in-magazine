@@ -1,0 +1,122 @@
+{% extends ':crm:layout.html.twig' %}
+
+    {% block header %}{% endblock %}
+
+    {% block body %}
+
+        <div class="row formulaire-add">
+            <div class="col-lg-10 m-auto main-chart">
+             <div class="row">
+               <div class="col-lg-12 pt-3">
+               	<a href="{{path('softivendor_user_list')}}" class="btn btn-theme02 btn-md">Retour à la liste</a>
+                 <div class="form-panel pt-6">
+                  <div class="title pb-3">
+                      <h3><i class="fa fa-angle-right"></i> Création d'utilisateur</h3>
+                    </div> 
+                     {{ form_start(form,{'attr': {novalidate:'novalidate','id': 'form_user','class':'form-horizontal style-form'}}) }}
+                      
+                     <div class="form-group">
+                       <label class="col-sm-2 col-sm-2 control-label">Nom</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.nom,{'attr':{'class':'form-control'}})}}
+                        <div class="error">
+                              {{ form_errors(form.nom) }}
+                              <span class="error-nom error"></span>    
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                       <label class="col-sm-2 col-sm-2 control-label">Prénom(s)</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.prenom,{'attr':{'class':'form-control'}})}}
+                        <div class="error">
+                              {{ form_errors(form.prenom) }}
+                              <span class="error-nom error"></span>    
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Email</label>
+                      <div class="col-sm-10">
+                         {{ form_widget(form.email,{'attr':{'class':'form-control'}})}}
+                         <div class="error">
+                              {{ form_errors(form.email) }}
+                              <span class="error-nom error"></span>    
+                          </div>   
+                      </div>               
+                    </div>
+
+                     <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Login</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.username,{'attr':{'class':'form-control'}})}}
+                         <div class="error">
+                              {{ form_errors(form.username) }}
+                              <span class="error-nom error"></span>    
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Mot de passe</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.password.first,{'attr':{'class':'form-control'}})}} 
+                        <div class="error">
+                          {{ form_errors(form.password.first) }}
+                          <span class="error-pass-first error"></span>   
+                      </div>
+                      </div>
+                    </div>
+                   
+
+                    <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">Retapez le Mot de passe</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.password.second,{'attr':{'class':'form-control'}})}} 
+                        <div class="error">
+                        {{ form_errors(form.password.second) }}
+                        <span class="error-pass-first error"></span>
+                      </div>
+                      </div>
+                     </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Type d'utilisateur</label>
+                      <div class="col-sm-10">
+                      {{form_widget(form.rolecrm,{'attr':{'class':'form-control'}})}}
+                      </div>
+                    </div>
+
+                    <button class="btn btn-theme btn-submit center-block" href="index.html" type="submit" title="Enregistrer">Enregistrer</button>
+                  
+                {{form_end(form)}}
+                 
+                </div>
+               </div>
+             </div>
+
+            </div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                      Hi there, I am a Modal Example for Dashio Admin Panel.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" >Oui</button>
+                      <button type="button" class="btn btn-default"data-dismiss="modal">Non</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- /col-lg-3 -->
+          </div>
+
+
+    {% endblock %}

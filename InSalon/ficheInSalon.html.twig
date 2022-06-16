@@ -1,0 +1,310 @@
+{% extends ':crm:layout.html.twig' %} {% block header %}
+
+<!--logo end-->
+<div class="nav notify-row" id="top_menu">
+    <ul class="nav top-menu">
+
+        {#
+        <li>
+            <a class="list-entreprise" href="{{ path('softivendor_crm_business_fiche_central_ajout') }}">
+                <i class="fa fa-text-o"></i> AJOUTER
+            </a>
+        </li> #}
+        <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+        <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_insalon') }}">
+                <i class="fa fa-file-text-o"></i> FICHE
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_business_list',{type : 'in_salon'}) }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="top-menu fiche_btn">
+    <ul class="nav pull-left top-menu">
+        {% if prev != false %}
+        <li><a href="{{ path('softivendor_crm_business_fiche_insalon') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+        {% endif %} {% if next != false %}
+        <li><a href="{{ path('softivendor_crm_business_fiche_insalon') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %} {% block body %}
+
+<div class="container-fluid">
+    <div class="row formulaire-add in-game-fiche">
+        <div class="col-lg-12 main-chart">
+
+            <input type="hidden" id="id_business" value="{{business.id}}">
+
+            <div class="row">
+                <div class="col-sm-3 pl-5 pt-3">
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail">
+                            {% if business.logo %}
+                            <img src=" {{app.request.basepath}}/img/logo/{{business.logo}}"> {% else %}
+                            <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+                        </div>
+                        {#
+                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                        <div>
+                            <span class="btn btn-theme02 btn-file">
+                    <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                            <input type="file" class="default">
+                            </span>
+                            <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                        </div> #}
+                    </div>
+                </div>
+
+                <div class="col-sm-9 pt-3">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="showback">
+                                <h2>{{ business.societe }}</h2>
+                            </div>
+                            <div class="d-flex">
+                                {{ activeHeaderContrat(business.id) }}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <article>
+                                <div class="bouton_crud">
+                                    <div class="checkbox">
+                                        <label>
+                                            {# {{ form_widget(form.partenaire) }} #}
+                                            {% if business.Partenaire != 0 %}
+                                            <span class="checkbox_case">
+                                                <input type="checkbox" id="partenaire" name="partenaire" checked>
+                                                    <span class="check"></span>
+                                                </span>
+                                            {% else %}
+                                                <span class="checkbox_case">
+                                                <input type="checkbox" id="partenaire" name="partenaire">
+                                                    <span class="check"></span>
+                                                </span>
+                                            {% endif %}
+                                            Partenaire
+                                            </label>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="row right-column-top none-md">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-3">
+
+                            <div class="pt-2 lg-3 bloc-right" style="">
+                                <div class="list-group historique">
+                                  <h4><i class="fa fa-angle-right"></i> Date signature</h4>
+                                  
+                                    <h4><i class="fa fa-angle-right"></i> Date fin d'adhésion</h4>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="bloc-right">
+                                <div class="list-group">
+
+                                    <article>
+                                        <h4> Référent commercial</h4>
+                                       
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-7 pt-3">
+                    <h3><i class="fa fa-angle-right"></i> Fiche in-salon</h3>
+
+                    <div class="form-panel pt-3 liste-collaborateur">
+                        <div class="row">
+                            {#
+                            <div class="col-md-2">
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <div class="fileupload-new thumbnail">
+                                        <img src="{{asset('/web/crm/img/nologo.png')}}" alt="">
+                                    </div>
+                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                    <div>
+                                        <span class="btn btn-theme02 btn-file">
+                        <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                        <input type="file" class="default">
+                                        </span>
+                                        <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                                    </div>
+                                </div>
+                            </div> #}
+                            <div class="col-md-10">
+                                <form class="form-horizontal style-form in-salon-form" method="get">
+                                    <div class="form-group mt-3">
+                                        <label class="col-sm-2 col-sm-2 control-label">Nom</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" disabled value="{{business.enseigne}}">
+                                        </div>
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Date</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" disabled value="{{business.adresse}}">
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group mt-3">
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Lieu </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" disabled value="{{business.tel}}">
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!--  <div class="row">
+                            <div class="col-lg-12">
+                                <article>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-theme" title="Enregistrer">Enregistrer</button>
+                                        <button type="button" class="btn btn-theme" data-toggle="modal" title="" data-target="#myModalSuppression">Supprimer</button>
+                                    </div>
+                                </article>
+                            </div>
+                        </div> -->
+                    </div>
+
+                </div>
+                <div class="col-lg-5  pt-3  right-column">
+                    <div class="row block-md">
+                        <div class="col-lg-6">
+                            <div class="pt-2 lg-3 bloc-right" style="">
+                                <div class="list-group">
+                                    <h4><i class="fa fa-angle-right"></i> Date signature</h4>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="bloc-right">
+                                <div class="list-group">
+                                    <article>
+                                        <h4><i class="fa fa-angle-right"></i> Référent commercial</h4>
+
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <div class="bloc-right">
+                                <div class="list-group">
+                                    <h4><i class="fa fa-angle-right"></i> Suivi "automatique" du contact</h4>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="bloc-right">
+                                <div class="list-group">
+                                    <h4><i class="fa fa-angle-right"></i> Infos / Suivi</h4>
+                                    <article>
+
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalAjoutpopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+
+            <div class="modal-footer">
+                <a href="" class="btn btn-default delete">Oui</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalSuppression" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+            </div>
+            <div class="modal-body">
+                Voulez-vous vraiment supprimer cet utilisateur ?
+            </div>
+            <div class="modal-footer">
+                <a href="" class="btn btn-default delete">Oui</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        // var partenaire =$("input[name='checkbox-partenaire']:checked").val();
+        $('#partenaire').click(function() {
+            var iscked = $(this).is(':checked');
+            var id = $('#id_business').val();
+            $.ajax({
+
+                method: "POST",
+                url: "{{ path('softivendor_crm_business_fiche_ajaxByBusness') }}",
+                data: {
+                    id: id,
+                    checked: iscked
+                }
+
+            }).done(function() {
+                console.log("ok");
+            })
+
+
+        });
+
+
+    });
+</script>
+
+
+{% endblock %}

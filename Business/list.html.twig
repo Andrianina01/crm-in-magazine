@@ -1,0 +1,254 @@
+{% extends ':crm:layout.html.twig' %}
+
+
+
+{% block header %}
+      <div class="nav notify-row" id="top_menu">
+        <ul class="nav top-menu">
+          <!-- settings start -->
+          <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+          <li class="dropdown">
+            {% if type == 'central' %}
+                <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_central') }}">
+            {% elseif type == 'in_club' %}
+                <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_inclub') }}">
+            {% elseif type == 'in_games' %}
+                <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_ingames') }}">            
+            {% elseif type == 'in_magazines' %}
+                <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_inmagazines') }}">
+            {% elseif type == 'in_salon' %}
+                <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_insalon') }}">
+            {% endif %}
+            
+              <i class="fa fa-file-text-o"></i>
+               FICHE
+              </a>
+          </li>
+          <!-- settings end -->
+          <!-- inbox dropdown start-->
+          <li class="dropdown">
+            <a href="{{path('softivendor_crm_business_list',{type : type})}}" class="list-entreprise" title="LISTE">
+               <i class="fa fa-list-ul"></i>
+             LISTE
+              </a>
+          </li>
+          <!-- notification dropdown end -->
+        </ul>
+        <!--  notification end -->
+      </div>
+    <div class="top-menu logout">
+        <ul class="nav pull-right top-menu">
+          <li class="nombre" style="margin-right: 100px;"><span class="nombre-titre">Nombre</span> <span class="nombre_id">{{ allBusiness.getTotalItemCount }}</span></li>
+          <li>{# <a class="logout" href="{{path('fos_user_security_crm_logout')}}" title="Logout">Logout</a> #}</li>
+        </ul>
+        
+    </div>
+{% endblock %}
+
+{% block body %}
+
+
+
+{% for key, messages in app.session.flashbag.all() %}
+
+    <div class="modal-contrat-suppr-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                                <i class="fa fa-check-circle true"></i>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
+{% endfor %}  
+        <input type="hidden" value="" class="business_id">
+                            <input type="hidden" value="" class="activity_id">
+        <div class="row">
+            <div class="col-md-12 mt tableau-list list-central">
+                <div id="dtHorizontalExample" class="content-panel">
+                {{ form_start(form_search,{'attr': {novalidate:'novalidate'}}) }}
+                <input type="hidden" name="pageRequested" id="pageRequested" value="1">
+                  <table class="table table-hover table-striped table-advance">
+                    <div class="entete">
+                        <h4><i class="fa fa-angle-right"></i> Liste des entreprises</h4> 
+                        <span class="float-right"> 
+                            <a href="#" id = "export_excel" class="export_xlsx"  title="télécharger en excel"><img src="{{asset('crm/img/exceller.png')}}" alt=""></a>
+                            <!--<a href="#" title="télécharger en pdf"><img src="img/pdf.png" alt=""></a>-->
+                        </span>
+                    </div>
+                    <hr>
+                    <thead>
+                      <tr>
+                        <th style="width: 10%">Statut</th>
+                        <th style="width: 30%">Nom établissement <a href="{{ path('softivendor_crm_business_list', { type:'central',tri: 'enseigne' , ordre: 'DESC'}) }}">  <span class="fa fa-chevron-down desc"></span></a>
+                        <a href="{{ path('softivendor_crm_business_list', {type:'central', tri: 'enseigne' , ordre: 'ASC'}) }}">   <span class="fa fa-chevron-up esc"></span>
+                        </th>
+                        <th style="width: 30%">Liste activité</th>
+                        <th style="width: 20%">Date et heure d'inscription <a href="{{ path('softivendor_business_list', { tri: 'dateInscription' , ordre: 'DESC'}) }}"><span class="fa fa-chevron-down desc"></span></a>
+                         <a href="{{ path('softivendor_business_list', { tri: 'dateInscription' , ordre: 'ASC'}) }}"><span class="fa fa-chevron-up esc"></span> </a>
+                         </th>
+                        <th style="width: 10%">Actions</th>
+                      </tr>
+                      <tr class="filter">
+                        <th></th>
+                        <th>{{ form_widget(form_search.entreprise, {attr : {class:'form-control',label:'rojo'}}) }}</th>
+                        
+                        <th>
+                            {{ form_widget(form_search.categories, {attr : {class:'form-control'}} ) }}
+                        </th>
+                        <th></th>
+                        
+                        <th>{{ form_row(form_search.rechercher, {attr : {class:'form-control btn btn-theme btn-md'}} ) }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {{ form_end(form_search) }}
+
+                    <form method="post" action="{{ path('softivendor_crm_business_list',{type:type}) }}">
+    
+                         {% for business in allBusiness %}
+                      <tr>
+                        <td width="10%">
+                            {% if business.actif == 1 %}
+                                Actif
+                            {% else %}
+                                Non actif
+                            {% endif %}
+
+                        </td>
+                        <td>  {{ business.enseigne }} </td>
+                        <td>
+                          {% for activity in  business.activity %}
+                            {{ activity.name }}<br>
+                            
+                          {% endfor %}   
+                        </td>
+                        <td> 
+                            {% if business.dateInscription != null %}
+                                {{ business.dateInscription | date("d/m/Y H:m:s")}}
+                            {% else %}
+                                0/0/00 0:00:00
+                            {% endif %} 
+                        </td>
+                        <td class="action">
+                            {% if type == 'central' %}
+                                <a href="{{ path('softivendor_crm_business_fiche_central',{'next':business.id, 'edit':business.id} )}}" title="Editer">
+                            {% elseif type == 'in_club' %}
+                                <a href="{{ path('softivendor_crm_business_fiche_inclub',{'next':business.id} )}}" title="Editer">
+                            {% elseif type == 'in_games' %}
+                                <a href="{{ path('softivendor_crm_business_fiche_ingames',{'next':business.id} )}}" title="Editer">
+                            {% elseif type == 'in_magazines' %}
+                                <a href="{{ path('softivendor_crm_business_fiche_inmagazines',{'next':business.id} )}}" title="Editer">
+                            {% elseif type == 'in_salon' %}
+                                <a href="{{ path('softivendor_crm_business_fiche_insalon',{'next':business.id} )}}" title="Editer">
+                            {% endif %}
+                           <i class="glyphicon glyphicon-edit icon-left"></i>Editer</a><br>
+                            <span class="checkbox_case">
+                               <input id="checkBox" type="checkbox" name="supChoice[]" value="{{ business.id }}"> 
+                                <span class="check"></span>
+                            </span><span class="label">supprimer</span>
+                        </td>
+                      </tr>
+                      
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                   <div class="content-bottom">
+                     <div class="boutton_supprim">
+                       <article>
+                        <button type="button" class="btn btn-theme04 delete btn-md" data-toggle="modal" data-target="#modalConfirm" title="Supprimer">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Supprimer</span>
+                    </button></article>
+                     </div>
+                      <div class="pagination_liste">
+                       {{ knp_pagination_render(allBusiness,'SoftivendorCRMBundle:Paginate:templatePaginator.html.twig') }}
+                     </div>
+                    </div>
+                </div>
+              </div>
+
+            <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <form method="post" action="{{ path('softivendor_business_list') }}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                    </div>
+                    <div class="modal-body">
+                     Voulez-vous supprimer les entreprises sélectionnnés ?
+                     Attention si vous supprimer une entreprise, tous les collaborateurs liés a cette entreprise seront aussi supprimées
+                    </div>
+                    <div class="modal-footer">
+                      <button type ="submit" class="btn btn-default" name="supChoice[]">Oui</button>
+                      <button type="button" class="btn btn-default"data-dismiss="modal">Non</button>
+                    </div>
+                  </div>
+                </div>
+                </form>
+              </div>
+            </form>
+        </div>
+    {% block javascript %}
+      <script type="text/javascript">
+        $('document').ready(function() {
+              initializeForm();
+               $('.pagination li a').click(function(event) {
+              var curent = parseInt($('.pagination .current').html());
+              event.preventDefault();
+              if ($(this).html() == parseInt($(this).html(),10)){
+                   $('#pageRequested').val($(this).html());
+              } else {
+                  var className = ($(this).attr('class'));
+                  if ( className == 'previous' )
+                       $('#pageRequested').val(curent - 1 );
+                  if ( className == 'next' )
+                       $('#pageRequested').val(curent + 1 );
+                  if ( className == 'first' )
+                       $('#pageRequested').val(1);
+                   if ( className == 'last')
+                       $('#pageRequested').val({{allBusiness.pageCount}});
+              }
+              $('[name="form"]').submit();
+          });
+            //------------------------------------------------export exel modif by anthony ------------------------------------------------
+            var $export_excel = $('.export_xlsx');
+            var exportSelectedInXlsx_path = "{{path('softivendor_crm_business_exportSelectedInXlsx')}}"
+            $export_excel.click(function () {
+              var business_id = $('.business_id').val();
+              var activity_id = $('.activity_id').val(); 
+              var business_id = $('.business_id').val();
+              var activity_id = $('.activity_id').val(); 
+            
+              
+              openNewTabToPath (exportSelectedInXlsx_path + '?businnesid=' + business_id + '&activityid=' + activity_id + '&type={{ type }}' ); 
+            });
+            //------------------------------------------------end modifi export excel------------------------------------------------
+
+            $('#form_entreprise').keyup(function(){
+              $('.business_id').val($(this).val());
+            });
+            
+            $('#form_categories').change(function(){
+              $('.activity_id').val($(this).val());
+            });
+
+            function openNewTabToPath (path) {
+                  window.open(path, '_blank');
+            }  
+            function initializeForm(){
+               $('.business_id').val($("#form_entreprise").val());
+               $('.activity_id').val($("#form_categories").val());
+            }
+
+          });
+      </script>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,1953 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 pt-3 text-center">
+            <h3><i class="fa fa-angle-right"></i> Gestion des contrats</h3>
+        </div>
+    </div>
+
+    <div class="row contrat">
+        <div class="col-lg-3 col-md-6 text-center">
+            <article>
+                <h4>IN Club</h4>
+                <div class="liste">
+                    <ul class="list-inline inclub">
+                        {# #} {% for contrat in business.getContrat %} {% if contrat.type == "in-club" %}
+                        <li>
+                            <a target="_blank" href="{{asset('/web/pdf/crm/')}}{{ contrat.file }}">{{ contrat.file }}</a>
+                            <div class="Editer_suppr">
+                                <a>
+                                    <i data-type="{{ contrat.type }}" data-id="{{ contrat.id }}" class="fa fa-search"></i>
+                                </a>
+                                <a>
+                                    <i data-id="{{ contrat.id }}" class="fa fa-trash-o" {# data-toggle="modal" data-target="#myModalSuppression" #}>
+                              </i>
+                                </a>
+                            </div>
+                        </li>
+                        {% endif %} {% endfor %}
+                    </ul>
+                </div>
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <span class="btn btn-theme02 btn-file">
+                      <span class="fileupload-new"><i class="fa fa-paperclip"></i> Ajouter</span>
+                    <input id="InClub_upload" type="file" class="default">
+                    </span>
+
+
+                    <div class="alert alert-warning errorclub" style="display:none" role="alert">
+                        veuillez entrer un fichier de type .pdf
+                    </div>
+
+
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-3 col-md-6 text-center">
+            <article>
+                <h4>IN Games</h4>
+                <div class="liste">
+                    <ul class="list-inline inGames">
+                        {% for contrat in business.getContrat %} {% if contrat.type == "in-games" %}
+                        <li>
+                            <a target="_blank" href="{{asset('/web/pdf/crm/')}}{{ contrat.file }}">
+                            {{ contrat.file }}</a>
+                            <div class="Editer_suppr">
+                                <a>
+                                    <i data-type="{{ contrat.type }}" data-id="{{ contrat.id }}" class="fa fa-search"></i>
+                                </a>
+                                <a>
+                                    <i data-id="{{ contrat.id }}" class="fa fa-trash-o"> {# data-toggle="modal" data-target="#myModalSuppression #}
+                              </i>
+                                </a>
+                            </div>
+                        </li>
+                        {% endif %} {% endfor %}
+                    </ul>
+                </div>
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <span class="btn btn-theme02 btn-file">
+                  <span class="fileupload-new"><i class="fa fa-paperclip"></i> Ajouter</span>
+                    <input id="InGames_upload" type="file" class="default">
+                    </span>
+
+                    <div class="alert alert-warning errorgames" style="display:none" role="alert">
+                        veuillez entrer un fichier de type .pdf
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-3 col-md-6 text-center">
+            <article>
+                <h4>IN Magazine</h4>
+                <div class="liste">
+                    <ul class="list-inline inMagazine">
+                        {% for contrat in business.getContrat %} {% if contrat.type == "in-magazine" %}
+                        <li>
+                            <a target="_blank" href="{{asset('/web/pdf/crm/')}}{{ contrat.file }}">
+                            {{ contrat.file }}</a>
+                            <div class="Editer_suppr">
+                                <a>
+                                    <i data-type="{{ contrat.type }}" data-id="{{ contrat.id }}" class="fa fa-search"></i>
+                                </a>
+                                <a>
+                                    <i data-id="{{ contrat.id }}" class="fa fa-trash-o " {# data-toggle="modal" data-target="#myModalSuppression" #}>
+                              </i>
+                                </a>
+                            </div>
+                        </li>
+                        {% endif %} {% endfor %}
+                    </ul>
+                </div>
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <span class="btn btn-theme02 btn-file">
+                  <span class="fileupload-new"><i class="fa fa-paperclip"></i> Ajouter</span>
+                    <input id="InMag_upload" type="file" class="default">
+                    </span>
+
+                    <div class="alert alert-warning errormag" style="display:none" role="alert">
+                        veuillez entrer un fichier de type .pdf
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-3 col-md-6 text-center">
+            <article>
+                <h4>IN Salon</h4>
+                <div class="liste">
+                    <ul class="list-inline InSalon">
+                        {% for contrat in business.getContrat %} {% if contrat.type == "in-salon" %}
+                        <li>
+                            <a target="_blank" href="{{asset('/web/pdf/crm/')}}{{ contrat.file }}">
+                            {{ contrat.file }}</a>
+                            <div class="Editer_suppr">
+                                <a>
+                                    <i data-type="{{ contrat.type }}" data-id="{{ contrat.id }}" class="fa fa-search"></i>
+                                </a>
+                                <a>
+                                    <i data-id="{{ contrat.id }}" class="fa fa-trash-o " {# data-toggle="modal" data-target="#myModalSuppression" #}>
+                              </i>
+                                </a>
+                            </div>
+                        </li>
+                        {% endif %} {% endfor %}
+
+                    </ul>
+                </div>
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <span class="btn btn-theme02 btn-file">
+                  <span class="fileupload-new"><i class="fa fa-paperclip"></i> Ajouter</span>
+                    <input id="InSalon_upload" type="file" class="default">
+                    </span>
+
+                    <div class="alert alert-warning errorsalon" style="display:none" role="alert">
+                        veuillez entrer un fichier de type .pdf
+                    </div>
+
+                </div>
+            </article>
+        </div>
+
+    </div>
+    <div class="row relative">
+        <span id='btn-drop' class="dropdown-toggle"><i class="fa fa-plus"></i></span>
+        <div id="drop" class="row">
+            {# ----------------------------------------------------------- in club contrat ----------------------------------------------------------- #}
+
+            <div class="col-lg-3 col-md-6 text-center">
+                <article class="in-club">
+                    {# go add date signature et fin adhésion 03-06-2022 Rojo #}
+                    <div class="form-group">
+                        <span class="help-block text-left">Date de signature</span>
+                        <div class="d-block">
+                            {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                            <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                <input class="form-control" size="16" type="text" value="" name="date_signature_in_club" id="date_signature_in_club">
+                                <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="help-block text-left">Date de fin d'adhésion</span>
+                        <div class="d-block">
+                            {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                            <div {# data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths" #}>
+                                <input class="form-control" size="16" type="text" value="" name="date_fin_adhesion_in_club" id="date_fin_adhesion_in_club">
+                                <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# end add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                    <h4>Montant HT</h4>
+                    <div class="form-group">
+                        <div class="d-block">
+                            <input type="text" name="amount_inclub" id="amount_inclub" class="form-control">
+                            <input type="hidden" class="id_contrat" name="id_contrat" value=>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <span class="help-block text-left">Date de paiement</span>
+                        <div class="d-block">
+                            <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                            <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                <input class="form-control" size="16" type="text" value="" name="date_paiement_in_club" id="date_paiement_in_club">
+                                <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-in_club">
+                        <span class="help-block text-left">Echelonnement</span>
+                        <input type="hidden" id="in_club_increment" value="4">
+
+                        <div class="input-groupe">
+                            <div class="d-block">
+                                <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_1_in_club" name="echolonnement_1_in_club">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_1_echolonnement_in_club" id="prix_1_echolonnement_in_club">
+
+                                </div>
+
+                            </div>
+                            <div class="d-block">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_2_in_club" name="echolonnement_2_in_club">
+                                        <span class="input-group-btn add-on">
+                          <button class="btn btn-theme"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_2_echolonnement_in_club" id="prix_2_echolonnement_in_club">
+                                </div>
+                            </div>
+
+                            <div class="d-block">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_3_in_club" name="echolonnement_3_in_club">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" data-type="in_club" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_3_echolonnement_in_club" id="prix_3_echolonnement_in_club">
+                                </div>
+
+                            </div>
+                            <div class="d-block  block-4">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_4_in_club" name="echolonnement_4_in_club">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_4_echolonnement_in_club" id="prix_4_echolonnement_in_club">
+
+                                </div>
+
+                            </div>
+                            <div class="d-block block-5">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_5_in_club" name="echolonnement_5_in_club">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_5_echolonnement_in_club" id="prix_5_echolonnement_in_club">
+
+                                </div>
+
+                            </div>
+                            <div class="d-block  block-6">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_6_in_club" name="echolonnement_6_in_club">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_6_echolonnement_in_club" id="prix_6_echolonnement_in_club">
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="btn-plus"><i class="fa fa-plus-square"></i></div>
+                    </div>
+                    <button type="button" data-type="in-club" class="btn btn-theme save_inclub">Enregistrer</button>
+                </article>
+            </div>
+            {# ----------------------------------------------------------- in club contrat ----------------------------------------------------------- #} {# ----------------------------------------------------------- in games contrat -----------------------------------------------------------
+            #}
+
+            <div class="col-lg-3 col-md-6 text-center">
+                <article class="in-games">
+
+                    {# go add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                    <div class="form-group">
+                        <span class="help-block text-left">Date de signature</span>
+                        <div class="d-block">
+                            {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                            <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                <input class="form-control" size="16" type="text" value="" name="date_signature_in_games" id="date_signature_in_games">
+                                <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="help-block text-left">Date de fin d'adhésion</span>
+                        <div class="d-block">
+                            {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                            <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                <input class="form-control" size="16" type="text" value="" name="date_fin_adhesion_in_games" id="date_fin_adhesion_in_games">
+                                <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# end add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                    <h4>Montant HT</h4>
+                    <div class="form-group">
+                        <div class="d-block">
+                            <input type="text" name="amount_ingames" id="amount_ingames" class="form-control">
+                            <input type="hidden" class="id_contrat" name="id_contrat" value=>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <span class="help-block text-left">Date de paiement</span>
+                        <div class="d-block">
+                            <span class="teste" id="ingames" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                            <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                <input class="form-control form-control-inline input-medium default-date-picker" size="16" type="text" value="" name="date_paiement_in_games" id="date_paiement_in_games">
+                                <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-in_games">
+                        <span class="help-block text-left">Echelonnement</span>
+                        <input type="hidden" id="in_games_increment" value="4">
+                        <div class="input-groupe">
+                            <div class="d-block">
+                                <span class="teste " id="ingames" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_1_in_games" name="echolonnement_1_in_games">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" placeholder="Montant Ht" name="prix_1_echolonnement_in_games" id="prix_1_echolonnement_in_games">
+
+                                </div>
+
+                            </div>
+                            <div class="d-block">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_2_in_games" name="echolonnement_2_in_games">
+                                        <span class="input-group-btn add-on">
+                          <button class="btn btn-theme"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" placeholder="Montant Ht" name="prix_2_echolonnement_in_games" id="prix_2_echolonnement_in_games">
+
+                                </div>
+
+                            </div>
+                            <div class="d-block">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_3_in_games" name="echolonnement_3_in_games">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" placeholder="Montant Ht" name="prix_3_echolonnement_in_games" id="prix_3_echolonnement_in_games">
+
+                                </div>
+                            </div>
+
+                            <div class="d-block  block-4">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_4_in_games" name="echolonnement_4_in_games">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" placeholder="Montant Ht" name="prix_4_echolonnement_in_games" id="prix_4_echolonnement_in_games">
+
+                                </div>
+                            </div>
+
+                            <div class="d-block block-5">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_5_in_games" name="echolonnement_5_in_games">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" placeholder="Montant Ht" name="prix_5_echolonnement_in_games" id="prix_5_echolonnement_in_games">
+
+                                </div>
+                            </div>
+
+                            <div class="d-block  block-6">
+                                <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div>
+                                    <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                        <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_6_in_games" name="echolonnement_6_in_games">
+                                        <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                    </div>
+                                    <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" placeholder="Montant Ht" name="prix_6_echolonnement_in_games" id="prix_6_echolonnement_in_games">
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="btn-plus"><i class="fa fa-plus-square"></i></div>
+                        <button type="button" class="btn btn-theme save_ingames" data-type="in-games">Enregistrer</button>
+                </article>
+                </div>
+
+                {# ----------------------------------------------------------- in games contrat ----------------------------------------------------------- #} {# ----------------------------------------------------------- in magazine contrat -----------------------------------------------------------
+                #}
+
+                <div class="col-lg-3 col-md-6 text-center">
+                    <article class="in-magazine">
+
+                        {# go add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Date de signature</span>
+                            <div class="d-block">
+                                {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                                <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                    <input class="form-control" size="16" type="text" value="" name="date_signature_in_magazines" id="date_signature_in_magazines">
+                                    <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Date de fin d'adhésion</span>
+                            <div class="d-block">
+                                {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                                <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                    <input class="form-control" size="16" type="text" value="" name="date_fin_adhesion_in_magazines" id="date_fin_adhesion_in_magazines">
+                                    <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# end add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                        <h4>Montant HT</h4>
+                        <div class="form-group">
+                            <div class="d-block">
+                                <input type="text" class="form-control" name="amount_inmagazines" id="amount_inmagazines">
+                                <input type="hidden" class="id_contrat" name="id_contrat" value=>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Date de paiement</span>
+                            <div class="d-block">
+                                <span class="teste " id="inmag" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                    <input class="form-control form-control-inline input-medium default-date-picker" size="16" type="text" value="" name="date_paiement_in_magazines" id="date_paiement_in_magazines">
+                                    <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Echelonnement</span>
+                            <input type="hidden" id="in_magazines_increment" value="4">
+                            <div class="input-groupe">
+                                <div class="d-block">
+                                    <span class="teste " id="inmag" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_1_in_magazines" name="echolonnement_1_in_magazines">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_1_echolonnement_in_magazines" id="prix_1_echolonnement_in_magazines">
+
+                                    </div>
+
+                                </div>
+                                <div class="d-block">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_2_in_magazines" name="echolonnement_2_in_magazines">
+                                            <span class="input-group-btn add-on">
+                          <button class="btn btn-theme"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_2_echolonnement_in_magazines" id="prix_2_echolonnement_in_magazines">
+
+                                    </div>
+                                </div>
+                                <div class="d-block">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_3_in_magazines" name="echolonnement_3_in_magazines">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_3_echolonnement_in_magazines" id="prix_3_echolonnement_in_magazines">
+
+                                    </div>
+                                </div>
+
+                                <div class="d-block  block-4">
+                                    <span class="teste " id="echolonnement_" style="display: block;"><i class="fa fa-times-circle false"></i></span> {#
+                                    <div> #}
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_4_in_magazines" name="echolonnement_4_in_magazines">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_4_echolonnement_in_magazines" id="prix_4_echolonnement_in_magazines"> {# </div> #}
+                                </div>
+
+
+                                <div class="d-block  block-5">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_5_in_magazines" name="echolonnement_5_in_magazines">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_5_echolonnement_in_magazines" id="prix_5_echolonnement_in_magazines">
+
+                                    </div>
+                                </div>
+
+                                <div class="d-block  block-6">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_6_in_magazines" name="echolonnement_6_in_magazines">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_6_echolonnement_in_magazines" id="prix_6_echolonnement_in_magazines">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="btn-plus"><i class="fa fa-plus-square"></i></div>
+                        </div>
+                        <button data-type="in-magazine" type="button" class="btn btn-theme save_inmagazines" data-type="in-magazine">Enregistrer</button>
+                    </article>
+                </div>
+
+                {# ----------------------------------------------------------- in magazines contrat ----------------------------------------------------------- #} {# ----------------------------------------------------------- in salon contrat -----------------------------------------------------------
+                #}
+
+                <div class="col-lg-3 col-md-6 text-center">
+                    <article class="in-salon">
+
+
+                        {# go add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Date de signature</span>
+                            <div class="d-block">
+                                {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                                <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                    <input class="form-control" size="16" type="text" value="" name="date_signature_in_salon" id="date_signature_in_salon">
+                                    <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Date de fin d'adhésion</span>
+                            <div class="d-block">
+                                {# <span class="teste " id="inc" style="display: none;"><i class="fa fa-times-circle false"></i></span> #}
+                                <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                    <input class="form-control" size="16" type="text" value="" name="date_fin_adhesion_in_salon" id="date_fin_adhesion_in_salon">
+                                    <span class="input-group-btn add-on">
+                      <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# end add date signature et fin adhésion 03-06-2022 Rojo #}
+
+                        <h4>Montant HT</h4>
+                        <div class="form-group">
+                            <div class="d-block">
+                                <input type="text" class="form-control" name="amount_insalon" id="amount_insalon">
+                                <input type="hidden" class="id_contrat" name="id_contrat" value=>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="help-block text-left">Date de paiement</span>
+                            <div class="d-block">
+                                <span class="teste " id="insa" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                    <input class="form-control form-control-inline input-medium default-date-picker" size="16" type="text" value="" name="date_paiement_in_salon" id="date_paiement_in_salon">
+                                    <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="help-block text-left">Echelonnement</span>
+                            <input type="hidden" id="in_salon_increment" value="4">
+                            <div class="input-groupe">
+                                <div class="d-block">
+                                    <span class="teste " id="insa" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_1_in_salon" name="echolonnement_1_in_salon">
+                                            <span class="input-group-btn add-on">
+                            <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_1_echolonnement_in_salon" id="prix_1_echolonnement_in_salon">
+
+                                    </div>
+                                </div>
+                                <div class="d-block">
+                                    <span class="teste " id="insa" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_2_in_salon" name="echolonnement_2_in_salon">
+                                            <span class="input-group-btn add-on">
+                              <button class="btn btn-theme"><i class="fa fa-calendar"></i></button>
+                            </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_2_echolonnement_in_salon" id="prix_2_echolonnement_in_salon">
+
+                                    </div>
+                                </div>
+                                <div class="d-block">
+                                    <span class="teste " id="insa" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_3_in_salon" name="echolonnement_3_in_salon">
+                                            <span class="input-group-btn add-on">
+                            <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_3_echolonnement_in_salon" id="prix_3_echolonnement_in_salon">
+
+                                    </div>
+                                </div>
+
+                                <div class="d-block  block-4">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_4_in_salon" name="echolonnement_4_in_salon">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_4_echolonnement_in_salon" id="prix_4_echolonnement_in_salon">
+
+                                    </div>
+                                </div>
+
+                                <div class="d-block  block-5">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_5_in_salon" name="echolonnement_5_in_salon">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_5_echolonnement_in_salon" id="prix_5_echolonnement_in_salon">
+
+                                    </div>
+                                </div>
+
+                                <div class="d-block  block-6">
+                                    <span class="teste " id="echolonnement_" style="display: none;"><i class="fa fa-times-circle false"></i></span>
+                                    <div>
+                                        <div data-date-minviewmode="days" data-date-viewmode="days" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                            <input class="form-control form-control-inline input-medium default-date-picker" placeholder="Date" size="16" type="text" value="" id="echolonnement_6_in_salon" name="echolonnement_6_in_salon">
+                                            <span class="input-group-btn add-on">
+                        <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                                        </div>
+                                        <input class="form-control-inline form-control" type="text" placeholder="Montant Ht" name="prix_6_echolonnement_in_salon" id="prix_6_echolonnement_in_salon">
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="btn-plus"><i class="fa fa-plus-square"></i></div>
+                        </div>
+
+                        <button type="button" data-type="in-salon" class="btn btn-theme save_insalon">Enregistrer</button>
+                    </article>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="message-alert">
+    </div>
+    <div class="modal-contrat">
+        <progress max="100" value="0"></progress>
+        <div class="preload">
+            <span id="progress"></span>
+            <i id="spin" class="fa fa-spinner fa-spin"></i>
+        </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title" id="myModalLabel">Ajout contrat fait avec succès</h4>
+                </div>
+                <div class="modal-body">
+                    <i class="fa fa-check-circle true"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-contrat-suppr" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header text-center">
+                    <h4 class="modal-title" id="myModalLabel">Suppression faite avec succès</h4>
+                </div>
+                <div class="modal-body">
+                    <i class="fa fa-check-circle true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-contrat-modif">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header text-center">
+                    <h4 class="modal-title" id="myModalLabel">Modification faite avec succès </h4>
+                </div>
+                <div class="modal-body">
+                    <i class="fa fa-check-circle true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModalSuppression" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                </div>
+                <div class="modal-body">
+                    Voulez-vous vraiment supprimer cet contrat ?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-default delete">Oui</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% include "SoftivendorCRMBundle:Business:fiche_contentJs.html.twig" %} {#
+    <script>
+        $(document).ready(function() {
+            //for inclub
+            $('#InClub_upload').on('change', function() {
+                var file_data = $(this).prop('files')[0];
+                var form_data = new FormData();
+                form_data.append('file', file_data);
+                form_data.append('id', {
+                    {
+                        business.id
+                    }
+                });
+                form_data.append('type', 'in-club');
+                $('.modal-contrat').fadeIn(800)
+                $('progress').show()
+                $('#progress').show()
+                $.ajax({
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+
+                        xhr.upload.addEventListener("progress", function(evt) {
+
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                $('#progress').text(percentComplete + "%")
+                                $('progress').val(percentComplete)
+                                console.log(percentComplete);
+                            }
+                            if (percentComplete == 100) {
+                                $('progress').hide()
+                                $('#progress').hide()
+                                $('#spin').show()
+
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_ajoutPdf') }}",
+                    processData: false,
+                    contentType: false,
+                    data: form_data
+                }).done(function(reponse) {
+                    if (reponse == 'nok') {
+                        $('.errorclub').fadeIn(800, function() {
+                            $(this).parent().fadeIn(500)
+                        }).delay(1000).fadeOut(800)
+
+                    } else {
+
+                        rp = (JSON.parse(reponse));
+                        $('.inclub').append('<li class="liinclub"><a target="_blank"></i> ' + rp.fileName + '</a><div class="Editer_suppr"><a><i data-type="in-club" data-id="' + rp.id + '" class="fa fa-search"></i></a><a><i data-id="' + rp.id + '" class="fa fa-trash-o"></i></a></div></li>');
+                        //add active btn in header 
+                        $('.in-club-active').addClass('active');
+
+                        $('.modal-contrat').each(function() {
+                            $(this).find('.modal-dialog').fadeIn()
+                        }).delay(1000).fadeOut(800, function() {
+                            $(this).find('.modal-dialog').hide()
+                            $('#spin').hide()
+                        })
+
+                        console.log(msg);
+                    }
+                });
+            });
+
+
+            //for in-games
+            $('#InGames_upload').on('change', function() {
+                var file_data = $(this).prop('files')[0];
+                var form_data = new FormData();
+                form_data.append('file', file_data);
+                form_data.append('id', {
+                    {
+                        business.id
+                    }
+                });
+                form_data.append('type', 'in-games');
+                $('.modal-contrat').fadeIn(800)
+                $('progress').show()
+                $('#progress').show()
+                $.ajax({
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+
+                        xhr.upload.addEventListener("progress", function(evt) {
+
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                $('#progress').text(percentComplete + "%")
+                                $('progress').val(percentComplete)
+                                console.log(percentComplete);
+                            }
+                            if (percentComplete == 100) {
+                                $('progress').hide()
+                                $('#progress').hide()
+                                $('#spin').show()
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_ajoutPdf') }}",
+                    processData: false,
+                    contentType: false,
+                    data: form_data
+                }).done(function(reponse) {
+                    if (reponse == 'nok') {
+                        $('.errorgames').fadeIn(800, function() {
+                            $(this).parent().fadeIn(500)
+                        }).delay(1000).fadeOut(800)
+
+                    } else {
+                        rp = (JSON.parse(reponse));
+                        $('.inGames').append('<li><a target="_blank"></i> ' + rp.fileName + '</a><div class="Editer_suppr"><a><i data-type="in-games" data-id="' + rp.id + '" class="fa fa-search"></i></a><a><i data-id="' + rp.id + '" class="fa fa-trash-o"></i></a></div></li>');
+                        //add active btn in header 
+                        $('.in-games-active').addClass('active');
+
+                        $('.modal-contrat').each(function() {
+                            $(this).find('.modal-dialog').fadeIn()
+                        }).delay(1000).fadeOut(800, function() {
+                            $(this).find('.modal-dialog').hide()
+                        })
+
+                        console.log(msg);
+                    }
+                });
+            });
+
+            //for inmagazines
+            $('#InMag_upload').on('change', function() {
+                var file_data = $(this).prop('files')[0];
+                var form_data = new FormData();
+                form_data.append('file', file_data);
+                form_data.append('id', {
+                    {
+                        business.id
+                    }
+                });
+                form_data.append('type', 'in-magazine');
+                $('.modal-contrat').fadeIn(800)
+                $('progress').show()
+                $('#progress').show()
+                $.ajax({
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+
+                        xhr.upload.addEventListener("progress", function(evt) {
+
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                $('#progress').text(percentComplete + "%")
+                                $('progress').val(percentComplete)
+                                console.log(percentComplete);
+                            }
+                            if (percentComplete == 100) {
+                                $('progress').hide()
+                                $('#progress').hide()
+                                $('#spin').show()
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_ajoutPdf') }}",
+                    processData: false,
+                    contentType: false,
+                    data: form_data
+                }).done(function(reponse) {
+
+                    if (reponse == 'nok') {
+                        $('.errormag').fadeIn(800, function() {
+                            $(this).parent().fadeIn(500)
+                        }).delay(1000).fadeOut(800)
+
+                    } else {
+                        rp = (JSON.parse(reponse));
+                        $('.inMagazine').append('<li><a target="_blank"></i> ' + rp.fileName + '</a><div class="Editer_suppr"><a><i data-type="in-magazine" data-id="' + rp.id + '" class="fa fa-search"></i></a><a><i data-id="' + rp.id + '" class="fa fa-trash-o"></i></a></div></li>');
+                        //add active btn in header 
+                        $('.in-magazine-active').addClass('active');
+
+                        $('.modal-contrat').each(function() {
+                            $(this).find('.modal-dialog').fadeIn()
+                        }).delay(1000).fadeOut(800, function() {
+                            $(this).find('.modal-dialog').hide()
+                        })
+                        console.log(msg);
+                    }
+                });
+            });
+
+            //for insalon
+            $('#InSalon_upload').on('change', function() {
+                var file_data = $(this).prop('files')[0];
+                var form_data = new FormData();
+                form_data.append('file', file_data);
+                form_data.append('id', {
+                    {
+                        business.id
+                    }
+                });
+                form_data.append('type', 'in-salon');
+                $('.modal-contrat').fadeIn(800)
+                $('progress').show()
+                $('#progress').show()
+                $.ajax({
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+
+                        xhr.upload.addEventListener("progress", function(evt) {
+
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                $('#progress').text(percentComplete + "%")
+                                $('progress').val(percentComplete)
+                                console.log(percentComplete);
+                            }
+                            if (percentComplete == 100) {
+                                $('progress').hide()
+                                $('#progress').hide()
+                                $('#spin').show()
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_ajoutPdf') }}",
+                    processData: false,
+                    contentType: false,
+                    data: form_data
+                }).done(function(reponse) {
+                    if (reponse == 'nok') {
+                        $('.errorsalon').fadeIn(800, function() {
+                            $(this).parent().fadeIn(500)
+                        }).delay(1000).fadeOut(800)
+
+                    } else {
+                        rp = (JSON.parse(reponse));
+                        $('.InSalon').append('<li><a target="_blank"></i> ' + rp.fileName + '</a><div class="Editer_suppr"><a><i data-type="in-salon" data-id="' + rp.id + '" class="fa fa-search"></i></a><a><i data-id="' + rp.id + '" class="fa fa-trash-o"></i></a></div></li>');
+                        //add active btn in header 
+                        $('.in-salon-active').addClass('active');
+                        $('.modal-contrat').each(function() {
+                            $(this).find('.modal-dialog').fadeIn()
+                        }).delay(1000).fadeOut(800, function() {
+                            $(this).find('.modal-dialog').hide()
+                        })
+                        console.log(msg);
+                    }
+                });
+            });
+
+            /*-------------------------In Club delete ------------------------------------------*/
+
+            //for deletion contrat
+            $(document).on("click", ".fa-trash-o ", function() {
+
+                id = $(this).data('id');
+
+                $("#myModalSuppression").modal('show');
+                $('.delete').on("click", function() {
+
+                    var dom = $(this);
+                    var id_contrat = id;
+
+                    //launch ajax to suppression contrats
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ path('softivendor_crm_business_fiche_contra_suppr_contrat') }}",
+                        data: {
+                            id: id_contrat
+                        }
+                    }).done(function(reponse) {
+                        //remove html if delete is success
+                        if (reponse == "ok") {
+
+                            $("li").find(`[data-id='${id}']`).parent().parent().parent().remove();
+                            // dom.parent().parent().parent().remove();
+
+                        }
+
+                        // $('.modal-contrat-suppr').fadeIn('slow')
+                        $('.modal-contrat-suppr').fadeIn(800, function() {
+                            $(this).children().fadeIn(500)
+                        }).delay(1000).fadeOut(800)
+
+
+                    });
+                    // //end suppression
+                })
+            });
+
+
+            /*-------------------------In magazines delete ------------------------------------------*/
+
+
+            //search
+            $(document).on("click", ".fa-search", function() {
+                //simulate click trigger in btn -
+                $('#btn-drop').css('cursor', 'pointer')
+                $('#drop').slideDown(500)
+                $('#btn-drop i').removeClass('fa fa-plus')
+                $('#btn-drop i').addClass('fa fa-minus')
+
+                //disabled all input unless type
+                type = $(this).data('type');
+                id = $(this).data('id');
+                disabledAllInput(type, id);
+
+                if (type == "in-club") {
+                    initializeAllInput(id);
+
+                    for (var i = 4; i < 7; i++) {
+                        $('.block-' + i).css('display', 'none');
+
+
+                    };
+
+                    $('#date_paiement_in_games').val("")
+                    $('#date_paiement_in_magazines').val("")
+                    $('#date_paiement_in_salon').val("")
+
+                    $("#ingames").hide();
+                    $("#insa").hide();
+                    $("#inmag").hide();
+
+
+                    $('#amount_ingames').val("");
+                    $('#amount_inmagazines').val("");
+                    $('#amount_insalon').val(" ");
+
+
+
+                }
+                if (type == "in-games") {
+                    initializeAllInputInGame(id);
+
+                    for (var i = 4; i < 7; i++) {
+                        $('.block-' + i).css('display', 'none');
+
+                    };
+
+                    $('#date_paiement_in_club').val("")
+                    $('#date_paiement_in_magazines').val("")
+                    $('#date_paiement_in_salon').val("")
+
+                    $("#inclub").hide();
+                    $("#insa").hide();
+                    $("#inmag").hide();
+
+
+                    $('#amount_inclub').val("");
+                    $('#amount_inmagazines').val("");
+                    $('#amount_insalon').val(" ");
+
+                }
+
+                if (type == "in-magazine") {
+                    initializeAllInputInMagazines(id);
+
+                    for (var i = 4; i < 7; i++) {
+                        $('.block-' + i).css('display', 'none');
+
+                        // $('.block-inclub-'+i).val("");
+                        // $('.block-ingames-'+i).val("");
+                    };
+
+                    $('#date_paiement_in_club').val("")
+                    $('#date_paiement_in_games').val("")
+                    $('#date_paiement_in_salon').val("")
+
+                    $("#inclub").hide();
+                    $("#insa").hide();
+                    $("#inmag").hide();
+
+
+                    $('#amount_inclub').val("");
+                    $('#amount_ingames').val("");
+                    $('#amount_insalon').val(" ");
+
+                }
+
+                if (type == "in-salon") {
+                    initializeAllInputInSalon(id);
+
+                    for (var i = 4; i < 7; i++) {
+                        $('.block-' + i).css('display', 'none');
+
+
+                    };
+
+                    $('#date_paiement_in_club').val("")
+                    $('#date_paiement_in_games').val("")
+                    $('#date_paiement_in_magazines').val("")
+
+                    $("#inclub").hide();
+                    $("#insa").hide();
+                    $("#inmag").hide();
+
+
+                    $('#amount_inclub').val("");
+                    $('#amount_ingames').val("");
+                    $('#amount_inmagazines').val(" ");
+                }
+            });
+
+
+
+
+
+            function disabledAllInput(type, id) {
+                typeA = ["in-club", "in-games", "in-magazine", 'in-salon'];
+                for (var i = 0; i < 4; i++) {
+                    if (type != typeA[i]) {
+                        $("." + typeA[i] + " :input").prop("disabled", true);
+                        $("." + typeA[i] + " .fa-plus-square").hide();
+                    } else {
+                        $("." + typeA[i] + " :input").prop("disabled", false);
+                        $("." + typeA[i] + " .fa-plus-square").show();
+                        $("." + typeA[i] + " .id_contrat").val(id);
+                    }
+                };
+
+            }
+
+            /*-------------------------In Club Initialize ------------------------------------------*/
+
+            function initializeAllInput(id) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_initialize_contrat_data') }}",
+                    data: {
+                        id: id
+                    }
+                }).done(function(reponse) {
+                    //initialize
+                    data = JSON.parse(reponse);
+                    // console.log(data.data['montant']);
+                    // console.log(data.data.datePaiement);
+                    //initialize croix in input echollonement
+                    $('.teste').each(function() {
+                        $(this).hide();
+                    });
+                    //initialize input echollonement
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+                        $('#echolonnement_' + j + '_in_club').val("");
+                        $('#echolonnement_' + j + '_in_games').val("");
+                        $('#echolonnement_' + j + '_in_magazines').val("");
+                        $('#echolonnement_' + j + '_in_salon').val("");
+                        $('#prix_' + j + '_echolonnement_in_club').val("");
+                        $('#prix_' + j + '_echolonnement_in_games').val("");
+                        $('#prix_' + j + '_echolonnement_in_magazines').val("");
+                        $('#prix_' + j + '_echolonnement_in_salon').val("");
+
+
+                    };
+
+                    $('#amount_inclub').val(data.data.montant);
+                    $('#date_paiement_in_club').val(data.data.datePaiement);
+                    if ($('#date_paiement_in_club').val() != "") {
+                        $("#inc").show();
+
+
+                    } else {
+                        $("#inc").hide();
+                    }
+
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+
+                        if (data.ech[i]['date_' + j] !== undefined) {
+                            $('#echolonnement_' + j + '_in_club').val(data.ech[i]['date_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_club').val(data.ech[i]['prix_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_club').parent().prev().show();
+                            $('#echolonnement_' + j + '_in_club').parent().prev().show();
+                            $('.block-inclub').val(j);
+                            $('#echolonnement_' + j + '_in_club').parent().parent().show();
+                            $('#prix_' + j + '_echolonnement_in_club').parent().parent().show();
+                            $('#in_club_increment').val(j + 1);
+                        } else {
+                            if (j >= 4) {
+                                $('#echolonnement_' + j + '_in_club').parent().parent().hide();
+                                $('#prix_' + j + '_echolonnement_in_club').parent().parent().hide();
+                            }
+                        }
+                        //console.log(data.ech[i]);
+                    };
+                    //console.log(data.ech);
+
+                    // var montanttotal = $('#amount_inclub').val();
+                    // var montantEchelonnement = [] ;
+                    // for (var i = 1; i < 5; i++) {  
+                    //     montantEchelonnement.push( $('#prix_'+ i +'_echolonnement_in_club').val());
+
+                    // }
+                    //     switch (montantEchelonnement){
+
+                    //           case montantEchelonnement[1] !== undefined:
+                    //                alert(montantEchelonnement[1]);
+                    //                total = montanttotal - montantEchelonnement[1];
+                    //           break;
+                    //     }
+
+                    // console.log(total);
+
+                });
+            }
+
+            /*-------------------------In Club ------------------------------------------*/
+
+            /*-------------------------In game initialize------------------------------------------*/
+
+            function initializeAllInputInGame(id) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_initialize_contrat_data') }}",
+                    data: {
+                        id: id
+                    }
+                }).done(function(reponse) {
+                    //initialize
+                    data = JSON.parse(reponse);
+                    //initialize croix in input echollonement
+                    $('.teste').each(function() {
+                        $(this).hide();
+                    });
+                    //initialize input echollonement
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+
+                        $('#echolonnement_' + j + '_in_club').val("");
+                        $('#echolonnement_' + j + '_in_games').val("");
+                        $('#echolonnement_' + j + '_in_magazines').val("");
+                        $('#echolonnement_' + j + '_in_salon').val("");
+                        $('#prix_' + j + '_echolonnement_in_games').val("");
+                        $('#prix_' + j + '_echolonnement_in_club').val("");
+                        $('#prix_' + j + '_echolonnement_in_magazines').val("");
+                        $('#prix_' + j + '_echolonnement_in_salon').val("");
+                    };
+
+                    $('#amount_ingames').val(data.data.montant);
+
+                    $('#date_paiement_in_games').val(data.data.datePaiement);
+                    if ($('#date_paiement_in_games').val() != "") {
+                        $("#ingames").show();
+
+                    } else {
+                        $("#ingames").hide();
+                    }
+
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+                        if (data.ech[i]['date_' + j] !== undefined) {
+                            $('#echolonnement_' + j + '_in_games').val(data.ech[i]['date_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_games').val(data.ech[i]['prix_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_games').parent().prev().show();
+                            $('#echolonnement_' + j + '_in_games').parent().prev().show();
+                            $('.block-ingames').val(j);
+                            $('#echolonnement_' + j + '_in_games').parent().parent().show();
+                            $('#prix_' + j + '_echolonnement_in_games').parent().parent().show();
+                            $('#in_games_increment').val(j + 1);
+                        } else {
+                            if (j >= 4) {
+                                $('#echolonnement_' + j + '_in_games').parent().parent().hide();
+                                $('#prix_' + j + '_echolonnement_in_club').parent().parent().hide();
+                            }
+                        }
+                        //console.log(data.ech[i]);
+                    };
+                    //console.log(data.ech);
+                });
+            }
+
+            /*-------------------------In game ------------------------------------------*/
+
+
+            /*-------------------------In magazines initialize------------------------------------------*/
+
+            function initializeAllInputInMagazines(id) {
+
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_initialize_contrat_data') }}",
+                    data: {
+                        id: id
+                    }
+                }).done(function(reponse) {
+                    //initialize
+                    data = JSON.parse(reponse);
+                    //initialize croix in input echollonement
+                    $('.teste').each(function() {
+                        $(this).hide();
+                    });
+                    //initialize input echollonement
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+                        $('#echolonnement_' + j + '_in_magazines').val("");
+                        $('#echolonnement_' + j + '_in_club').val("");
+                        $('#echolonnement_' + j + '_in_games').val("");
+                        $('#echolonnement_' + j + '_in_salon').val("");
+                        $('#prix_' + j + '_echolonnement_in_magazines').val("");
+                        $('#prix_' + j + '_echolonnement_in_club').val("");
+                        $('#prix_' + j + '_echolonnement_in_games').val("");
+                        $('#prix_' + j + '_echolonnement_in_salon').val("");
+                    };
+
+                    $('#amount_inmagazines').val(data.data.montant);
+
+                    $('#date_paiement_in_magazines').val(data.data.datePaiement);
+                    if ($('#date_paiement_in_magazines').val() != "") {
+                        $("#inmag").show();
+
+                    } else {
+                        $("#inmag").hide();
+                    }
+
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+                        if (data.ech[i]['date_' + j] !== undefined) {
+                            $('#echolonnement_' + j + '_in_magazines').val(data.ech[i]['date_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_magazines').val(data.ech[i]['prix_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_magazines').parent().prev().show();
+                            $('#echolonnement_' + j + '_in_magazines').parent().prev().show();
+                            $('.block-inmagazines').val(j);
+                            $('#echolonnement_' + j + '_in_magazines').parent().parent().show();
+                            $('#prix_' + j + '_echolonnement_in_magazines').parent().parent().show();
+                            $('#in_magazines_increment').val(j + 1);
+                        } else {
+                            if (j >= 4) {
+                                $('#echolonnement_' + j + '_in_magazines').parent().parent().hide();
+                                //$('#prix_'+ j +'_echolonnement_in_magazines').parent().parent().hide();
+                            }
+                        }
+                        //console.log(data.ech[i]);
+                    };
+                    //console.log(data.ech);
+                });
+            }
+
+            /*-------------------------In magazine ------------------------------------------*/
+
+
+            /*-------------------------In salon initialize------------------------------------------*/
+
+            function initializeAllInputInSalon(id) {
+
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('softivendor_crm_business_fiche_contra_initialize_contrat_data') }}",
+                    data: {
+                        id: id
+                    }
+                }).done(function(reponse) {
+                    //initialize
+                    data = JSON.parse(reponse);
+                    //initialize croix in input echollonement
+                    $('.teste').each(function() {
+                        $(this).hide();
+                    });
+                    //initialize input echollonement
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+                        $('#echolonnement_' + j + '_in_salon').val("");
+                        $('#echolonnement_' + j + '_in_magazines').val("");
+                        $('#echolonnement_' + j + '_in_club').val("");
+                        $('#echolonnement_' + j + '_in_games').val("");
+                        $('#prix_' + j + '_echolonnement_in_salon').val("");
+                        $('#prix_' + j + '_echolonnement_in_magazines').val("");
+                        $('#prix_' + j + '_echolonnement_in_club').val("");
+                        $('#prix_' + j + '_echolonnement_in_games').val("");
+
+                    };
+
+                    $('#amount_insalon').val(data.data.montant);
+
+                    $('#date_paiement_in_salon').val(data.data.datePaiement);
+                    if ($('#date_paiement_in_salon').val() != "") {
+                        $("#insa").show();
+
+                    } else {
+                        $("#insa").hide();
+                    }
+
+                    for (var i = 0; i < 6; i++) {
+                        j = i + 1;
+                        if (data.ech[i]['date_' + j] !== undefined) {
+                            $('#echolonnement_' + j + '_in_salon').val(data.ech[i]['date_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_salon').val(data.ech[i]['prix_' + j]);
+                            $('#prix_' + j + '_echolonnement_in_salon').parent().prev().show();
+                            $('#echolonnement_' + j + '_in_salon').parent().prev().show();
+                            $('.block-insalon').val(j);
+                            $('#echolonnement_' + j + '_in_salon').parent().parent().show();
+                            $('#prix_' + j + '_echolonnement_in_salon').parent().parent().show();
+                            $('#in_salon_increment').val(j + 1);
+                        } else {
+                            if (j >= 4) {
+                                $('#echolonnement_' + j + '_in_salon').parent().parent().hide();
+                                $('#prix_' + j + '_echolonnement_in_magazines').parent().parent().hide();
+                            }
+                        }
+                        //console.log(data.ech[i]);
+                    };
+                    //console.log(data.ech);
+                });
+            }
+
+            /*-------------------------In salon ------------------------------------------*/
+
+
+            /*-------------------------In club save ------------------------------------------*/
+
+            //save echollonement
+            $('.save_inclub').click(function() {
+
+                var montant = $("#amount_inclub").val();
+                var totalechelonnement = 0;
+                for (var i = 1; i <= 6; i++) {
+                    totalechelonnement += +$('#prix_' + i + '_echolonnement_in_club').val();
+                }
+
+                var total = montant - totalechelonnement
+
+                if (total >= 0) {
+
+
+                    var type = $(this).data('type');
+                    var form_data = new FormData();
+                    form_data.append('montant', $('#amount_inclub').val());
+                    form_data.append('date', $('#date_paiement_in_club').val());
+                    //echollnnenmt
+                    form_data.append('date_1', $('#echolonnement_1_in_club').val());
+                    form_data.append('date_2', $('#echolonnement_2_in_club').val());
+                    form_data.append('date_3', $('#echolonnement_3_in_club').val());
+                    form_data.append('date_4', $('#echolonnement_4_in_club').val());
+                    form_data.append('date_5', $('#echolonnement_5_in_club').val());
+                    form_data.append('date_6', $('#echolonnement_6_in_club').val());
+                    form_data.append('prix_1', $('#prix_1_echolonnement_in_club').val());
+                    form_data.append('prix_2', $('#prix_2_echolonnement_in_club').val());
+                    form_data.append('prix_3', $('#prix_3_echolonnement_in_club').val());
+                    form_data.append('prix_4', $('#prix_4_echolonnement_in_club').val());
+                    form_data.append('prix_5', $('#prix_5_echolonnement_in_club').val());
+                    form_data.append('prix_6', $('#prix_6_echolonnement_in_club').val());
+                    form_data.append('id', $("." + type + " .id_contrat").val());
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ path('softivendor_crm_business_fiche_contra_save_contrat_data') }}",
+                        processData: false,
+                        contentType: false,
+                        data: form_data
+                    }).done(function(reponse) {
+                        if (reponse == "ok") {
+                            if ($('#date_paiement_in_club').val() != "") {
+                                $("#inc").show();
+                            }
+                            //echelonement ajout croix
+                            $('input[id^="echolonnement_"]').each(function() {
+                                val = $(this).val();
+                                if (val != "") {
+                                    $(this).parent().prev().show();
+                                }
+                            });
+
+
+                            $('.modal-contrat-modif').fadeIn(800, function() {
+                                $(this).children().fadeIn(500)
+                            }).delay(1000).fadeOut(800)
+                        };
+                    });
+                } else {
+                    let html = '<div class="alert alert-warning validate-montant">le montant ' + montant + ' est inferieur à celle du total de l\'échelonnement ' + totalechelonnement + '</div>';
+
+                    $('.message-alert').fadeIn(800, function() {
+                        $(this).append(html).delay(4000).fadeOut(800, function() {
+                            $(this).children().remove()
+                        })
+                    })
+
+                }
+
+            })
+
+
+            /*-------------------------In club save ------------------------------------------*/
+
+            /*-------------------------In game save ------------------------------------------*/
+
+            //save echollonement
+            $('.save_ingames').click(function() {
+
+                    var montant = $("#amount_ingames").val();
+                    var totalechelonnement = 0;
+                    for (var i = 1; i <= 6; i++) {
+                        totalechelonnement += +$('#prix_' + i + '_echolonnement_in_games').val();
+                    }
+
+                    var total = montant - totalechelonnement
+
+                    if (total >= 0) {
+
+                        var type = $(this).data('type');
+
+                        var form_data = new FormData();
+                        form_data.append('montant', $('#amount_ingames').val());
+                        form_data.append('date', $('#date_paiement_in_games').val());
+                        //echollnnenmt
+                        form_data.append('date_1', $('#echolonnement_1_in_games').val());
+                        form_data.append('date_2', $('#echolonnement_2_in_games').val());
+                        form_data.append('date_3', $('#echolonnement_3_in_games').val());
+                        form_data.append('date_4', $('#echolonnement_4_in_games').val());
+                        form_data.append('date_5', $('#echolonnement_5_in_games').val());
+                        form_data.append('date_6', $('#echolonnement_6_in_games').val());
+                        form_data.append('prix_1', $('#prix_1_echolonnement_in_games').val());
+                        form_data.append('prix_2', $('#prix_2_echolonnement_in_games').val());
+                        form_data.append('prix_3', $('#prix_3_echolonnement_in_games').val());
+                        form_data.append('prix_4', $('#prix_4_echolonnement_in_games').val());
+                        form_data.append('prix_5', $('#prix_5_echolonnement_in_games').val());
+                        form_data.append('prix_6', $('#prix_6_echolonnement_in_games').val());
+                        form_data.append('id', $("." + type + " .id_contrat").val());
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ path('softivendor_crm_business_fiche_contra_save_contrat_data') }}",
+                            processData: false,
+                            contentType: false,
+                            data: form_data
+                        }).done(function(reponse) {
+                            if (reponse == "ok") {
+                                if ($('#date_paiement_in_games').val() != "") {
+                                    $("#ingames").show();
+                                }
+                                //echelonement ajout croix
+                                $('input[id^="echolonnement_"]').each(function() {
+                                    val = $(this).val();
+                                    if (val != "") {
+                                        $(this).parent().prev().show();
+                                    }
+                                });
+
+
+                                $('.modal-contrat-modif').fadeIn(800, function() {
+                                    $(this).children().fadeIn(500)
+                                }).delay(1000).fadeOut(800)
+                            };
+                        });
+                    } else {
+                        let html = '<div class="alert alert-warning validate-montant">le montant ' + montant + ' est inferieur à celle du total de l\'échelonnement ' + totalechelonnement + '</div>';
+
+                        $('.message-alert').fadeIn(800, function() {
+                            $(this).append(html).delay(4000).fadeOut(800, function() {
+                                $(this).children().remove()
+                            })
+                        })
+                    }
+
+                })
+                /*-------------------------In games save ------------------------------------------*/
+
+
+            /*-------------------------In magazines save ------------------------------------------*/
+
+            //save echollonement
+            $('.save_inmagazines').click(function() {
+
+
+                    var montant = $("#amount_inmagazines").val();
+                    var totalechelonnement = 0;
+                    for (var i = 1; i <= 6; i++) {
+                        totalechelonnement += +$('#prix_' + i + '_echolonnement_in_magazines').val();
+                    }
+
+                    var total = montant - totalechelonnement
+
+                    if (total >= 0) {
+
+
+                        var type = $(this).data('type');
+                        var form_data = new FormData();
+                        form_data.append('montant', $('#amount_inmagazines').val());
+                        form_data.append('date', $('#date_paiement_in_magazines').val());
+                        //echollnnenmt
+                        form_data.append('date_1', $('#echolonnement_1_in_magazines').val());
+                        form_data.append('date_2', $('#echolonnement_2_in_magazines').val());
+                        form_data.append('date_3', $('#echolonnement_3_in_magazines').val());
+                        form_data.append('date_4', $('#echolonnement_4_in_magazines').val());
+                        form_data.append('date_5', $('#echolonnement_5_in_magazines').val());
+                        form_data.append('date_6', $('#echolonnement_6_in_magazines').val());
+                        form_data.append('prix_1', $('#prix_1_echolonnement_in_magazines').val());
+                        form_data.append('prix_2', $('#prix_2_echolonnement_in_magazines').val());
+                        form_data.append('prix_3', $('#prix_3_echolonnement_in_magazines').val());
+                        form_data.append('prix_4', $('#prix_4_echolonnement_in_magazines').val());
+                        form_data.append('prix_5', $('#prix_5_echolonnement_in_magazines').val());
+                        form_data.append('prix_6', $('#prix_6_echolonnement_in_magazines').val());
+                        form_data.append('id', $("." + type + " .id_contrat").val());
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ path('softivendor_crm_business_fiche_contra_save_contrat_data') }}",
+                            processData: false,
+                            contentType: false,
+                            data: form_data
+                        }).done(function(reponse) {
+                            if (reponse == "ok") {
+                                if ($('#date_paiement_in_magazines').val() != "") {
+                                    $("#inmag").show();
+                                }
+                                //echelonement ajout croix
+                                $('input[id^="echolonnement_"]').each(function() {
+                                    val = $(this).val();
+                                    if (val != "") {
+                                        $(this).parent().prev().show();
+                                    }
+                                });
+
+
+                                $('.modal-contrat-modif').fadeIn(800, function() {
+                                    $(this).children().fadeIn(500)
+                                }).delay(1000).fadeOut(800)
+                            };
+                        });
+
+                    } else {
+                        let html = '<div class="alert alert-warning validate-montant">le montant ' + montant + ' est inferieur à celle du total de l\'échelonnement ' + totalechelonnement + '</div>';
+
+                        $('.message-alert').fadeIn(800, function() {
+                            $(this).append(html).delay(4000).fadeOut(800, function() {
+                                $(this).children().remove()
+                            })
+                        })
+                    }
+
+                })
+                /*-------------------------In magazines save ------------------------------------------*/
+
+            /*-------------------------In salon save ------------------------------------------*/
+
+            //save echollonement
+            $('.save_insalon').click(function() {
+
+
+                var montant = $("#amount_insalon").val();
+                var totalechelonnement = 0;
+                for (var i = 1; i <= 6; i++) {
+                    totalechelonnement += +$('#prix_' + i + '_echolonnement_in_salon').val();
+                }
+
+                var total = montant - totalechelonnement
+
+                if (total >= 0) {
+
+                    var type = $(this).data('type');
+                    var form_data = new FormData();
+                    form_data.append('montant', $('#amount_insalon').val());
+                    form_data.append('date', $('#date_paiement_in_salon').val());
+                    //echollnnenmt
+                    form_data.append('date_1', $('#echolonnement_1_in_salon').val());
+                    form_data.append('date_2', $('#echolonnement_2_in_salon').val());
+                    form_data.append('date_3', $('#echolonnement_3_in_salon').val());
+                    form_data.append('date_4', $('#echolonnement_4_in_salon').val());
+                    form_data.append('date_5', $('#echolonnement_5_in_salon').val());
+                    form_data.append('date_6', $('#echolonnement_6_in_salon').val());
+                    form_data.append('prix_1', $('#prix_1_echolonnement_in_salon').val());
+                    form_data.append('prix_2', $('#prix_2_echolonnement_in_salon').val());
+                    form_data.append('prix_3', $('#prix_3_echolonnement_in_salon').val());
+                    form_data.append('prix_4', $('#prix_4_echolonnement_in_salon').val());
+                    form_data.append('prix_5', $('#prix_5_echolonnement_in_salon').val());
+                    form_data.append('prix_6', $('#prix_6_echolonnement_in_salon').val());
+                    form_data.append('id', $("." + type + " .id_contrat").val());
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ path('softivendor_crm_business_fiche_contra_save_contrat_data') }}",
+                        processData: false,
+                        contentType: false,
+                        data: form_data
+                    }).done(function(reponse) {
+                        if (reponse == "ok") {
+                            if ($('#date_paiement_in_salon').val() != "") {
+                                $("#insa").show();
+                            }
+                            //echelonement ajout croix
+                            $('input[id^="echolonnement_"]').each(function() {
+                                val = $(this).val();
+                                if (val != "") {
+                                    $(this).parent().prev().show();
+                                }
+                            });
+
+
+                            $('.modal-contrat-modif').fadeIn(800, function() {
+                                $(this).children().fadeIn(500)
+                            }).delay(1000).fadeOut(800)
+                        };
+                    });
+                } else {
+                    let html = '<div class="alert alert-warning validate-montant">le montant ' + montant + ' est inferieur à celle du total de l\'échelonnement ' + totalechelonnement + '</div>';
+
+                    $('.message-alert').fadeIn(800, function() {
+                        $(this).append(html).delay(4000).fadeOut(800, function() {
+                            $(this).children().remove()
+                        })
+                    })
+                }
+
+            })
+
+
+            /*-------------------------In salon save ------------------------------------------*/
+
+
+            $('.btn-theme').on('click', function() {
+
+                $('.dpMonths input').datepicker({
+                    format: "dd/mm/yyyy",
+                });
+
+                //var valinput = $('#echolonnement_1_in_club').val();
+
+                //alert(valinput);
+                //var valinput = $('#echolonnement_1_in_club').val();
+
+                //if( valinput =! "" ) {                      
+                //$('#prix_echolonnement_1_in_club').css('display','block') ;  
+                //}
+
+            });
+
+        });
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            // var montant = $("#amount_inclub").val();
+            // var totalechelonnement = 0
+            // for (var i = 1; i <= 6 ; i++) {
+            //    totalechelonnement += +$('#prix_'+i+'_echolonnement_in_club').val();
+            //  }
+
+            // var total = montant - totalechelonnement
+            // alert(total);
+
+            $('#date_paiement_in_club').on('focus', function() {
+
+                setInterval(function() {
+                    if ($('#date_paiement_in_club').val() != "") {
+                        for (var i = 1; i <= 6; i++) {
+                            //    totalechelonnement += +$('#prix_'+i+'_echolonnement_in_club').val();
+                            $('#echolonnement_' + i + '_in_club').prop("disabled", 'disabled');
+                            $('#prix_' + i + '_echolonnement_in_club').prop("disabled", 'disabled');
+                        }
+
+                    }
+                }, 100);
+
+            })
+
+            $('#date_paiement_in_games').on('focus', function() {
+
+                setInterval(function() {
+                    if ($('#date_paiement_in_games').val() != "") {
+                        for (var i = 1; i <= 6; i++) {
+                            //    totalechelonnement += +$('#prix_'+i+'_echolonnement_in_club').val();
+                            $('#echolonnement_' + i + '_in_games').prop("disabled", 'disabled');
+                            $('#prix_' + i + '_echolonnement_in_games').prop("disabled", 'disabled');
+                        }
+
+                    }
+                }, 100);
+
+            })
+
+            $('#date_paiement_in_magazines').on('focus', function() {
+
+                setInterval(function() {
+                    if ($('#date_paiement_in_magazines').val() != "") {
+                        for (var i = 1; i <= 6; i++) {
+                            //    totalechelonnement += +$('#prix_'+i+'_echolonnement_in_club').val();
+                            $('#echolonnement_' + i + '_in_magazines').prop("disabled", 'disabled');
+                            $('#prix_' + i + '_echolonnement_in_magazines').prop("disabled", 'disabled');
+                        }
+
+                    }
+                }, 100);
+            })
+            $('#date_paiement_in_salon').on('focus', function() {
+
+                setInterval(function() {
+                    if ($('#date_paiement_in_salon').val() != "") {
+                        for (var i = 1; i <= 6; i++) {
+                            //    totalechelonnement += +$('#prix_'+i+'_echolonnement_in_club').val();
+                            $('#echolonnement_' + i + '_in_salon').prop("disabled", 'disabled');
+                            $('#prix_' + i + '_echolonnement_in_salon').prop("disabled", 'disabled');
+                        }
+
+                    }
+                }, 100);
+            })
+
+
+        })
+    </script> #}

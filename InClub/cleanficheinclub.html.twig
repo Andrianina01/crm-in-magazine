@@ -1,0 +1,758 @@
+{% extends ':crm:layout.html.twig' %} {% block header %}
+<style type="text/css">
+
+</style>
+
+{% include "SoftivendorCRMBundle:InClub:header.html.twig" %}
+
+{% endblock %} {% block body %} {{ form_start(form,{'attr':{novalidate:'novalidate',class:'row formulaire-add'}}) }}
+
+<input type="hidden" id="id_business" value="{{business.id}}">
+
+
+<div class="container-fluid">
+    <div class="row formulaire-add'">
+        <div class="col-lg-8 main-chart">
+
+            <div class="row">
+                <div class="col-sm-4 pl-5 pt-3">
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail">
+
+                            {% if business.logo %}
+                            <img src=" {{app.request.basepath}}/img/logo/{{business.logo}}"> {% else %}
+                            <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+                        </div>
+                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                        <div>
+
+                            <span class="btn btn-theme02 btn-file">
+                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span> {{ form_widget(form.fileLogo) }}
+                            </span>
+                            <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8 pt-3">
+                    <div class="showback">
+                        <h2>{{ business.societe }}</h2>
+                    </div>
+                    {{ activeHeaderContrat(business.id) }}
+                </div>
+            </div>
+
+
+            {% for key, messages in app.session.flashbag.all() %}
+
+
+            <div class="modal-contrat-suppr-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                                <i class="fa fa-check-circle true"></i>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
+            
+            {% endfor %}
+
+            <div class="row">
+                <div class="col-lg-12 pt-3" >
+                    <h3><i class="fa fa-angle-right"></i> Liste des membres in club</h3>
+
+       
+
+
+{#                 <ul class="user"
+                     id="user-fields-list" 
+                     data-index="{{ form.userBusiness|length > 0 ? form.userBusiness|last.vars.name + 1 : 0 }}"
+                     data-prototype="{{ form_row(form.userBusiness.vars.prototype,{attr :{class :'form-panel pt-3 liste-collaborateur'} })|e('html_attr') }}" 
+                     data-widget-tags="{{ '<li></li>'|e('html_attr')}}" 
+                     data-widget-counter="{{ form.userBusiness|length }}"
+                > #}
+
+                <ul class="tags" data-prototype="{{ form_row(form.userBusiness.vars.prototype,{attr :{class :'form-panel pt-3 liste-collaborateur'} })|e('html_attr') }}">
+
+                    {% for user in form.userBusiness %}
+                <li>
+
+                    <div class="form-panel pt-3 liste-collaborateur">
+                        <span class="dropdown-toggle btn-drop-2"><i class="fa fa-plus"></i></span>
+                        <div class="row">
+
+                            <div class="col-lg-2">
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <div class="fileupload-new thumbnail">
+                                 
+
+                                        {# <img src="{{ asset('img/avatar/') }}{{ business.userBusiness[0].avatar }}" style="width:100px;height:100px" /> #} {% if business.userBusiness[loop.index - 1].avatar != null %}
+                                        <img src="{{ asset('img/avatar/') }}{{  business.userBusiness[loop.index - 1].avatar }}" style="width:100px;height:100px" /> {% else %}
+                                        <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+
+                                    </div>
+                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                    <div>
+                                        <span class="btn btn-theme02 btn-file">
+                                <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span> {{ form_widget(user.fileAvatar) }}
+                                        </span>
+                                        <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-10 form-horizontal style-form">
+
+                                <div class="form-group mt-3">
+
+                                    <label class="col-sm-2 col-sm-2 control-label">Entreprise</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" disabled=d isabled>
+                                <option>{{ business.societe }}</option>
+                              </select>
+
+                                    </div>
+
+                                    <label class="col-sm-2 col-sm-2 control-label">Type</label>
+                                    <div class="col-sm-4">
+
+                                        {{ form_widget(user.type) }}
+
+                                        <div class="error">
+                                            {{ form_errors(user.type) }}
+                                            <span class="error-nom error"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-group mt-3">
+
+                                    <label class="col-sm-2 col-sm-2 control-label">Nom</label>
+                                    <div class="col-sm-4">
+                                        {{ form_widget(user.nom) }}
+                                        <div class="error">
+                                            {{ form_errors(user.nom) }}
+                                            <span class="error-nom-{{ loop.index - 1 }} error"></span>
+                                        </div>
+                                    </div>
+
+                                    <label class="col-sm-2 col-sm-2 control-label">Prénom</label>
+                                    <div class="col-sm-4">
+                                        {{ form_widget(user.prenom) }}
+                                        <div class="error">
+                                            {{ form_errors(user.prenom) }}
+                                            <span class="error-prenom-{{ loop.index - 1 }} error"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="fade-out">
+                                    <div class="form-group">
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Civilité</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.civilite) }}
+                                            <div class="error">
+                                                {{ form_errors(user.civilite) }}
+                                                <span class="error-civilite-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Tél</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.tel) }}
+                                            <div class="error">
+                                                {{ form_errors(user.tel) }}
+                                                <span class="error-tel-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 col-sm-2 control-label">Email</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.email) }}
+                                            <div class="error">
+                                                {{ form_errors(user.email) }}
+                                                <span class="error-email-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Fonction</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.fonction) }}
+                                            <div class="error">
+                                                {{ form_errors(user.fonction) }}
+                                                <span class="error-fonction-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 col-sm-2 control-label">Date d'abonnement</label>
+                                        <div class="col-sm-4">
+                                            <div data-date-minviewmode="months" data-date-viewmode="years" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                                {{ form_widget(user.dateInscription, {'attr': { 'class': 'form-control form-control-inline input-medium default-date-picker', 'size': '16'}}) }}
+
+                                                <div class="error">
+                                                    {{ form_errors(user.dateInscription) }}
+                                                    <span class="error-dateInscription-{{ loop.index - 1 }} error"></span>
+                                                </div>
+                                                <span class="input-group-btn add-on">
+                                  <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                                  </span>
+                                            </div>
+                                        </div>
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Ville</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.ville) }}
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 col-sm-2 control-label">Mot de passe</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.pass) }}
+                                            <div class="error">
+                                                {{ form_errors(user.pass) }}
+                                                <span class="error-pass-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Confirmation mot de passe</label>
+                                        <div class="col-sm-4">
+                                            <input type="password" name="confirm_pass" id="confirm_pass-{{ loop.index - 1 }}" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <div class="bouton_crud">
+                                                <div class="checkbox">
+                                                    <label>
+                                  {{ form_widget(user.actif) }}
+                                  Status (actif ou pas)
+                                  </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="bouton_crud">
+                                                <div class="checkbox">
+                                                    <label>
+                                  {{ form_widget(user.blocage) }}
+                                  Blocage (bloquer ou pas)
+                                  </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <article>
+                                    <div class="text-right" data-id="{{ loop.index - 1 }}">
+                                        <input type="hidden" value="{{ loop.index - 1 }}">
+                                        <button type="button" class="btn btn-theme edit" title="Editer">Editer</button> {{ form_widget(user.enregistrer) }}
+                                        <button type="button" data-id="{{business.userBusiness[loop.index - 1].id}}" class="btn btn-theme" data-toggle="modal" data-target="#myModalSuppression{{loop.index - 1}}" title="Supprimer">Supprimer</button>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# </div> #} {# modal #}
+
+                <div class="modal fade" id="myModalSuppression{{loop.index - 1}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                            </div>
+                            <div class="modal-body">
+                                Voulez-vous vraiment supprimer cet contrat ?
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{{path("softivendor_crm_business_fiche_delete_inclub",{id : 'business.userBusiness[loop.index - 1].id'}) }}" class="btn btn-default delete">Oui</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </li>
+{{ form_row(form._token) }}
+
+
+                {% endfor %}
+
+    </ul>            
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 ds pt-3">
+        <article>
+            <div class="bouton_crud">
+                <div class="checkbox">
+                    <label>
+                          {# {{ form_widget(form.partenaire) }} #}
+                          {% if business.Partenaire != 0 %}
+                          <input type="checkbox" id="partenaire" name="partenaire" checked>
+                        {% else %}
+                           <input type="checkbox" id="partenaire" name="partenaire" >
+                        {% endif %}
+                          Partenaire
+                          </label>
+                </div>
+            </div>
+        </article>
+    </div>
+    <!-- /col-lg-3 -->
+</div>
+</div>
+{{ form_row(form._token) }}
+
+{# <button type="button" class="add-another-collection-widget" data-collection-holder-class="user" data-list-selector="#user-fields-list"><span  class="dropdown-toggle btn-drop-2"><i class="fa fa-plus"></i></span></button> #}
+
+
+{{ form_end(form) }}
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.formulaire-add input').prop('disabled', true);
+        $('.formulaire-add select').prop('disabled', true);
+        $('.hideme').css('display', 'none');
+        $('#partenaire').prop('disabled', false);
+
+
+        $('.edit').on('click', function() {
+            $('.formulaire-add input').prop('disabled', false);
+            $('.formulaire-add select').prop('disabled', false);
+            $('.hideme').show();
+            $('.edit').hide();
+        })
+
+
+        // $('.js-datepicker').datetimepicker({
+        //         language:  'fr'
+        //         format: 'dd-mm-yy'
+        //     });
+
+
+        // $('#softivendor_crmbundle_business_userBusiness_0_dateInscription').datetimepicker({
+        //       language:  'fr',
+        //       weekStart: 1,
+        //       todayBtn:  1,
+        //   autoclose: 1,
+        //   todayHighlight: 1,
+        //   startView: 2,
+        //   forceParse: 0,
+        //       showMeridian: 1
+        //   });
+
+
+
+    });
+</script>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        // var partenaire =$("input[name='checkbox-partenaire']:checked").val();
+        $('#partenaire').click(function() {
+            var iscked = $(this).is(':checked');
+            var id = $('#id_business').val();
+            $.ajax({
+
+                method: "POST",
+                url: "{{ path('softivendor_crm_business_fiche_ajaxByBusness') }}",
+                data: {
+                    id: id,
+                    checked: iscked
+                }
+
+            }).done(function() {
+                console.log("ok");
+            })
+
+
+        });
+
+
+    });
+</script>
+
+
+<script type="text/javascript">
+
+// var $collectionHolder;
+
+// // setup an "add a tag" link
+// var $addTagButton = $('<button type="button" class="add_tag_link">Add a tag</button>');
+// var $newLinkLi = $('<li></li>').append($addTagButton);
+
+// jQuery(document).ready(function() {
+//     // Get the ul that holds the collection of tags
+//     $collectionHolder = $('ul.tags');
+
+//     // add the "add a tag" anchor and li to the tags ul
+//     $collectionHolder.append($newLinkLi);
+
+//     // count the current form inputs we have (e.g. 2), use that as the new
+//     // index when inserting a new item (e.g. 2)
+//     $collectionHolder.data('index', $collectionHolder.find('input').length);
+
+//     $addTagButton.on('click', function(e) {
+//         // add a new tag form (see next code block)
+//         addTagForm($collectionHolder, $newLinkLi);
+//     });
+// });
+
+// function addTagForm($collectionHolder, $newLinkLi) {
+//     // Get the data-prototype explained earlier
+//     var prototype = $collectionHolder.data('prototype');
+
+//     // get the new index
+//     var index = $collectionHolder.data('index');
+
+//     var newForm = prototype;
+//     // You need this only if you didn't set 'label' => false in your tags field in TaskType
+//     // Replace '__name__label__' in the prototype's HTML to
+//     // instead be a number based on how many items we have
+//     // newForm = newForm.replace(/__name__label__/g, index);
+
+//     // Replace '__name__' in the prototype's HTML to
+//     // instead be a number based on how many items we have
+//     newForm = newForm.replace(/__name__/g, index);
+
+//     // increase the index with one for the next item
+//     $collectionHolder.data('index', index + 1);
+
+//     // Display the form in the page in an li, before the "Add a tag" link li
+//     var $newFormLi = $('<li></li>').append(newForm);
+//     $newLinkLi.before($newFormLi);
+// }
+
+
+
+
+
+
+
+
+
+
+    // add-collection-widget.js
+    // jQuery(document).ready(function() {
+    //     jQuery('.add-another-collection-widget').click(function(e) {
+    //         var list = jQuery(jQuery(this).attr('data-list-selector'));
+    //         // Try to find the counter of the list or use the length of the list
+    //         var counter = list.data('widget-counter') || list.children().length;
+
+    //         // grab the prototype template
+    //         var newWidget = list.attr('data-prototype');
+    //         // replace the "__name__" used in the id and name of the prototype
+    //         // with a number that's unique to your emails
+    //         // end name attribute looks like name="contact[emails][2]"
+    //         newWidget = newWidget.replace(/__name__/g, counter);
+    //         // Increase the counter
+    //         counter++;
+    //         // And store it, the length cannot be used if deleting widgets is allowed
+    //         list.data('widget-counter', counter);
+
+    //         // create a new list element and add it to the list
+    //         var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+    //         newElem.appendTo(list);
+    //     });
+    // });
+
+
+</script>
+
+
+
+{# validation #}
+
+<script>
+    $(document).on('click', '.hideme', function() {
+
+        var id = $(this).parent().data('id');
+
+        //nom
+        var valideNom = 1;
+        var nom = $('#softivendor_crmbundle_business_userBusiness_' + id + '_nom ');
+        var errorNom = $('.error-nom-' + id);
+        if (nom.val().trim() == "") {
+            valideNom = 0;
+            errorNom.text('Veuillez completez le champ Nom s\'il vous plait');
+        } else {
+            errorNom.text('');
+        }
+
+        //validation prenom
+        var validePrenom = 1;
+        var prenom = $('#softivendor_crmbundle_business_userBusiness_' + id + '_prenom');
+        var errorPrenom = $('.error-prenom-' + id);
+        if (prenom.val().trim() == "") {
+            validePrenom = 0;
+            errorPrenom.text('Veuillez completez le champ Prénom s\'il vous plait');
+        } else {
+            errorPrenom.text('');
+        }
+
+        //   //           //validation email 
+        var valideEmail = 1
+        var email = $('#softivendor_crmbundle_business_userBusiness_' + id + '_email');
+        var errorMail = $('.error-email-' + id);
+        var regexMail = /^[\w\-\+]+(\.[\w\-]+)*@[\w\-]+(\.[\w\-]+)*\.[\w\-]{2,19}$/;
+        if (email.val().trim() == "") {
+            valideEmail = 0;
+            errorMail.text('Veuillez completez le champ email s\'il vous plait');
+        } else if (!(email.val()).match(regexMail)) {
+            valideEmail = 0;
+            errorMail.text('Veuillez entrez un email valide s\'il vous plait');
+        } else {
+            valideEmail = 1;
+            errorMail.text('');
+        }
+
+        //     //tel
+        var valideTel = 1;
+        var tel = $('#softivendor_crmbundle_business_userBusiness_' + id + '_tel');
+        var msgErrorTel = $('.error-tel-' + id);
+        var regexTel = /(^\+|\d|\s)+$/;
+
+        if (tel.val().trim() == "") {
+            valideTel = 0;
+            msgErrorTel.text('Veuillez completez le champ Portable s\'il vous plait ex: 06 50 40 88 45');
+        } else if (!(tel.val()).match(regexTel)) {
+            valideTel = 0;
+            msgErrorTel.text('Veuillez entrez un numeros de téléphone exact s\'il vous plait  ex:06 50 40 88 45');
+        } else {
+            valideTel = 1;
+            msgErrorTel.text('');
+        }
+
+
+        //             //           //validation mot de passe 
+
+        var validePass = 1;
+        var pass = $('#softivendor_crmbundle_business_userBusiness_' + id + '_pass');
+        var confirmPass = $('#confirm_pass-' + id);
+        var erroPass = $('.error-pass-' + id);
+        if (pass.val() != confirmPass.val()) {
+            validePass = 0;
+            erroPass.css('color', 'red');
+            erroPass.text('les mots de passe doivent correspondres');
+        } else {
+            erroPass.text('');
+        }
+
+        //
+
+        if (valideTel == 0 || validePrenom == 0 || valideNom == 0 || valideEmail == 0 || validePass == 0) {
+            console.log(valideTel);
+            console.log(validePrenom);
+            console.log(valideNom);
+            console.log(validePass);
+            console.log(valideEmail);
+            console.log(id);
+
+            return false;
+        }
+
+        $('form[name="softivendor_crmbundle_business"]').submit();
+
+
+
+
+
+    });
+
+
+    // $('document').ready(function() {
+    //       $('#softivendor_businessbundle_userbusiness_dateInscription_month option').each(function(){
+    //         if ( $(this).text() === 'January' )
+    //           $(this).text('Janvier');
+    //         if ( $(this).text() === 'February' )
+    //           $(this).text('Février');
+    //         if ( $(this).text() === 'March' )
+    //           $(this).text('Mars');
+    //         if ( $(this).text() === 'April' )
+    //           $(this).text('Avril');
+    //         if ( $(this).text() === 'May' )
+    //           $(this).text('Mai');
+    //         if ( $(this).text() === 'June' )
+    //           $(this).text('Juin');
+    //         if ( $(this).text() === 'July' )
+    //           $(this).text('Juillet');
+    //         if ( $(this).text() === 'August' )
+    //           $(this).text('Août');
+    //         if ( $(this).text() === 'September' )
+    //           $(this).text('Septembre');
+    //         if ( $(this).text() === 'October' )
+    //           $(this).text('Octobre');
+    //         if ( $(this).text() === 'November' )
+    //           $(this).text('Novembre');
+    //         if ( $(this).text() === 'December' )
+    //           $(this).text('Decembre');
+    //           console.log($(this).text());
+    //       });
+    //      $('form[name="softivendor_crmbundle_business"]').on('submit', function(e) {
+    //           //validation nom
+
+    //           var valideNom = 1;
+    //           var nom = $('#softivendor_crmbundle_business_userBusiness_0_nom ');
+    //           var errorNom = $('.error-nom');
+    //           if (nom.val().trim() == ""){
+    //             valideNom = 0;
+    //             errorNom.text('Veuillez completez le champ Nom s\'il vous plait');
+    //           }else{
+    //             errorNom.text('');
+    //           }
+
+
+    //           //validation prenom
+    //           var validePrenom = 1;
+    //           var prenom = $('#softivendor_crmbundle_business_userBusiness_0_prenom');
+    //           var errorPrenom = $('.error-prenom');
+    //           if (prenom.val().trim() == ""){
+    //             validePrenom = 0;
+    //             errorPrenom.text('Veuillez completez le champ Prénom s\'il vous plait');
+    //           }else{
+    //             errorPrenom.text('');
+    //           }
+    //           //validation email 
+    //           var valideEmail = 1 
+    //           var email = $('#softivendor_crmbundle_business_userBusiness_0_email');
+    //           var errorMail = $('.error-email');
+    //           var regexMail = /^[\w\-\+]+(\.[\w\-]+)*@[\w\-]+(\.[\w\-]+)*\.[\w\-]{2,19}$/;
+    //           if (email.val().trim() == ""){
+    //             valideEmail = 0;
+    //             errorMail.text('Veuillez completez le champ email s\'il vous plait');
+    //           }else if(!(email.val()).match(regexMail)){
+    //             valideEmail = 0;
+    //             errorMail.text('Veuillez entrez un email valide s\'il vous plait');
+    //           }else{
+    //               valideEmail = 1;
+    //               errorMail.text('');
+    //           }
+
+    //           //validation telephone
+    //             var valideTel = 1;
+    //             var tel = $('#softivendor_crmbundle_business_userBusiness_0_tel');
+    //             var msgErrorTel = $('.error-tel');
+    //             var regexTel = /(^\+|\d|\s)+$/;
+
+    //             if ( tel.val().trim() == "" ){
+    //                 valideTel = 0;
+    //                 msgErrorTel.text('Veuillez completez le champ Portable s\'il vous plait ex: 06 50 40 88 45');
+    //             }
+    //             else if(!(tel.val()).match(regexTel)){
+    //                 valideTel = 0;
+    //                 msgErrorTel.text('Veuillez entrez un numeros de téléphone exact s\'il vous plait  ex:06 50 40 88 45');
+    //             }else{
+    //                 valideTel = 1;
+    //                 msgErrorTel.text('');
+    //             }
+
+    //           //validation mot de passe 
+
+    //           var validePass = 1;
+    //           var pass = $('#softivendor_crmbundle_business_userBusiness_0_pass');
+    //           var confirmPass = $('#confirm_pass');
+    //           var erroPass = $('.error-pass');
+    //           if ( pass.val() !=  confirmPass.val() ){
+    //               validePass = 0;
+    //               erroPass.css('color','red');  
+    //               erroPass.text('les mots de passe doivent correspondres'); 
+    //           }else{
+    //             erroPass.text(''); 
+    //           }
+    //           if ( validePrenom == 0 || valideNom == 0 || valideEmail == 0 || validePass == 0  || valideTel == 0){
+    //             $('.global-error').css('display','block');
+    //             return false;
+    //           }
+    //      });
+    //      //mdp test
+    //      $('#softivendor_businessbundle_userbusiness_pass').keyup(function(){
+    //           var pass = $('#softivendor_crmbundle_business_userBusiness_0_pass').val();
+    //           var erroPass = $('.error-pass');
+    //           if ( pass.length <= 6 )
+    //           {   
+    //               erroPass.css('color','red');  
+    //               erroPass.text('sécurité faible');  
+    //           }else if( pass.length > 6 && pass.length <= 10){
+    //               erroPass.css('color','blue');  
+    //               erroPass.text('sécurité moyen'); 
+    //           }else if(pass.length > 11 ){
+    //               erroPass.css('color','green');  
+    //               erroPass.text('sécurité élevé'); 
+    //           }
+
+    //           if( pass.length == 0 ){
+    //               erroPass.text(''); 
+    //           }
+    //      });
+    // });
+</script>
+<script>
+$(document).ready(function(){
+    $('.btn-drop-2').each(function() {
+        let drop = $(this).parent().find('.fade-out');
+
+        $(this).click(function() {
+            if (!drop.is(':visible')) {
+                $('.fade-out').slideUp(600)
+                $('.btn-drop-2').children().removeClass('fa-minus')
+                $('.btn-drop-2').children().addClass('fa-plus')
+                drop.slideDown();
+                $(this).children().removeClass('fa-plus')
+                $(this).children().addClass('fa-minus')
+
+            } else {
+                console.log('false')
+                drop.slideUp();
+                $(this).children().addClass('fa-plus')
+                $(this).children().removeClass('fa-minus')
+            }
+        })
+
+    });
+})
+</script>
+
+{% endblock %}

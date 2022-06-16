@@ -1,0 +1,139 @@
+<html>
+    <head>	
+        <style type="text/css">
+            table {border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;}
+            table td {border-collapse: collapse;}
+        </style>
+    </head>
+    <body>
+        <table summary="" cellspacing="0" cellpadding="0" border="0" align="left" width="100%"  style=" margin-right:auto">
+            <tr>
+                <td style="padding:7px 0">
+                    <table summary="" cellspacing="0" cellpadding="0" border="0" align="left"  width="450" >
+                        <tr>
+                            <td class="logo" style="border-bottom:4px solid #333333;padding:7px 0; text-align: center;" align="center">
+                                <img src="images/logo_red.jpg" alt="in-magazines" width="75" style="margin: auto; display: inline-block">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:7px 0; font-weight:500;font-size:25px;text-transform:uppercase;line-height:33px; text-align: center; color: #555454" align="center">
+                                <span style="margin: auto; display: inline-block;color: #555454">
+                                {{ event_detail }}
+                                </span><br>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="padding:7px 0;" >
+                                <table summary="" align="left"  width="450"  cellspacing="0" cellpadding="0" border="0"><!-- Title -->
+                                    <tr>
+                                         <td style="width:40px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal; vertical-align:middle">
+                                            Photo
+                                        </td>
+
+                                        <td style="width:40px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal; vertical-align:middle">
+                                            Civilité
+                                        </td>
+
+                                        <td style="width:40px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal; vertical-align:middle">
+                                            Nom
+                                        </td>
+                                        <td style="width:85px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal; vertical-align:middle">
+                                            Prénom
+                                        </td>
+                                        <td style="width:85px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal;line-height :normal; vertical-align:middle ">
+                                            <strong> Société</strong>
+                                        </td>
+                                        <td style="width:100px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal;line-height :normal;  vertical-align:middle">
+                                            Evènement
+                                        </td>
+                                        <td style="width:70px; font-family: Arial,Open-sans, sans-serif; border:1px solid #D6D4D4;color:rgb(85, 84, 84);padding:7px 8px; font-size:11px; line-height :normal; vertical-align:middle ">
+                                            Statut
+                                        </td>										
+                                    </tr>
+                                
+                                    {% for item in list %} 
+                                    
+                                    <tr>
+                                        <td style="width:40px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif;color:rgb(85, 84, 84);padding:3px 8px; font-size:13px; line-height :normal">
+                                            
+                                            {% if (item.userGames.avatar != null)  %}
+                                                <img  src="img/avatar/{{ item.userGames.avatar}}" width="40" >
+                                            {% else %}
+                                                <img    src="images/avatar_defaut.jpg" width="40">
+                                            {% endif %}
+                                            {# {{ item.userGames.avatar}} #}
+                                        
+                                        </td>
+
+                                        <td style="width:40px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif;color:rgb(85, 84, 84);padding:3px 8px; font-size:13px; line-height :normal">
+                                        
+                                            {{ item.userGames.civilite}}
+                                        
+                                        </td>
+
+                                        <td style="width:40px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif;color:rgb(85, 84, 84);padding:3px 8px; font-size:13px; line-height :normal">
+                                        
+                                            {{ item.userGames.nom}}
+                                        
+                                        </td>
+                                        
+                                        <td style="width:40px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif;color:rgb(85, 84, 84);padding:3px 8px; font-size:13px; line-height :normal">
+                                        
+                                            {{ item.userGames.prenom}}
+                                        
+                                        </td>
+
+                                        <td style="width:40px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif;color:rgb(85, 84, 84);padding:3px 8px; font-size:13px; line-height :normal">
+                                        
+                                            {{ item.userGames.Business.Societe }}
+                                        
+                                        </td>
+                                        <td  style="width:85px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif; color:rgb(85, 84, 84);padding:3px 8px; font-size:10px; line-height :normal;  vertical-align:middle">
+                                            {{ item.eventGames.titre}}
+                                            
+                                        </td>
+
+                                         <td  style="width:85px; border-bottom:1px solid #D6D4D4; font-family: Arial,Open-sans, sans-serif; color:rgb(85, 84, 84);padding:3px 8px; font-size:10px; line-height :normal;  vertical-align:middle">
+                                            {{  item.type}}
+                                            
+                                        </td>
+                                        
+                                       						
+                                    </tr>
+
+                                    {% endfor %}
+                                   
+
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0!important">&nbsp;</td>
+                        </tr>
+                        
+
+                        <tr>
+                            <td class="logo" style="border-bottom:4px solid #333333;padding:7px 0; text-align: center; " align="center">
+                            </td>
+                        </tr>
+{#                         <tr>
+                            <td style="text-align: center; padding-top: 15px">
+                                <span style="font-family: Arial,Open-sans, sans-serif; color:rgb(85, 84, 84);padding:3px 8px; font-size:13px; line-height :normal; text-align: center; display: inline-block; margin: auto">
+                                    Société PASTEL - Magazine IN<br>
+                                    80 route des Lucioles - Batiment N - 06560 Valbonne Sophia Antipolis
+                                    - Tél. : 09 83 79 29 56
+                                </span>
+                            </td>
+                        </tr> #}
+
+                        <tr style="display: none;">
+                            <td style="padding:0!important">&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

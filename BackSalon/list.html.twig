@@ -1,0 +1,92 @@
+{% extends ':crm:layout.html.twig' %}
+
+{% block body %}
+
+		<div class="row mt tableau">
+			<div class="col-md-12">
+				<div class="content-panel">
+					<table class="table table-striped table-advance table-hover">
+						<div class="title">
+						<h3>
+							<i class="fa fa-angle-right"></i>
+							Liste des salons</h3>
+							<a href="{{path('softivendor_crm_Backend_inSalon_add')}}" class="btn btn-theme02 btn-md btn-add">Ajouter</a>
+						</div>
+						<hr>
+						<thead>
+							<tr>
+								<th>
+									Nom</th>
+								<th>
+									Date début</th>
+								<th>
+									Date fin</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for salon in salons %}
+
+
+								<tr>
+									<td>{{salon.nom}}</td>
+									<td>{{salon.dateDebut |date("d/m/Y")}}</td>
+									<td>{{salon.dateFin|date("d/m/Y")}}</td>
+
+									<td>
+										<a href="{{path('softivendor_crm_Backend_inSalon_update',{id: salon.id})}}"><button class="btn btn-primary btn-xs" title="editer"><i class="fa fa-pencil"></i></button></a>
+										<button data-id="{{ salon.id }}" class="btn btn-danger btn-xs" title="supprimer" data-toggle="modal" data-target="#myModal{{ salon.id }}"><i class="fa fa-trash-o "></i></button>
+										</td>
+									</td>
+								</tr>
+
+	            			{# modal dynamic #}
+	            			<div class="modal fade" id="myModal{{ salon.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			                  <div class="modal-dialog">
+			                    <div class="modal-content">
+			                        <div class="modal-header">
+			                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                          <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+			                        </div>
+			                        <div class="modal-body">
+			                          Voulez-vous vraiment supprimer ce salon ?
+			                        </div>
+			                        <div class="modal-footer">
+			                          <a  href="{{path('softivendor_crm_Backend_inSalon_delete',{id: salon.id})}}" class="href-delete"><button type="button" class="btn btn-default" >Oui</button><a/>
+			                          <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+			                        </div>
+			                    </div>
+			                  </div>
+			                </div>
+	            			{# end modal dynamique #}
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /content-panel -->
+			</div>
+			<!-- /col-md-12 -->
+		</div>
+
+		{% for key, messages in app.session.flashbag.all() %}
+
+			<div class="modal-contrat-suppr-2">
+	                    <div class="modal-dialog">
+	                        <div class="modal-content">
+
+	                        <div class="modal-header text-center">
+	                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+	                        </div>
+	                        <div class="modal-body">
+	                                <i class="fa fa-check-circle true"></i>
+	                                </div>
+	                        </div>
+	                    </div>
+	                    </div>
+
+		{% endfor %}
+
+
+
+
+{% endblock body %}

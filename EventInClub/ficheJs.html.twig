@@ -1,0 +1,404 @@
+<script>
+
+		//fonction pour l'api google maps
+      function initMap() {
+        var ville = /** @type {!HTMLInputElement} */(
+            document.getElementById('softivendor_crmbundle_event_ville'));
+
+         var input = /** @type {!HTMLInputElement} */(
+            document.getElementById('softivendor_crmbundle_event_adresse'));
+
+        var types = document.getElementById('type-selector');
+
+        var autocomplete = new google.maps.places.Autocomplete(input);//permet l'autocompletion
+        var autocompleteville = new google.maps.places.Autocomplete(ville);//permet l'autocompletion
+        
+
+        autocomplete.addListener('place_changed', function() {
+          var placess = autocomplete.getPlace();
+          var latss = placess.geometry.location.lat();
+          var lngss = placess.geometry.location.lng();
+          console.log(latss);
+          console.log(lngss);
+          var inputlat = document.getElementById('softivendor_crmbundle_event_lat');
+          var inputlong = document.getElementById('softivendor_crmbundle_event_longit');
+           $('#softivendor_crmbundle_event_lat').val(latss);
+              $('#softivendor_crmbundle_event_longit').val(lngss);
+        });
+        //autocomplete ville
+        autocompleteville.addListener('place_changed', function() {
+            var addr = document.getElementById('softivendor_crmbundle_event_adresse');
+            var inputlat = document.getElementById('softivendor_crmbundle_event_lat');
+              var inputlong = document.getElementById('softivendor_crmbundle_event_longit');
+            console.log('val');
+            console.log(inputlat.value);
+            console.log(inputlong.value);
+            console.log(addr.value);
+            if ( 
+                inputlat.value == ""  ||
+                inputlong.value == "" ||
+                addr.value == ""
+            ){
+              var placess = autocompleteville.getPlace();
+              var latss = placess.geometry.location.lat();
+              var lngss = placess.geometry.location.lng();
+              console.log(latss);
+              console.log(lngss);
+
+              $('#softivendor_crmbundle_event_lat').val(latss);
+              $('#softivendor_crmbundle_event_longit').val(lngss);
+          }
+        });
+
+
+      }
+</script>
+<script type="text/javascript">
+	//tinymce listener
+	// function callback_tinymce_init(editor) {
+	//     //console.log(editor);
+	// }
+
+	// //datepicker
+ //    $('.form_datetime').datetimepicker({
+ //        language:  'fr',
+ //        weekStart: 1,
+ //        todayBtn:  1,
+ //        autoclose: 1,
+ //        todayHighlight: 1,
+ //        startView: 2,
+ //        forceParse: 0,
+
+ //        format: "dd/mm/yyyy"
+
+ //        //showMeridian: 1,
+ //    });
+
+ //    $('.form_date').datetimepicker({
+ //        language:  'fr',
+ //        weekStart: 1,
+ //        todayBtn:  1,
+ //        autoclose: 1,
+ //        todayHighlight: 1,
+ //        startView: 2,
+ //        minView: 2,
+ //        forceParse: 0,
+ //        onSelect: function() {
+ //            $(this).change();
+ //        }
+ //    });
+
+	$(document).ready(function() {
+
+        // tinymce listener
+        function callback_tinymce_init(editor) {
+            //console.log(editor);
+        }
+		
+
+		//js validation
+		$('.ajout').on('click', function callback_tinymce_init(editor) {
+
+            console.log(editor);
+            tinyMCE.triggerSave();
+
+			//validation enseigne
+            var valideTitre = 1;
+            var titre = $('#softivendor_crmbundle_event_titre');
+            var msgErrorTitre = $('.error-titre');
+            if ( titre.val().trim() == "" ){
+                valideTitre = 0;
+                msgErrorTitre.text('Veuillez complétez le champ Titre s\'il vous plait');
+            }else{
+                valideTitre = 1;
+                msgErrorTitre.text('');
+            }
+            //validation description
+            var valideDescription = 1;
+            var description = $(".tinymce");
+            var msgErrorDescription = $('.error-description');
+            if (description.val().trim() == ""){
+                valideDescription = 0;
+                msgErrorDescription.text('Veuillez complétez le champ Description s\'il vous plait');
+            }else{
+                valideDescription = 1;
+                msgErrorDescription.text('');
+            }
+            //validation bandeau
+            var valideBandeau = 1;
+            var bandeau = $('#softivendor_crmbundle_event_fileBandeau');
+            var msgErrorBandeau = $('.error-fileBandeau');
+            if (bandeau.val().trim() == "" && $('#bandeauImg').length == 0){
+                valideBandeau = 0;
+                msgErrorBandeau.text('Veuillez selectionnez votre  Bandeau s\'il vous plait');
+            }else{
+                valideBandeau = 1;
+                msgErrorBandeau.text('');
+            }
+
+            //dodson
+            var period = $("#softivendor_crmbundle_event_period").get(0).checked;
+            var valideDateBegin1 = 1;
+            var valideDateBegin2 = 1;
+            var valideDateEnd = 1;
+            var msgErrorDateBegin1 = $('.error-date-begin-1');
+            var msgErrorDateBegin2 = $('.error-date-begin-2');
+            var msgErrorDateEnd = $('.error-date-end');
+            var dateBegin1 = $('#softivendor_crmbundle_event_dateBeginTemp1');
+            var dateBegin2 = $('#softivendor_crmbundle_event_dateBeginTemp2');
+            var dateEnd = $('#softivendor_crmbundle_event_dateEnd');
+            if (period) {
+                if ( dateBegin2.val().trim() == "" ){
+                    valideDateBegin2 = 0;
+                    msgErrorDateBegin2.text('Veuillez completez le champ Date début s\'il vous plait');
+                }else{
+                    valideDateBegin2 = 1;
+                    msgErrorDateBegin2.text('');
+                }
+
+                if ( dateEnd.val().trim() == "" ){
+                    valideDateEnd = 0;
+                    msgErrorDateEnd.text('Veuillez completez le champ Date fin s\'il vous plait');
+                }else{
+                    valideDateEnd = 1;
+                    msgErrorDateEnd.text('');
+                }
+            }else{
+                if ( dateBegin1.val().trim() == "" ){
+                    valideDateBegin1 = 0;
+                    msgErrorDateBegin1.text('Veuillez completez le champ Date s\'il vous plait');
+                }else{
+                    valideDateBegin1 = 1;
+                    msgErrorDateEnd.text('');
+                }
+            }
+            //dodson
+            //validation Ville
+            var valideVille = 1;
+            var ville = $('#softivendor_crmbundle_event_ville');
+            var msgErrorVille =$('.error-ville');
+
+            if ( ville.val().trim() == "" ){
+                valideVille = 0;
+                msgErrorVille.text('Veuillez completez le champ Ville s\'il vous plait');
+            }else{
+                valideVille = 1;
+                msgErrorVille.text('');
+            }
+            //validation Adresse
+            var valideAdresse = 1;
+            var adresse = $('#softivendor_crmbundle_event_adresse');
+            var msgErrorAdresse =$('.error-adresse');
+
+            if ( adresse.val().trim() == "" ){
+                valideAdresse = 0;
+                msgErrorAdresse.text('Veuillez completez le champ Adresse s\'il vous plait');
+            }else{
+                valideAdresse = 1;
+                msgErrorAdresse.text('');
+            }
+            //validation Country
+            var valideCountry = 1;
+            var country = $('[name="country"]');
+            var msgErrorCountry =$('.error-country');
+
+            if ( country.val().trim() == "" ){
+                valideCountry = 0;
+                msgErrorCountry.text('Veuillez completez le champ Country s\'il vous plait');
+            }else{
+                valideCountry = 1;
+                msgErrorCountry.text('');
+            }
+            //validation nbPlace
+            var valideNbPlace = 1;
+            var nbPlace = $('#softivendor_crmbundle_event_nbPlace');
+            var msgErrorNbPlace =$('.error-nbPlace');
+
+            if ( nbPlace.val().trim() == "" ){
+                valideNbPlace = 0;
+                msgErrorNbPlace.text('Veuillez completez le champ Nombre de place s\'il vous plait');
+            }else{
+                valideNbPlace = 1;
+                msgErrorNbPlace.text('');
+            }
+             //validation lat
+            var valideLat = 1;
+            var lat = $('#softivendor_crmbundle_event_lat');
+            var msgErrorLat =$('.error-lat');
+
+            if ( lat.val().trim() == "" ){
+                valideLat = 0;
+                msgErrorLat.text('Veuillez completez le champ Latitude s\'il vous plait');
+            }else{
+                valideLat = 1;
+                msgErrorLat.text('');
+            }
+            //validation longit
+            var valideLongit = 1;
+            var longit = $('#softivendor_crmbundle_event_longit');
+            var msgErrorLongit =$('.error-longit');
+
+            if ( longit.val().trim() == "" ){
+                valideLongit = 0;
+                msgErrorLongit.text('Veuillez completez le champ Longitude s\'il vous plait');
+            }else{
+                valideLongit = 1;
+                msgErrorLongit.text('');
+            }
+
+            if (valideTitre == 0 ||
+            	valideDescription == 0 ||
+            	valideBandeau == 0 ||
+                valideVille == 0 ||
+                valideCountry == 0 ||
+                valideNbPlace == 0 ||
+                valideLat == 0 ||
+                valideLongit == 0 ||
+                valideAdresse == 0  ||
+            	valideDateBegin1 == 0 ||
+                valideDateBegin2 == 0 ||
+                valideDateEnd == 0
+            ){
+            	console.log('non valide');
+                $('.global-error').css('display','block');
+                return false;
+            }else{
+            	console.log('valide');
+                $('.global-error').css('display','none');
+                var formEvent = $('#eventCreate');
+                formEvent.submit();
+            }
+
+            $('form[name = "softivendor_crmbundle_event"]').submit();
+
+         });
+	});
+
+
+
+</script>
+
+<!-- dodson evo 20190211 -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        var $container = $('div#softivendor_crmbundle_event_eventPlaces');
+        var index = $container.find(':input').length;
+
+        function generateFields(date_debut, nb_jour)
+        {   
+            var d = new Date(date_debut);
+            for (i = 1; i <= nb_jour; i++) {
+                if (i == 1)
+                d.setDate(d.getDate() + 0);
+                else
+                d.setDate(d.getDate() + 1);
+                
+                var j = (d.getDate() < 10)?'0'+d.getDate():d.getDate();
+                var x = d.getMonth() + 1;
+                var m = (x < 10)?'0'+x:x;
+                var Y = d.getFullYear();
+                var date_format1 = (j+'/'+m+'/'+Y);
+                var date_format2 = Y+'-'+m+'-'+j;
+                addField($container, date_format1, date_format2);
+            }
+        }
+        function addField($container, date_format1, date_format2) {
+            var template = $container.attr('data-prototype')
+                .replace(/__date__/g, date_format1)
+                .replace(/__date_value__/g, date_format2)
+                .replace(/__name__/g, index)
+              ;
+            var $prototype = $(template);
+            $container.append($prototype);
+            index++;
+        }
+        function getNdJour(startDate, endDate)
+        {
+            var startDay = new Date(startDate);
+            var endDay = new Date(endDate);
+            var millisecondsPerDay = 1000 * 60 * 60 * 24;
+            var millisBetween = endDay.getTime() - startDay.getTime();
+            var days = millisBetween / millisecondsPerDay;
+            return Math.floor(days);
+        }
+
+        // Apparaitre/Disparaitre
+        $(".toggle_eventPlaces").click(function(e){
+            e.preventDefault();
+            var startDate = $("#dtp_input3").val();
+            var endDate = $("#dtp_input2").val();
+            var msgErrorEventPlace = $(".error-event-place");
+            if ($container.find(':input').length == 0) {
+                if (startDate == '' || endDate == '') {
+                    msgErrorEventPlace.text('Veuillez séléctionner la date début et date fin s\'il vous plaît !');
+                    return false;
+                }else{
+                    nbj = getNdJour(startDate,endDate);
+                    if(nbj < 0){
+                        msgErrorEventPlace.text('Veuillez vérifier la date début et date fin s\'il vous plaît !');
+                        return false;
+                    }
+                    msgErrorEventPlace.text('');
+                }
+            }
+            $('.toggle_eventPlaces').toggleClass('hide');
+            $("#softivendor_crmbundle_event_eventPlaces").slideToggle(400);
+        });
+    });
+
+    // ecoute evenement datetimepicker
+    // $('.date_form').on('change',function(){
+    //     var startDate = $("#dtp_input3").val();
+    //     var endDate = $("#dtp_input2").val();
+    //     var msgErrorEventPlace = $(".error-event-place");
+    //     if (startDate != '' && endDate != '') {
+    //         var startDate = new Date(startDate);
+    //         var endDate = new Date(endDate);
+    //         var millisecondsPerDay = 1000 * 60 * 60 * 24;
+    //         var millisBetween = endDate.getTime() - startDate.getTime();
+    //         var days = millisBetween / millisecondsPerDay;
+    //         var nbj = Math.floor(days);
+    //         if (nbj >= 0) {
+    //             nbj = nbj + 1;
+    //             var $container = $('div#softivendor_crmbundle_event_eventPlaces');
+    //             index = 0;
+    //             $container.find('>div').each(function(){
+    //               $(this).remove();
+    //             });
+    //             for (i = 1; i <= nbj; i++) {
+    //                 if (i == 1)
+    //                 startDate.setDate(startDate.getDate() + 0);
+    //                 else
+    //                 startDate.setDate(startDate.getDate() + 1);
+                    
+    //                 var j = (startDate.getDate() < 10)?'0'+startDate.getDate():startDate.getDate();
+    //                 var x = startDate.getMonth() + 1;
+    //                 var m = (x < 10)?'0'+x:x;
+    //                 var Y = startDate.getFullYear();
+    //                 var date_format1 = (j+'/'+m+'/'+Y);
+    //                 var date_format2 = Y+'-'+m+'-'+j;
+                    
+    //                 var template = $container.attr('data-prototype')
+    //                     .replace(/__date__/g, date_format1)
+    //                     .replace(/__date_value__/g, date_format2)
+    //                     .replace(/__name__/g, index)
+    //                   ;
+    //                 var $prototype = $(template);
+    //                 $container.append($prototype);
+    //                 index++;
+    //             }
+    //             msgErrorEventPlace.text('');
+    //         }
+    //         $("#softivendor_crmbundle_event_setDate").val(1);
+    //     }
+    // });
+
+    $(document).ready(function(){
+        $('div#softivendor_crmbundle_event_eventPlaces').find(':input').change(function(){
+            $("#softivendor_crmbundle_event_setDate").val(1);
+        });
+    });
+</script>
+<!-- dodson end evo 20190211 -->
+
+{{ tinymce_init() }}

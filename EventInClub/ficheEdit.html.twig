@@ -1,0 +1,81 @@
+{% extends ':crm:layout.html.twig' %}
+
+{% block header %}
+          <!--logo end-->
+      <div class="nav notify-row" id="top_menu">
+        <ul class="nav top-menu">
+          <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+          <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_event_fiche_event_inclub') }}">
+              <i class="fa fa-file-text-o"></i>
+               FICHE
+              </a>
+          </li>
+          <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_event_list_inclub') }}" title="LISTE">
+               <i class="fa fa-list-ul"></i>
+             LISTE
+              </a>
+          </li>
+        </ul>
+      </div> 
+
+    <div class="top-menu fiche_btn">
+        <ul class="nav pull-left top-menu">
+         {% if prev != false %}
+          <li><a href="{{ path('softivendor_crm_event_fiche_event_inclub') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+         {% endif %} 
+          {% if next != false %}
+            <li><a href="{{ path('softivendor_crm_event_fiche_event_inclub') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+          {% endif %}
+        </ul>
+      </div> 
+
+{#       <div class="top-menu logout">
+          <ul class="nav pull-right top-menu">
+             <li class="nombre"><span class="nombre-titre">Nombre</span> <span class="nombre_id">{{ reservation.getTotalItemCount }}</span></li>
+            <li><a class="logout" href="{{path('fos_user_security_crm_logout')}}" title="Logout">Logout</a></li>
+          </ul>
+          
+      </div> #}
+
+         
+          
+   
+ {% endblock %} 
+
+
+{% block body %}
+
+
+<input type="text" class="form-control" id="testdate" name="">
+
+        <div class="form-group event-date date-container simple-date">
+      {{ form_label(form.dateBeginTemp1, "Date *", {'label_attr': { 'for': 'dtp_input1', 'class': 'col-md-1 control-label'}}) }}
+      
+                {{ form_widget(form.dateBeginTemp1, {'attr': { 'class': 'form-control form_datetime', 'size': '16'}})}}
+                
+      <input type="hidden" id="dtp_input1" value="" />
+      <div class="error">
+        {{ form_errors(form.dateBeginTemp1) }} 
+        <span class="error-date-begin-1"></span>   
+      </div>
+    </div>
+
+<script type="text/javascript">
+  
+$(document).ready(function(){
+  $('.form_datetime').datetimepicker({
+     language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0
+  })
+});
+</script>
+
+{% endblock %} 

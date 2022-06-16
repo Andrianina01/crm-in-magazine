@@ -1,0 +1,461 @@
+{% extends ':crm:layout.html.twig' %}
+
+{% block header %}
+          <!--logo end-->
+      <div class="nav notify-row" id="top_menu">
+        <ul class="nav top-menu">
+          <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+          <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_event_fiche_event_inclub') }}">
+              <i class="fa fa-file-text-o"></i>
+               FICHE
+              </a>
+          </li>
+          <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_event_list_inclub') }}" title="LISTE">
+               <i class="fa fa-list-ul"></i>
+             LISTE
+              </a>
+          </li>
+        </ul>
+      </div> 
+
+{# <!--         <div class="top-menu fiche_btn">
+        <ul class="nav pull-left top-menu">
+         {% if prev != false %}
+          <li><a href="{{ path('softivendor_crm_business_fiche_central') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+         {% endif %} 
+          {% if next != false %}
+            <li><a href="{{ path('softivendor_crm_business_fiche_central') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+          {% endif %}
+        </ul>
+      </div> --> #}
+
+      <div class="top-menu logout">
+          <ul class="nav pull-right top-menu">
+             <li class="nombre" style="margin-right: 100px;"><span class="nombre-titre">Nombre</span> <span class="nombre_id">{{ listEvent.getTotalItemCount }}</span></li>
+            
+            <li>{# <a class="logout" href="{{path('fos_user_security_crm_logout')}}" title="Logout">Logout</a> #}</li>
+          </ul>
+          
+      </div>
+
+         
+          
+   
+
+ {% endblock %}
+
+ {% block body %} 
+
+      <section class="wrapper event">
+      <div class="container-fluid">
+        <div class="row titre">
+          <div class="col-lg-12">
+            <h3><i class="fa fa-angle-right"></i> Liste des evénements in club</h3>
+          </div>
+        </div>
+
+            {% for key, messages in app.session.flashbag.all() %}
+
+            <div class="modal-contrat-suppr-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                                <i class="fa fa-check-circle true"></i>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
+            {% endfor %}
+
+          <div class="row link-event">
+
+
+            {% for  event in listEvent %}
+               
+
+              <div class="col-md-6 col-lg-4 event-list">
+                    <div class="scroll_tab">
+                    <div class="row">
+                      <div class="col-xs-9">
+                        <a href="{{path('softivendor_crm_event_fiche_event_inclub',{'next':event.getId})}}" >
+                          <h3><span>{{ event.getTitre }}</span></h3>
+                        </a>
+                      </div>
+                      <div  class="col-xs-3 nombre_invite">
+                        <div class="nbr_part">
+                          <big>
+                            {{ compteUser(event.id) }} 
+                          </big>
+                          <i class="arrow fa fa-angle-down"></i>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                <div class="row">
+                 
+                  <div class="col-md-12 mt tableau-list">
+                      <div class="content-panel">
+      
+
+                        <div style="float: right;">
+                            <select name="" class="export_option_event" >
+                                <option value="1">Liste de tous les invités de cette soirée (xlsx)</option>
+                                <option value="2">Liste de toutes les factures de cette soirée (xlsx)</option>
+                                <option value="3">Liste de toutes les factures de cette soirée (pdf)</option> 
+                                <option value="4">Liste de tous les invités de cette soirée (pdf)</option>
+                            </select>
+                            <button type="button"   class="white-rounded-button voir_export_event btn btn-theme04">Voir </button>
+                            <input type="hidden" value="{{event.getId}}" class="event_id">
+                        </div>
+
+
+                        <table class="table table-hover table-striped table-advance">
+                          <thead>
+                            <tr>
+                              <th>Date de réservation</th>
+                              <th>Nom</th>
+                              <th>Prenom</th>
+                              <th>Société</th>
+                              <th>Type</th>
+                              <th>Nombre invité</th>
+                              <th>Tarif payé</th>
+                              <th>Tranche</th>
+                              <th>Facture</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                            <tbody>
+                              
+                        {% set listUser = listUser(event) %}
+
+                        {# A utiliser pour le lot 2.2 #}
+
+{#                         {% set listMail = listUserMail(event) %}    
+
+
+                         <button type="button"   class="white-rounded-button sendMail btn btn-theme01"><a href="mailto:{{listMail}}?subject=test d'envoies mail multiple &body= ceci est un test pour l'envoie de mail grouper">Envoie Mail </a></button> #}
+
+                           {# A utiliser pour le lot 2.2 #}
+
+                        {% for UserReservation in listUser %}
+
+                              <tr>
+                                <td>{{ UserReservation.getDate|date("d/m/Y H:i") }}</td>
+                                <td>{{ UserReservation.nom }}  </td>
+                                <td>{{ UserReservation.prenom }} </td>
+                                <td>
+                                    {% if UserReservation.userBusiness 
+                                      is not null %}
+                                      {% for entreprise in UserReservation.userBusiness.entreprise %}
+                                          {% if entreprise.enseigne is not null and entreprise.enseigne is not empty %}
+                                              <a href="{{ path('softivendor_crm_business_fiche_central',{'next':entreprise.id} )}}" title="Editer">{{ entreprise.enseigne }}</a> 
+                                          {% else %}
+                                              pas de société
+                                          {% endif %}
+                                      {% endfor %}
+                                      {% elseif UserReservation.nomSociete is not null and UserReservation.nomSociete is not empty %}
+                                          {{UserReservation.nomSociete}}
+                                      {% else %}
+                                      pas de société 
+                                  {% endif %}
+                                
+                              </td>
+                                <td>
+                                  {% if UserReservation.getUserBusiness is null %}
+                                      Non membre
+                                  {% else %}
+                                      Collaborateur
+                                  {% endif %}
+                                </td>
+                                <td>{{ nombreInvite(UserReservation) }}</td>
+                                <td id="output-{{UserReservation.id }}">
+
+                                  {% if UserReservation.privateEvent == 1 %}
+                                      
+                                          {% if UserReservation.invited is not null %}
+                                              {% if UserReservation.invited == 1 %}
+                                                  <span style="color:green;">
+                                                      Invité
+                                                  </span><br>
+                                                  <span>
+                                                      {% if UserReservation.datePredilection is not null %}
+                                                      {{ UserReservation.datePredilection|date('d/m/Y') }}
+                                                      {% endif %}
+                                                  </span>
+                                                  {% else %}
+                                                  <span style="color:red;">
+                                                      Refusé
+                                                  </span>
+                                              {% endif %}
+                                              {% else %}
+                                                  {% if nombreInscrit(UserReservation.event) >= UserReservation.event.nbplace %}
+                                                  <span style="color:blue;">Plus de place libre</span>
+                                                      {% else %}
+                                                      <input id="input-inviter" {% if UserReservation.datePredilection is not null %}title="{{ UserReservation.datePredilection|date('d/m/Y') }}"{% endif %} type="button" value="inviter" onclick="invitation(1,{{ UserReservation.id }},'{{ url('softivendor_event_reservation_invitation') }}')">
+                                                  <input id="input-refuser" type="button" value="refuser" onclick="invitation(0,{{ UserReservation.id }},'{{ url('softivendor_event_reservation_invitation') }}')">
+                                                  {% endif %}
+                                                  
+                                          {% endif %}
+                                          {% if UserReservation.nbPlace is not null %}
+                                          <br/>
+                                          <span>Nombre de place souhaitée : {{ UserReservation.nbPlace }}</span>
+                                          {% endif %}
+                                      
+                                      
+                                  {% else %}
+                                      {% if UserReservation.getTransaction is not null %}
+                                      {{ UserReservation.getTransaction.getMontant/100 }}
+                                      {% else %}
+                                      Gratuit
+                                      {% endif %}
+                                  {% endif %}
+
+                                </td>
+                                <td> 
+                                  {% if UserReservation.tranche is not null %}
+                                      
+                                      {{ UserReservation.tranche }}
+                                  {% endif %}
+                                </td>
+                                <td><a href="#">
+                                  {% if UserReservation.getFacture is not null %}<a href="https://www.in-magazines.com/web/{{UserReservation.getFacture.getPath}}" target="_blank" style="display: block;width: 100%;font-size:inherit;">&numero; {{UserReservation.getFacture.getNumero}} {% else %}Pas de facture{% endif %}
+                                </a></td>
+                                <td class="action">
+                                    <a href="{{path('softivendor_crm_event_list_edit_inclub', {id: UserReservation.getId})}}" class="btn-edit" title="Modifier"><i class="fa fa-edit"></i>&nbsp;Modifier</a>
+                                    <span class="checkbox_case">
+                                      <input id="supChoice" class="suppre" type="checkbox"  data-id="{{UserReservation.getId}}" value="{{UserReservation.getId}}">
+                                        <span class="check"></span>
+                                    </span><span>&nbsp;supprimer</span>
+                                </td>
+                              </tr>
+                        {% endfor %}
+                        </tbody>
+                        </table>
+      
+                        <div class="content-bottom">
+                          <div class="boutton_supprim">
+                            <article>
+                              <button type="button" class="btn btn-theme04 delete btn-md" data-toggle="modal" data-target="#modalConfirm" title="Supprimer">
+                                <i class="glyphicon glyphicon-trash"></i>
+                              <span>Supprimer</span>
+                              </button>
+                            </article>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div> 
+              </div>
+          {% endfor %}
+
+
+{# modal #}
+
+    <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <form method="post" action="{{ path('softivendor_crm_event_list_inclub') }}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+            </div>
+            <div class="modal-body">
+             Voulez-vous supprimer les réservations séléctionnés ?
+            </div>
+            <div class="modal-footer">
+              <button type ="submit" class="btn btn-default delete" value="" name="supChoice[]">Oui</button>
+              <button type="button" class="btn btn-default"data-dismiss="modal">Non</button>
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+    </form>
+</div>
+
+{# modal #}
+
+              
+          </div>
+        </div>
+        </div>
+        {{ knp_pagination_render(listEvent,'SoftivendorCRMBundle:Paginate:templatePaginator.html.twig') }} <br> 
+
+      </section>
+    </section>
+  </section>
+
+  <script type="text/javascript">
+$(document).ready(function(){
+
+    $(function(){
+      $('.delete').click(function(){
+        var val = [];
+        $(':checkbox:checked').each(function(i){
+          val[i] = $(this).val();
+        });
+        $(this).val(val); 
+      });
+    });
+
+})
+
+
+  </script>
+
+
+  <script type="text/javascript">
+      var exportAllEventInXlsx_path = "{{path('softivendor_event_reservation_exportAllGuestInAllEventInXlsx')}}";
+      var testGenerateXlsx_path = "{{path('softivendor_event_reservation_testGenerateXlsx')}}";
+      var exportAllGuestInOneEventInXlsx_option_path = "{{path('softivendor_event_reservation_exportAllGuestInOneEventInXlsx')}}";
+      var exportAllFactureInXlsx_path = "{{path('softivendor_event_reservation_exportAllFactureInXlsx')}}";
+      var exportAllFactureInOneEventInXlsx_path = "{{path('softivendor_event_reservation_exportAllFactureInOneEventInXlsx')}}";
+      var exportAllFactureInPdf_path = "{{path('softivendor_event_reservation_exportAllFactureInPdf')}}";
+      var exportAllFactureInOneEventInPdf_path = "{{path('softivendor_event_reservation_exportAllFactureInOneEventInPdf')}}";
+      var exportAllGuestInOneEventInPdf_path="{{path('softivendor_event_reservation_exportAllGuestInOneEventInPdf')}}"; //04 10 2021
+
+      var $export_button = $('#export_button');
+      var $export_option = $('#export_option'); 
+      var $voir_export_event = $('.voir_export_event');
+      var exportAllEventInXlsx_option_value = '1';
+      var exportAllFactureInXlsx_option_value = '2';
+      var exportAllFactureInPdf_option_value = '3';
+      var exportAllGuestInOneEventInXlsx_option_value = '1';
+      var exportAllFactureInOneEventInXlsx_option_value = '2';
+      var exportAllFactureInOneEventInPdf_option_value = '3';
+      var exportAllGuestInOneEventInPdf_option_value = '4'; //04 10 2021
+      var testGenerateXlsx_option_value = '99';
+
+      $(function () {
+          onClickExportButtonDoExport(); 
+      });
+
+      function onClickExportButtonDoExport () {
+          onClickExportForAllEvent ();
+          onClickExportForOneEvent ();
+      }
+
+      function onClickExportForAllEvent () {
+          $export_button.click(function () {
+              exportByExportOptionVal ();
+          });
+      }
+
+      function onClickExportForOneEvent() {
+          $voir_export_event.click(function () {
+              var event_id = $(this).next('.event_id').val(); 
+              var export_option_event = $(this).prev('.export_option_event').val();
+              console.log(event_id);
+              exportByExportOptionValForOneEvent (event_id, export_option_event);
+          });
+      }
+
+      function exportByExportOptionVal () {
+          switch ($export_option.val()) {
+              case exportAllEventInXlsx_option_value:
+                  openNewTabToPath (exportAllEventInXlsx_path); 
+                  break;
+              case testGenerateXlsx_option_value:
+                  openNewTabToPath (testGenerateXlsx_path); 
+                  break;
+              case exportAllFactureInXlsx_option_value:
+                  openNewTabToPath (exportAllFactureInXlsx_path); 
+                  break;
+              case exportAllFactureInPdf_option_value:
+                  openNewTabToPath (exportAllFactureInPdf_path); 
+                  break; 
+              
+              default: 
+                  console.log(exportAllEventInXlsx_path);
+                  break;
+          }
+      }
+
+      function exportByExportOptionValForOneEvent (event_id, export_option_event) {  
+          switch (export_option_event) {
+              case exportAllGuestInOneEventInXlsx_option_value:
+                  openNewTabToPath (exportAllGuestInOneEventInXlsx_option_path + '?eventid=' + event_id); 
+                  break; 
+              case exportAllFactureInOneEventInXlsx_option_value:
+                  openNewTabToPath (exportAllFactureInOneEventInXlsx_path + '?eventid=' + event_id); 
+                  break;
+              case exportAllFactureInOneEventInPdf_option_value:
+                  openNewTabToPath (exportAllFactureInOneEventInPdf_path + '?eventid=' + event_id); 
+                  break;
+
+              case exportAllGuestInOneEventInPdf_option_value:
+                  openNewTabToPath (exportAllGuestInOneEventInPdf_path + '?eventid=' + event_id); 
+                  break;
+
+              default: 
+                  console.log(exportAllEventInXlsx_path);
+                  break;
+          }
+      }
+
+      function openNewTabToPath (path) {
+          window.open(path, '_blank');
+      }
+
+
+
+
+
+
+  </script>
+  <script>
+  $(document).ready(function(){
+    $('.scroll_tab').each(function(){
+      	 	let spanWidth = $(this).find('span').width();
+	 	      let h3Width = $(this).find('h3').width();
+      if(spanWidth > h3Width){console.log(spanWidth)
+        $(this).addClass('debordement')
+      }
+      else{
+        $(this).removeClass('debordement')
+      }
+	 })
+  $('.debordement a').each(function(){
+    let spanWidth1 = $(this).find('span').width();
+
+	 	let h3Width2 = $(this).find('h3').width();
+
+    let calc = spanWidth1 - h3Width2 + 5 ;
+
+    $(this).mouseover(function(){
+       $(this).find('h3').animate({
+      'margin-left':'-'+calc+'px'
+      },100)
+    })
+
+    $(this).mouseout(function(){
+       $(this).find('h3').animate({
+      'margin-left':'0'
+      },100)
+    })
+   
+  })
+ $('.modal-contrat-suppr-2').each(function(){
+       if(!$(this).is(':visible')){
+           $(this).fadeIn(800).delay(2000).fadeOut(800)
+       }
+   })
+  })
+  </script>
+
+  <script type="text/javascript" src="{{asset('js/invitation.js')}}"></script>
+
+
+
+
+  
+
+{% endblock %} 

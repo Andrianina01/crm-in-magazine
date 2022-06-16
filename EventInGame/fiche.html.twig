@@ -1,0 +1,551 @@
+{% extends ':crm:layout.html.twig' %} 
+
+{% block stylesheets %}
+	<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+	<!-- dodson -->
+	<style type="text/css">
+		.date-container{
+			visibility:hidden;
+			opacity:0;
+			position:absolute;
+		}
+		.date-container.is_visible{
+			visibility:visible;
+			opacity:1;
+			position:relative;
+		}
+		.game-period.is_hide{
+			opacity:0;
+			position:absolute;
+			visibility:hidden;
+		}
+		/*evo 20190211*/
+		.toggle_gamePlaces{
+			display:block;
+			margin:10px 0;
+			font-weight:600;
+		}
+		.toggle_gamePlaces.hide{
+			display:none;
+		}
+		.toggle_gamePlaces:hover,.toggle_gamePlaces:focus{
+			text-decoration:none;
+		}
+		.toggle_gamePlaces i{
+			display:inline-block;
+			height:20px;
+			width:20px;
+			text-align:center;
+			line-height:20px;
+			background:#999;
+			-webkit-border-radius:4px;
+			border-radius:4px;
+			font-size:16px;
+			font-style:normal;
+			color:#fff
+		}
+	</style>
+	<!-- dodson -->
+{% endblock %}
+
+{% block header %}
+<!--logo end-->
+<div class="nav notify-row" id="top_menu">
+    <ul class="nav top-menu">
+        <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+        <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_event_fiche_ingame') }}">
+                <i class="fa fa-file-text-o"></i> FICHE
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_event_list_ingames') }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="top-menu fiche_btn">
+    <ul class="nav pull-left top-menu">
+        {% if prev != false %}
+        <li><a href="{{ path('softivendor_crm_event_fiche_ingame') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+        {% endif %} {% if next != false %}
+        <li><a href="{{ path('softivendor_crm_event_fiche_ingame') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{#
+<div class="top-menu logout">
+    <ul class="nav pull-right top-menu">
+        <li class="nombre"><span class="nombre-titre">Nombre</span> <span class="nombre_id">{{ reservation.getTotalItemCount }}</span></li>
+        <li><a class="logout" href="{{path('fos_user_security_crm_logout')}}" title="Logout">Logout</a></li>
+    </ul>
+
+</div> #} 
+{% endblock %} 
+
+
+{% block body %}
+
+    {% for key, messages in app.session.flashbag.all() %}
+
+    <div class="modal-contrat-suppr-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                                <i class="fa fa-check-circle true"></i>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+    {% endfor %}
+
+          <div class="row formulaire-add">
+            <div class="col-lg-8 main-chart">
+
+             <div class="row">
+               <div class="col-lg-12 pt-3">
+                 <h3><i class="fa fa-angle-right"></i> Informations sur l'événement</h3>
+                 <div class="form-panel pt-3">
+                  
+                {{ form_start(form,{'attr': {novalidate:'novalidate', 'id': 'gameCreate', class:'form-horizontal style-form'}}) }}
+                {% if not form.vars.valid %}
+                    {% if form.name.vars.errors is defined and form.name.vars.errors|length > 0 %}
+                        <ul class="form-errors name">
+                            {% for error in form.name.vars.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                <div class="ui alert alert-danger global-error" style="display:block">
+                    Attention des erreurs ont étés trouvés, veuillez vérfiez les champs s'il vous plait !!
+                </div>{% endif %}<div class="ui alert alert-danger global-error" style="display:none">
+                Attention des erreurs ont étés trouvés, veuillez vérfiez les champs s'il vous plait !!</div>
+
+
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Titre *</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.titre, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.titre) }}
+                            <span class="error-titre"></span>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group " >
+                       <label class="col-sm-2 col-sm-2 control-label">Description *</label>
+                      <div class="col-sm-10 description">
+                        {{ form_widget(form.description, {'attr': { 'class': 'form-control tinymce '}})}}
+                        <div class="error">
+                            {{ form_errors(form.description) }}
+                            <span class="error-description"></span>
+                        </div>
+
+                      </div>
+                    </div>
+
+        <div class="form-group" style="display: none;">
+            
+            {{ form_label(form.matin,"Le matin",{'attr': { 'class': 'control-label' }}) }}
+            {{ form_widget(form.matin, {'attr': { 'class': 'checkbox'}})}}
+            <div class="error">
+                {{ form_errors(form.matin) }} 
+                <span class="error-period"></span>   
+            </div>
+             {{ form_label(form.midi,"L'aprés-midi",{'attr': { 'class': 'control-label' }}) }}
+            {{ form_widget(form.midi, {'attr': { 'class': 'checkbox'}})}}
+            <div class="error">
+                {{ form_errors(form.midi) }} 
+                <span class="error-period"></span>   
+            </div>
+             {{ form_label(form.soir,"Le soir",{'attr': { 'class': 'control-label' }}) }}
+            {{ form_widget(form.soir, {'attr': { 'class': 'checkbox'}})}}
+            <div class="error">
+                {{ form_errors(form.soir) }} 
+                <span class="error-period"></span>   
+            </div>
+        </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Image Bandeau</label>
+                      <div class="col-sm-10">
+                       <div class="fileupload fileupload-new" data-provides="fileupload">
+                      <div class="fileupload-new thumbnail" style="width: 100%; height: 150px;">
+                            {% if game.bandeau is not null %}
+                                <div class="preview">
+                                    <img id="bandeauImg" src="{{ asset('img/bandeau/') }}{{ game.bandeau }}" style="widht:590;height:258px;">
+                                </div>
+                                {% else %}
+                                    <img src="{{asset('crm/img/nologo.png')}}" alt="">
+                            {% endif %}
+
+                      </div>
+                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                      <div>
+                        <span class="btn btn-theme02 btn-file">
+                          <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                         {{ form_widget(form.fileBandeau, {'attr': { 'class': 'form-control-file'}})}}
+                         <div class="error">
+                            {{ form_errors(form.fileBandeau) }} 
+                            <span class="error-fileBandeau"></span>   
+                        </div>
+                        </span>
+                        <a href="advanced_form_components.html#" title="" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                      </div>
+                    </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Type</label>
+                      <div class="col-sm-10">
+                        {{ form_widget(form.type, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.type) }}
+                            <span class="error-type"></span>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label"></label>
+                      <div class="col-sm-10">
+                        <div class="checkbox">
+                          <label>
+                          <span class="switch">
+                                {{ form_widget(form.status, {'attr': { 'class': 'checkbox'}})}}
+                                    <span class="slider round"></span>
+                           </span>
+                        
+                            &nbsp;&nbsp;Status (actif ou pas)
+                            <div class="error">
+                                {{ form_errors(form.status) }} 
+                                
+                                <span class="error-status"></span>   
+                            </div>
+                            </label>
+                        </div>
+                      </div>
+                    </div>
+
+
+        <!-- private game -->
+        <div class="form-group game-private" style="display: none;">
+            {{ form_label(form.privateGame, "Evenement (privé ou pas)", {'attr': { 'class': 'control-label'}}) }}
+            {{ form_widget(form.privateGame, {'attr': { 'class': 'checkbox'}})}}
+            <div class="error">
+                {{ form_errors(form.privateGame) }} 
+                <span class="error-game-private"></span>   
+            </div>
+        </div>
+        <!-- end dodson -->
+        <!-- dodson -->
+        <div class="form-group game-period" style="display: none;">
+            {{ form_label(form.period,"Période",{'attr': { 'class': 'control-label' }}) }}
+            {{ form_widget(form.period, {'attr': { 'class': 'checkbox'}})}}
+            <div class="error">
+                {{ form_errors(form.period) }} 
+                <span class="error-period"></span>   
+            </div>
+        </div>
+        <!-- dodson -->
+
+                    <div class="form-group ">
+                      <label class="col-sm-2 col-sm-2 control-label">Date</label>
+                      <div class="col-sm-4  " data-date-format="dd MM yyyy - hh:ii" data-link-field="dtp_input1">
+                         {{ form_widget(form.dateBeginTemp1, {'attr': { 'class': 'form-control datetime1', 'size': '16'}})}}
+                         <input type="hidden" id="dtp_input1" value="" />
+                         <div class="error">
+                            {{ form_errors(form.dateBeginTemp1) }} 
+                            <span class="error-date-begin-1"></span>   
+                        </div>
+                     </div>
+                     <div class="col-sm-3">
+                      <label class="control-label">Nombre de participant</label>
+                     </div>
+                     <div class="col-sm-3" >
+                      {{ form_widget(form.nbPlace, {'attr': { 'class': 'form-control nbPlace','readonly': 'readonly'}})}}
+                        <div class="error">
+                            {{ form_errors(form.nbPlace) }} 
+                            <span class="error-nbPlace"></span>   
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                     <label class="control-label col-sm-2 col-sm-2">Prix Participant </label>                       
+                        <div class="col-sm-10">
+                        {{ form_widget(form.prixCollaborateur, {'attr': { 'class': 'form-control'}})}} 
+                            <div class="error">
+                                {{ form_errors(form.prixCollaborateur) }} 
+                                <span class="error-prixInvite"></span>   
+                            </div>
+                        </div>
+                    </div>
+
+
+
+        <div class="date-container period-date">
+            <div class="form-group game-date">
+                {{ form_label(form.dateBeginTemp2, "Date début *", {'label_attr': { 'for': 'dtp_input1', 'class': 'col-md-1 control-label'}}) }}
+                <div id="beginDate" class="input-group date form_date col-md-4" data-date data-date-format="dd MM yyyy" data-link-field="dtp_input3" data-link-format="yyyy-mm-dd">
+                    {{ form_widget(form.dateBeginTemp2, {'attr': { 'class': 'form-control', 'size': '16', 'readonly': 'readonly'}})}}
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input3" value="" />
+                <div class="error">
+                    {{ form_errors(form.dateBeginTemp2) }} 
+                    <span class="error-date-begin-2"></span>   
+                </div>
+            </div>
+            <div class="form-group game-date">
+                {{ form_label(form.dateEnd, "Date fin *", {'label_attr': { 'for': 'dtp_input2', 'class': 'col-md-1 control-label'}}) }}
+                <div id="endDate" class="input-group date form_date col-md-4" data-date data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    {{ form_widget(form.dateEnd, {'attr': { 'class': 'form-control', 'size': '16', 'readonly': 'readonly'}})}}
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input2" value="" />
+                <div class="error">
+                    {{ form_errors(form.dateEnd) }} 
+                    <span class="error-date-end"></span>   
+                </div>
+            </div>
+            <!-- evo 20190211 -->
+            <div class="form-group game-date">
+                {{form_label(form.gamePlaces)}}
+                <a href="#" class="toggle_gamePlaces hide"><i>+</i> Afficher</a>
+                <a href="#" class="toggle_gamePlaces"><i>-</i> Réduire</a>
+                {{form_widget(form.gamePlaces)}}
+                <div class="error">
+                    {{form_errors(form.gamePlaces)}}
+                    <span class="error-game-place"></span>   
+                </div>
+            </div>
+        </div>
+
+
+
+                    <h3 class="pb-3 pt-3"><i class="fa fa-angle-right"></i> Coordonnées de l'événement</h3>
+                    <div class="form-group">
+
+                      <label class="col-sm-2 col-sm-2 control-label">Adresse *</label>
+                      <div class="col-sm-4">
+                        {{ form_widget(form.adresse, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.adresse) }} 
+                            <span class="error-adresse"></span>   
+                        </div>
+                      </div>
+                      <label class="col-sm-2 col-sm-2 control-label">Pays *</label>
+                      <div class="col-sm-4">
+                    <select name="country" class="form-control">
+                        {% for country in country %}
+                            <option value="{{ country.nomFrFr }}">{{ country.nomFrFr }}</option>
+                            {% if country.nomFrFr == "France" %}
+                                <option value="{{ country.nomFrFr }}" selected>{{ country.nomFrFr }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="error-country"></span>   
+                    </select>
+                      </div>
+                    </div>
+
+                     <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Ville *</label>
+                      <div class="col-sm-4">
+                       {{ form_widget(form.ville, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.ville) }} 
+                            <span class="error-ville"></span>   
+                        </div>
+                      </div>
+                      <label class="col-sm-2 col-sm-2 control-label">Code postal</label>
+                      <div class="col-sm-4">
+                        {{ form_widget(form.cp, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.cp) }} 
+                                <span class="error-cp"></span>   
+                            </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Latitude *</label>
+                      <div class="col-sm-4">
+                        {{ form_widget(form.lat, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.lat) }} 
+                            <span class="error-lat"></span>   
+                        </div>
+                      </div>
+                       <label class="col-sm-2 col-sm-2 control-label">Longitude *</label>
+                      <div class="col-sm-4">
+                       {{ form_widget(form.longit, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.longit) }} 
+                            <span class="error-longit"></span>   
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row w80">
+                        <div class="cols col-md-6" style="display: none;">
+                            <div class="form-group">
+                                {{ form_label(form.prixInvite, "Prix Invité", {'attr': { 'class': 'control-label'}}) }}
+                                {{ form_widget(form.prixInvite, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.prixInvite) }} 
+                                    <span class="error-prixInvite"></span>   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cols col-md-6" style="display: none;">
+                            <div class="form-group">
+                                {{ form_label(form.prixCollaborateur, "Prix Collaborateur", {'attr': { 'class': 'control-label'}}) }}
+                                {{ form_widget(form.prixCollaborateur, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.prixCollaborateur) }} 
+                                    <span class="error-prixCollaborateur"></span>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="pb-3 pt-3"><i class="fa fa-angle-right"></i> Référencement</h3>
+
+                     <div class="form-group">
+                      <label class="col-sm-2 col-sm-2 control-label">Meta title</label>
+                      <div class="col-sm-4">
+                      {{ form_widget(form.metaTitle, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.metaTitle) }} 
+                            <span class="error-metaTitle"></span>   
+                        </div>
+                      </div> 
+                      <label class="col-sm-2 col-sm-2 control-label">Meta description</label>
+                      <div class="col-sm-4">
+                         {{ form_widget(form.metaDescription, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.metaDescription) }} 
+                                <span class="error-metaDescription"></span>   
+                            </div>
+                      </div>
+                    </div>
+
+                </div>
+               </div>
+             </div>
+            </div>
+
+            <div class="col-lg-4 ds pt-3">
+                <article>
+                  <div class="bouton_crud">
+                    <!-- <button type="button" class="btn btn-theme" title="Ajouter">Ajouter</button> -->
+                    <button type="button" class="btn btn-theme edit" title="Editer">Editer</button>
+                    <button type="button" class="btn btn-theme save" style="display:none;" title="Editer">Enregistrer</button>
+                    <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#myModalSuppression{{game.id }}" title="Supprimer">Supprimer</button>
+                 </div>
+                </article>
+            </div>
+{{ form_end(form) }}
+
+            <div class="modal fade" id="myModalSuppression{{game.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                    </div>
+                    <div class="modal-body">
+                      Voulez-vous vraiment supprimer cet entreprise ?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="{{path('softivendor_crm_event_fiche_ingame_delete',{id:  game.id})}}" class="href-delete"><button type="submit" class="btn btn-default" >Oui</button></a>
+
+                      <button type="button" class="btn btn-default"data-dismiss="modal">Non</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- /col-lg-3 -->
+          </div>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+       $('#gameCreate input').prop('disabled', true);
+       $('#gameCreate select').prop('disabled', true);
+       $('#gameCreate textarea').prop('disabled', true);
+       $('.description').addClass('disabled');
+       
+
+       $('.edit').on('click', function() {
+           $('#gameCreate input').prop('disabled', false);
+           $('#gameCreate select').prop('disabled', false);
+           $('#gameCreate textarea').prop('disabled', false);
+           $('.edit').css('display', 'none');
+           $('.save').css('display', 'block');
+           $('.description').removeClass('disabled');
+           $("input[name='softivendor_crmbundle_game[nbPlace]']").removeAttr("readonly"); 
+       })
+
+        //datepicker
+           $('.datetime1').datetimepicker({
+               language:  'fr',
+            
+            format: 'dd MM yyyy - hh:ii',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+           });
+
+           $('.form_date').datetimepicker({
+               language:  'fr',
+               weekStart: 1,
+               todayBtn:  1,
+               autoclose: 1,
+               todayHighlight: 1,
+               startView: 2,
+               minView: 2,
+               forceParse: 0,
+               onSelect: function() {
+                   $(this).change();
+               }
+           });
+
+})
+</script>
+
+{% include 'SoftivendorCRMBundle:EventInGame:ficheJS.html.twig' %}
+
+
+
+
+{{ tinymce_init() }}
+
+ {% endblock %} 

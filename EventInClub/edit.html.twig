@@ -1,0 +1,436 @@
+{% extends ':crm:layout.html.twig' %} {% block header %}
+<!--logo end-->
+<div class="nav notify-row" id="top_menu">
+    <ul class="nav top-menu">
+        <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+        <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_event_fiche_event_inclub') }}">
+                <i class="fa fa-file-text-o"></i> FICHE
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_event_list_inclub') }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+    </ul>
+</div>
+
+{#
+<!--         <div class="top-menu fiche_btn">
+        <ul class="nav pull-left top-menu">
+         {% if prev != false %}
+          <li><a href="{{ path('softivendor_crm_business_fiche_central') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+         {% endif %} 
+          {% if next != false %}
+            <li><a href="{{ path('softivendor_crm_business_fiche_central') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+          {% endif %}
+        </ul>
+      </div> -->#} {#
+<div class="top-menu logout">
+    <ul class="nav pull-right top-menu">
+        <li class="nombre"><span class="nombre-titre">Nombre</span> <span class="nombre_id">{{ reservation.getTotalItemCount }}</span></li>
+        <li><a class="logout" href="{{path('fos_user_security_crm_logout')}}" title="Logout">Logout</a></li>
+    </ul>
+
+</div> #} {% endblock %} {% block body %}
+
+<div class="row formulaire-add">
+    <div class="col-lg-10 m-auto main-chart">
+        <div class="white-content">
+            <div class="row">
+                {% if success %}
+                <div class="alert alert-success">
+                    Modifications prises en compte.
+                </div>
+                {% endif %}
+                <!-- dodson 20190201 -->
+                {% if error is defined and error != '' %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <a href="{{path('softivendor_crm_event_list_inclub')}}" class="btn btn-theme02 btn-md">Retour à la liste</a>
+
+                <div class="form-panel pt-6">
+
+                    <div class="title pb-3">
+                        <h3><i class="fa fa-angle-right"></i> Edition Invite</h3>
+                    </div>
+
+                    <!-- end dodson -->
+                    <h3 class="form-section">FACTURE</h3>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {% if reservationInfo.facturePath is not empty %}
+                            <a href="https://www.in-magazines.com/web/{{ reservationInfo.facturePath }}" target="_blank" class="btn btn-theme04">Cliquez pour voir la facture</a> {% else %} Pas de facture {% endif %}
+                        </div>
+                        {#{{ form_label(form.titre, "Titre *", {'attr': { 'class': 'control-label'}}) }} {{ form_widget(form.titre, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.titre) }}
+                            <span class="error-titre"></span>
+                        </div>#}
+
+                    </div>
+                    <h3 class="form-section">EVENEMENT</h3>
+                    <table class="table-facture">
+                        {% if reservation.nomSociete is not null and reservation.nomSociete is not empty %}
+                        <tr>
+                            <td style="width: 150px;">
+                                Société:
+                            </td>
+                            <td>
+                                {{reservation.nomSociete}}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td style="width: 150px;">
+                                Nom:
+                            </td>
+                            <td>
+                                {{reservation.nom}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Prénom: </td>
+                            <td>{{reservation.prenom}}</td>
+                        </tr>
+                        <tr>
+                            <td> Email:</td>
+                            <td>{{reservation.email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse:</td>
+                            <td>{{reservation.adresse}}</td>
+                        </tr>
+                        <tr>
+                            <td>Code Postal:</td>
+                            <td>{{reservation.cp}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ville:</td>
+                            <td>{{reservation.ville}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tranche</td>
+                            <td><b>{{reservation.tranche}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Commentaire client:</td>
+                            <td><b>{{reservation.comment}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Evènement :</td>
+                            <td>{{ evenement.titre }} à {% if evenement.adresse is not null %}{{ evenement.adresse }}{% else %}{{ evenement.ville }}{% endif %}</td>
+                        </tr>
+                        <!-- dodson 20190124 -->
+                        <tr>
+                            <td>Date :</td>
+                            <td>
+                                {% if evenement.period is not null and evenement.period == 1 %} {% if evenement.datet|date('Y') == evenement.datetEnd|date('Y') %} {% if evenement.datet|date('m') == evenement.datetEnd|date('m') %} {{ evenement.date|getDate('day') }} au {{ evenement.dateEnd
+                                }} {% else %} {{ evenement.date|getDate('day') }} {{ evenement.date|getDate('month') }} au {{ evenement.dateEnd|getDate('day') }} {{ evenement.dateEnd|getDate('month') }} {{ evenement.datet|date('Y') }} {% endif %} {% else
+                                %} {{ evenement.date }} au {{ evenement.dateEnd }} {% endif %} {% else %} {{ evenement.date }} {% endif %}
+                            </td>
+                        </tr>
+                        <!-- end dodosn 20190424 -->
+                        <tr>
+                            <td>Date Réservation:</td>
+                            <td>{{ reservation.date|date("d/m/Y H:i") }}</td>
+                        </tr>
+                    </table>
+
+                    <!-- dodson 20190125 -->
+                    {% if evenement.privateEvent != 1 %}
+                    <h3 class="form-section">TARIF</h3>
+                    {% endif %}
+                    <!-- dodson end -->
+                    {{ form_start(form,{'attr': {novalidate:'novalidate', 'id': 'reservationEdit'}}) }} {% if gratuit != false %}
+                    <table class="reservation-table">
+                        <tr style="font-weight:bold;">
+                            <td width="100px">Participant</td>
+                            <td width="100px">Prix Unitaire</td>
+                            <td width="100px">Nombre</td>
+                            <td width="100px">Prix HT</td>
+                            <td width="100px">Prix TTC</td>
+                        </tr>
+
+                        <tr>
+                            <td>{% if reservation.getUserBusiness is null %}Non membre{% else %}Collaborateur{% endif %}</td>
+                            <td>{% if reservation.getUserBusiness is null %}{{evenement.getPrixInvite}}{% else %}{{evenement.getPrixCollaborateur}}{% endif %} &euro;</td>
+                            <td>1</td>
+                            {% if reservation.getUserBusiness is null %}{% set prixClientTTC = evenement.getPrixInvite %}{% else %}{% set prixClientTTC = evenement.getPrixCollaborateur %}{% endif %} {% set tva = reservation.getTva %}
+
+                            <td>{{ ( prixClientTTC / (1 + (tva/100))) |number_format(2, '.', '') }} &euro;</td>
+                            <td>{% if reservation.getUserBusiness is null %}{{evenement.getPrixInvite}}{% else %}{{evenement.getPrixCollaborateur}}{% endif %} &euro;</td>
+                        </tr>
+                        <tr>
+                            <td>Invités</td>
+                            <td>
+                                {% if reservation.getUserBusiness is null %} {{ evenement.getPrixInvite }} {% else %} {{ evenement.getPrixCollaborateur }} {% endif %} &euro;
+                            </td>
+                            <td>{{invites|length}}</td>
+                            <!--  -->
+                            {% if reservation.getUserBusiness is null %} {% set prixInviteTTC = evenement.getPrixInvite*(invites|length) %} {% else %} {% set prixInviteTTC = evenement.getPrixCollaborateur*(invites|length) %} {% endif %}
+                            <!--  -->
+
+                            <td>{{ ( prixInviteTTC / (1 + (tva/100))) |number_format(2, '.', '')}} &euro;</td>
+                            <td>
+                                {% if reservation.getUserBusiness is null %} {{ evenement.getPrixInvite*invites|length }} {% else %} {{ evenement.getPrixCollaborateur*invites|length }} {% endif %} &euro;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <table>
+                                    <tr>
+                                        <td width="98px">Total HT</td>
+                                        <td width="400px">{{ ( (transaction.getMontant/100) / (1 + (tva/100)) ) |number_format(2, '.', '') }} &euro;</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="98px">TVA</td>
+                                        <td width="400px">{{reservation.getTva}} %</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="98px">Total TTC</td>
+                                        <td width="400px">{{ transaction.getMontant/100 }} &euro;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table> <br><br> {% endif %}
+                    <!-- dodson 20190125 -->
+                    {% if form.myDatePredilection is defined %}
+                    <!-- dodson 20190201 -->
+                    <br>
+                    <div class="form-group">
+                        <label for="dateTemp" class="control-label">Date prédilection*</label>
+                        <div class="input-group date form_date" data-date data-date-format="dd MM yyyy" data-link-field="reservation_edit_myDatePredilection" data-link-format="yyyy-mm-dd" style="max-width:320px" ajax-url="{{url('softivendor_event_reservation_select_nb_place_dispo',{'id': evenement.id})}}">
+                            {% if reservation.datePredilection is not null %} {% set tab = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"] %} {% set date_p = reservation.datePredilection|date('d')~" "~tab[reservation.datePredilection|date('n')
+                            - 1]~" "~reservation.datePredilection|date('Y') %} {% else %} {% set date_p = null %} {% endif %}
+                            <input type="text" id="dateTemp" class="form-control" readonly="readonly" value="{{date_p}}" />
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        </div>
+                        {{ form_widget(form.myDatePredilection, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            <span class="error-datePredilection"></span>
+                        </div>
+                    </div>
+                    <!-- end dodson -->
+                    {% endif %}
+                    <!-- dodson evo 20190211 -->
+                    {% if form.nbPlace is defined %}
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            {{ form_label(form.nbPlace, "Nombre de place souhaité*", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.nbPlace, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.nbPlace) }}
+                                <span class="error-nbPlace"></span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- dodson end -->
+
+                    <h3 class="form-section">DETAIL CLIENT</h3>
+                    {% if form.nomSociete is defined %}
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            {{ form_label(form.nomSociete, "Société", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.nomSociete, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.nomSociete) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            {{ form_label(form.nom, "Nom", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+
+                        <div class="col-sm-4">
+                            {{ form_widget(form.nom, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.nom) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            {{ form_label(form.prenom, "Prénom", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+
+                        <div class="col-sm-4">
+                            {{ form_widget(form.prenom, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.prenom) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            {{ form_label(form.tel, "Téléphone", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.tel, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.tel) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            {{ form_label(form.email, "Email", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.email, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.email) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            {{ form_label(form.adresse, "Adresse", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.adresse, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.adresse) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            {{ form_label(form.cp, "Code postal", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.cp, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.cp) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            {{ form_label(form.ville, "Ville", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.ville, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.ville) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            {{ form_label(form.comment, "Commentaires du client", {'attr': { 'class': 'control-label'}}) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_widget(form.comment, {'attr': { 'class': 'form-control'}})}}
+                            <div class="error">
+                                {{ form_errors(form.comment) }}
+                                <span class="error-metaDescription"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                    </div>
+
+                    <!-- dodson 20190125-->
+                    <!-- dodson 20190312 -->
+                    {# {% if form.comment is defined %}
+                    <div class="form-group">
+                        {{ form_label(form.comment, "Commentaire", {'attr': { 'class': 'control-label'}}) }} {{ form_widget(form.comment, {'attr': { 'class': 'form-control'}})}}
+                        <div class="error">
+                            {{ form_errors(form.comment) }}
+                            <span class="error-metaDescription"></span>
+                        </div>
+                        <div class="error">
+                            <span class="error-comment"></span>
+                        </div>
+                    </div>
+                    {% endif %} #}
+                    <!-- dodson end -->
+
+                    {% if (invites is not null and invites is not empty) %}
+                    <h3 class="form-section">INFORMATIONS SUR LES INVITES</h3>{% endif %} {% for key, invite in invites %}
+                    <div>
+                        <label class="required"><strong>Invité {{ key+1 }} </strong></label>
+                        <div id="reservation_edit_invites_{{key}}">
+                            <div class="form-group">
+                                {{ form_label(formView[key], 'Nom', {'label_attr': {'class': 'control-label', 'for': 'reservation_edit_invites_'~key~'_nom'}}) }} {{ form_widget(formView[key].nom, {'full_name': 'reservation_edit[invites]['~key~'][nom]', 'attr': {'id': 'reservation_edit_invites_'~key~'_nom',
+                                'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(formView[key], 'Prénom', {'label_attr': {'class': 'control-label', 'for': 'reservation_edit_invites_'~key~'_prenom'}}) }} {{ form_widget(formView[key].prenom, {'full_name': 'reservation_edit[invites]['~key~'][prenom]', 'attr': {'id': 'reservation_edit_invites_'~key~'_prenom'
+                                , 'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(formView[key], 'Email', {'label_attr': {'class': 'control-label', 'for': 'reservation_edit_invites_'~key~'_email'}}) }} {{ form_widget(formView[key].email, {'full_name': 'reservation_edit[invites]['~key~'][email]', 'attr': {'id': 'reservation_edit_invites_'~key~'_email',
+                                'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(formView[key], 'Tél', {'label_attr': {'class': 'control-label', 'for': 'reservation_edit_invites_'~key~'_tel'}}) }} {{ form_widget(formView[key].tel, {'full_name': 'reservation_edit[invites]['~key~'][tel]', 'attr': {'id': 'reservation_edit_invites_'~key~'_tel',
+                                'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    {#
+                    <td>
+                        <div>
+                            {{ form_label(formView[key], '', {'label_attr': {'style': 'display:none;'}}) }} {{ form_widget(formView[key].correspondance, {'full_name': 'coloris[correspondance]['~key~']'}) }}
+                        </div>
+                    </td>#} {% endfor %} {{ form_widget(form.enregistrer, {'label': 'Enregistrer', 'attr': {'class': 'btn btn-theme04'}}) }} {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $('.form_date').datetimepicker({
+        format: 'dd MM yyyy ',
+        language: 'fr',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        onSelect: function() {
+            $(this).change();
+        },
+        { %
+            if evenement.period == 1 %
+        }
+        startDate: debutDate,
+        endDate: finDate,
+        // dodson 20190314
+        datesDisabled: datesBusy { % endif %
+        }
+    });
+</script>
+
+
+
+{% include 'SoftivendorCRMBundle:EventInClub:editJS.html.twig' %} {% endblock %}

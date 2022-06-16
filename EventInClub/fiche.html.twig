@@ -1,0 +1,837 @@
+{% extends ':crm:layout.html.twig' %} {% block stylesheets %}
+<style type="text/css">
+    .date-container {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+    }
+    
+    .date-container.is_visible {
+        visibility: visible;
+        opacity: 1;
+        position: relative;
+    }
+    
+    .event-period.is_hide {
+        opacity: 0;
+        position: absolute;
+        visibility: hidden;
+    }
+    /*evo 20190211*/
+    
+    .toggle_eventPlaces {
+        display: block;
+        margin: 10px 0;
+        font-weight: 600;
+    }
+    
+    .toggle_eventPlaces.hide {
+        display: none;
+    }
+    
+    .toggle_eventPlaces:hover,
+    .toggle_eventPlaces:focus {
+        text-decoration: none;
+    }
+    
+    .toggle_eventPlaces i {
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        text-align: center;
+        line-height: 20px;
+        background: #999;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        font-size: 16px;
+        font-style: normal;
+        color: #fff
+    }
+</style>
+{% endblock %} {% block header %}
+<!--logo end-->
+<div class="nav notify-row" id="top_menu">
+    <ul class="nav top-menu">
+        <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+        <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_event_fiche_event_inclub') }}">
+                <i class="fa fa-file-text-o"></i> FICHE
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_event_list_inclub') }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="top-menu fiche_btn">
+    <ul class="nav pull-left top-menu">
+        {% if prev != false %}
+        <li><a href="{{ path('softivendor_crm_event_fiche_event_inclub') }}?prev={{ prev }}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+        {% endif %} {% if next != false %}
+        <li><a href="{{ path('softivendor_crm_event_fiche_event_inclub') }}?next={{ next }}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{#
+<div class="top-menu logout">
+    <ul class="nav pull-right top-menu">
+        <li class="nombre"><span class="nombre-titre">Nombre</span> <span class="nombre_id">{{ reservation.getTotalItemCount }}</span></li>
+        <li><a class="logout" href="{{path('fos_user_security_crm_logout')}}" title="Logout">Logout</a></li>
+    </ul>
+
+</div> #} {% endblock %} {% block body %} 
+{% for key, messages in app.session.flashbag.all() %}
+
+<div class="modal-contrat-suppr-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                                <i class="fa fa-check-circle true"></i>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+{% endfor %}
+
+
+
+<div class="container-fluid">
+    <div class="row formulaire-add">
+        <div class="col-lg-8 main-chart">
+
+            {{ form_start(form,{'attr': {novalidate:'novalidate', 'id': 'eventCreate'}}) }} {% if not form.vars.valid %} {% if form.name.vars.errors is defined and form.name.vars.errors|length > 0 %}
+            <ul class="form-errors name">
+                {% for error in form.name.vars.errors %} {{ error }} {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="ui alert alert-danger global-error" style="display:block">
+                Attention des erreurs ont étés trouvés, veuillez vérfiez les champs s'il vous plait !!
+            </div>
+            {% endif %}
+            <div class="ui alert alert-danger global-error" style="display:none">
+                Attention des erreurs ont étés trouvés, veuillez vérfiez les champs s'il vous plait !!
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 pt-3">
+                    <h3><i class="fa fa-angle-right"></i> Informations sur l'événement</h3>
+                    <div class="form-panel pt-3 form-horizontal style-form">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Titre *</label>
+                            <div class="col-sm-10">
+                                {{ form_widget(form.titre, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.titre) }}
+                                    <span class="error-titre"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Description *</label>
+                            <div class="col-sm-10 description ">
+                                {{ form_widget(form.description, {'attr': { 'class': 'form-control tinymce'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.description) }}
+                                    <span class="error-description"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Disponibilité de l'évènement</label>
+                            <div class="col-sm-10">
+                                <div class="row dispo">
+                                    <div class="col-sm-4">
+                                            {{ form_label(form.matin,"Le matin",{'attr': { 'class': 'control-label' }}) }}
+                                            <span class="checkbox_case">
+                                             {{ form_widget(form.matin, {'attr': { 'class': 'checkbox'}})}}
+                                             <span class="check"></span>
+                                            <span>
+                                        <div class="error">
+                                                {{ form_errors(form.matin) }}
+                                            <span class="error-period"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form_label(form.midi,"L'aprés-midi",{'attr': { 'class': 'control-label' }}) }}
+                                    
+                                         <span class="checkbox_case">
+                                             {{ form_widget(form.midi, {'attr': { 'class': 'checkbox'}})}}
+                                             <span class="check"></span>
+                                            <span>
+                                        <div class="error">
+                                            {{ form_errors(form.midi) }}
+                                            <span class="error-period"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form_label(form.soir,"Le soir",{'attr': { 'class': 'control-label ' }}) }} 
+                                        <span class="checkbox_case">
+                                             {{ form_widget(form.soir, {'attr': { 'class': 'checkbox'}})}}
+                                             <span class="check"></span>
+                                            <span>
+                                        
+                                        <div class="error">
+                                            {{ form_errors(form.soir) }}
+                                            <span class="error-period"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Image Bandeau</label>
+                            <div class="col-sm-10">
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <div class="fileupload-new thumbnail" style="width: 100%; height: 150px;">
+
+                                        {% if event.bandeau is not null %}
+                                        <div class="preview">
+                                            <img id="bandeauImg" src="{{ asset('img/bandeau/') }}{{ event.bandeau }}" style="widht:590;height:258px;">
+                                        </div>
+                                        {% else %}
+
+                                        <img src="{{ asset('/web/crm/img/nologo.png') }}" alt=""> {% endif %}
+
+                                    </div>
+                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                    <div>
+                                        <span class="btn btn-theme02 btn-file">
+                              <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span> {{ form_widget(form.fileBandeau, {'attr': { 'class': 'form-control-file'}})}}
+                                        </span>
+                                        <a href="advanced_form_components.html#" title="" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Type</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.type, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.type) }}
+                                    <span class="error-type"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <label class="col-xs-4 control-label">Status (actif ou pas)</label>
+                                    <div class="col-xs-2">
+                                        <div class="checkbox">
+                                            <label>
+                                            <span class="switch">
+                                                {{ form_widget(form.status, {'attr': { 'class': 'checkbox'}})}}
+                                                <span class="slider round"></span>
+                                            </span>
+                                <div class="error">
+                                  {{ form_errors(form.status) }} 
+                                  <span class="error-status"></span>   
+                                </div>
+                                  </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <label class="col-xs-4 control-label">Complet</label>
+                                    <div class="col-xs-2">
+                                        <div class="checkbox">
+                                            <label>
+                                  <span class="checkbox_case">
+                                             {{ form_widget(form.estComplet, {'attr': { 'class': 'checkbox'}})}}
+                                             <span class="check"></span>
+                                            <span>
+                                      <div class="error">
+                                          {{ form_errors(form.estComplet) }} 
+                                          <span class="error-est-complet"></span>   
+                                      </div>
+                                    </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div class="form-group event-private">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <label class="col-xs-4 control-label">{{ form_label(form.privateEvent, "Evenement (privé ou pas)", {'attr': { 'class': 'control-label'}}) }}</label>
+                                    <div class="col-xs-2">
+                                        <div class="checkbox">
+                                            <label>
+
+                                            <span class="switch">
+                                                 {{ form_widget(form.privateEvent, {'attr': { 'class': 'checkbox'}})}}
+                                                <span class="slider round"></span>
+                                            </span>
+
+
+
+                                 <div class="error">
+                                     {{ form_errors(form.privateEvent) }} 
+                                     <span class="error-event-private"></span>   
+                                 </div>
+                                 </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <label class="col-xs-4 control-label event-period">{{ form_label(form.period,"Période",{'attr': { 'class': 'control-label' }}) }}</label>
+
+                                    <div class="col-xs-2 event-period">
+                                        <div class="checkbox">
+                                            <label> 
+                                            <span class="switch">
+                                                  {{ form_widget(form.period, {'attr': { 'class': 'checkbox'}})}}
+                                                <span class="slider round"></span>
+                                            </span>
+
+
+                                <div class="error">
+                                    {{ form_errors(form.period) }} 
+                                    <span class="error-period"></span>   
+                                </div>
+                              </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        {#
+                        <div class="form-group event-period">
+
+                            <div class="col-sm-10">
+                                {{ form_label(form.period,"Période",{'attr': { 'class': 'control-label' }}) }}
+                                <div class="checkbox">
+                                    {{ form_widget(form.period, {'attr': { 'class': 'checkbox '}})}}
+                                    <div class="error">
+                                        {{ form_errors(form.period) }}
+                                        <span class="error-period"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div> #}
+
+
+                        <div class="form-group date-container simple-date">
+                            {{ form_label(form.dateBeginTemp1, "Date *", {'label_attr': { 'for': 'dtp_input1', 'class': 'col-sm-2 col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-4" data-date-format="dd MM yyyy - hh:ii" data-link-field="dtp_input1" data-link-format="dd-mm-yyyy">
+                                {{ form_widget(form.dateBeginTemp1, {'attr': { 'class': 'datetime form-control', 'size': '16'}})}}
+                            </div>
+                            <input type="hidden" id="dtp_input1" value="" />
+                            <div class="error">
+                                {{ form_errors(form.dateBeginTemp1) }}
+                                <span class="error-date-begin-1"></span>
+                            </div>
+
+                            <label class="control-label col-sm-2">Nombre de place</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.nbPlace, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.nbPlace) }}
+                                    <span class="error-nbPlace"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="date-container period-date">
+                            <div class="form-group event-date">
+                                {{ form_label(form.dateBeginTemp2, "Date début *", {'label_attr': { 'for': 'dtp_input1', 'class': 'col-sm-2 col-sm-2 control-label'}}) }}
+                                <div class="col-sm-4">
+                                    <div id="beginDate" class="date form_date" data-date data-date-format="dd MM yyyy" data-link-field="dtp_input3" data-link-format="dd-mm-yyyy">
+                                        {{ form_widget(form.dateBeginTemp2, {'attr': { 'class': 'date_form form-control', 'size': '16'}})}}
+                                    </div>
+                                    <input type="hidden" id="dtp_input3" value="" />
+                                    <div class="error">
+                                        {{ form_errors(form.dateBeginTemp2) }}
+                                        <span class="error-date-begin-2"></span>
+                                    </div>
+                                </div>
+
+                                {{ form_label(form.dateEnd, "Date fin *", {'label_attr': { 'for': 'dtp_input2', 'class': 'col-sm-2 col-sm-2 control-label'}}) }}
+                                <div class="col-sm-4">
+                                    <div id="endDate" class="date form_date" data-date data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        {{ form_widget(form.dateEnd, {'attr': { 'class': 'date_form form-control', 'size': '16'}})}}
+                                    </div>
+                                    <input type="hidden" id="dtp_input2" value="" />
+                                    <div class="error">
+                                        {{ form_errors(form.dateEnd) }}
+                                        <span class="error-date-end"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- evo 20190211 -->
+                            <div class="form-group event-date">
+                                <div class="col-sm-4">
+                                    <a href="#" class="toggle_eventPlaces hide"><i>+</i> Afficher</a>
+                                    <a href="#" class="toggle_eventPlaces"><i>-</i> Réduire</a>
+                                </div>
+                                <div class="col-sm-2">
+                                    {{form_label(form.eventPlaces)}}
+                                </div>
+                                <div class="col-sm-6">
+                                    {{form_widget(form.eventPlaces)}}
+                                    <div class="error">
+                                        {{form_errors(form.eventPlaces)}}
+                                        <span class="error-event-place"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- <div class="form-group nb-place">
+
+                            {# <label class="col-sm-2 col-sm-2 control-label">Date</label>
+                            <div class="col-sm-4">
+                                <input size="16" type="text" value="2014-01-01 10:00" readonly="false" class="form_datetime form-control">
+                            </div> #}
+
+                             <label class="control-label col-sm-2">Nombre de place</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.nbPlace, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.nbPlace) }}
+                                    <span class="error-nbPlace"></span>
+                                </div>
+                            </div> 
+                        </div>-->
+
+                        <hr class="sep">
+
+                        <h3 class="pb-3 pt-3"><i class="fa fa-angle-right"></i> Coordonnées de l'événement</h3>
+
+                        <div class="form-group">
+
+                            <label class="col-sm-2 col-sm-2 control-label">Code postal</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.cp, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.cp) }}
+                                    <span class="error-cp"></span>
+                                </div>
+                            </div>
+                            <label class="col-sm-2 col-sm-2 control-label">Ville</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.ville, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.ville) }}
+                                    <span class="error-ville"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="col-sm-2 col-sm-2 control-label">Adresse</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.adresse, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.adresse) }}
+                                    <span class="error-adresse"></span>
+                                </div>
+                            </div>
+
+                            <label class="col-sm-2 col-sm-2 control-label">Pays</label>
+                            <div class="col-sm-4">
+                                <select name="country" class="form-control">
+                        {% for country in country %}
+                            <option value="{{ country.nomFrFr }}">{{ country.nomFrFr }}</option>
+                            {% if country.nomFrFr == "France" %}
+                                <option value="{{ country.nomFrFr }}" selected>{{ country.nomFrFr }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="error-country"></span>   
+                    </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Latitude</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.lat, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.lat) }}
+                                    <span class="error-lat"></span>
+                                </div>
+                            </div>
+                            <label class="col-sm-2 col-sm-2 control-label">Longitude</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.longit, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.longit) }}
+                                    <span class="error-longit"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="sep">
+
+                        <h3 class="form-section">ATTRIBUTS DE L'EVENEMENT</h3>
+                        <div class="form-group">
+
+                            <div class="col-sm-2">
+                                {{ form_label(form.prixInvite, "Prix Invité", {'attr': { 'class': 'control-label'}})}}
+                            </div>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.prixInvite, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.prixInvite) }}
+                                    <span class="error-prixInvite"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                {{ form_label(form.prixCollaborateur, "Prix Collaborateur", {'attr': { 'class': 'control-label'}})}}
+                            </div>
+
+                            <div class="col-sm-4">
+                                {{ form_widget(form.prixCollaborateur, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.prixCollaborateur) }}
+                                    <span class="error-prixCollaborateur"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <h3 class="pb-3 pt-3"><i class="fa fa-angle-right"></i> Référencement</h3>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Meta title</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.metaTitle, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.metaTitle) }}
+                                    <span class="error-metaTitle"></span>
+                                </div>
+                            </div>
+                            <label class="col-sm-2 col-sm-2 control-label">Meta description</label>
+                            <div class="col-sm-4">
+                                {{ form_widget(form.metaDescription, {'attr': { 'class': 'form-control'}})}}
+                                <div class="error">
+                                    {{ form_errors(form.metaDescription) }}
+                                    <span class="error-metaDescription"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-lg-4 ds pt-3">
+            <article>
+                <div class="bouton_crud">
+                    <button type="button" class="btn btn-theme ajout" style="display:none;" title="Ajouter">Enregistrer</button>
+                    <button type="button" class="btn btn-theme edit" title="Editer">Editer</button>
+                    <button type="button" class="btn btn-theme" name="supChoice" value="{{ event.id }}" data-toggle="modal" data-target="#myModalSuppression{{event.id }}" title="Supprimer">Supprimer</button>
+                </div>
+            </article>
+        </div>
+        <div class="modal fade" id="myModalSuppression{{event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                    </div>
+                    <div class="modal-body">
+                        Voulez-vous vraiment supprimer cet événement ?
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{path('softivendor_crm_event_fiche_inclub_delete',{id:  event.id})}}" class="href-delete"><button type="submit"  class="btn btn-default delete"   >Oui</button></a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /col-lg-3 -->
+    </div>
+</div>
+
+
+{% include 'SoftivendorCRMBundle:EventInClub:ficheJs.html.twig' %} {#
+<script type="text/javascript" src="{{asset('js/bootstrap-datetimepicker.fr.js')}}"></script>
+#}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#eventCreate input').prop('disabled', true);
+        $('#eventCreate select').prop('disabled', true);
+        $('#eventCreate textarea').prop('disabled', true);
+        $('.description').addClass('disabled');
+
+        $('.edit').on('click', function() {
+            $('#eventCreate input').prop('disabled', false);
+            $('#eventCreate select').prop('disabled', false);
+            $('#eventCreate textarea').prop('disabled', false);
+            $('.edit').css('display', 'none');
+            $('.ajout').css('display', 'block');
+            $('.description').removeClass('disabled');
+        })
+
+
+        // $('.ajout').on('click',function(){
+        //   $('form[name = "softivendor_crmbundle_event"]').submit();
+        // });
+
+        $('.datetime').datetimepicker({
+            language: 'fr',
+            format: 'dd MM yyyy - hh:ii',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+
+            // autoclose:true,
+        });
+        $('.date_form').datetimepicker({
+
+            format: 'dd MM yyyy ',
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            onSelect: function() {
+                $(this).change();
+            }
+        });
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#softivendor_crmbundle_event_privateEvent').on('change', function() {
+            // $('#softivendor_crmbundle_event_period').toggle();
+            toggle_period();
+        });
+
+
+
+        $('#softivendor_crmbundle_event_titre').change(function() {
+            updateMetaTitle();
+        });
+
+        function updateMetaTitle() {
+            titre = $('#softivendor_crmbundle_event_titre').val();
+            $('#softivendor_crmbundle_event_metaTitle').val(titre);
+        }
+
+        function toggle_period() {
+            var eventPrivate = $("#softivendor_crmbundle_event_privateEvent").get(0).checked;
+            if (eventPrivate === true) {
+                $(".event-period").removeClass('is_hide');
+                $("#softivendor_crmbundle_event_prixInvite").prop('disabled', true);
+                $("#softivendor_crmbundle_event_prixCollaborateur").prop('disabled', true);
+            } else {
+                $(".event-period").addClass('is_hide');
+                $("#softivendor_crmbundle_event_period").prop('checked', false);
+                $("#softivendor_crmbundle_event_prixInvite").prop('disabled', false);
+                $("#softivendor_crmbundle_event_prixCollaborateur").prop('disabled', false);
+            }
+
+            show_date_fin();
+        }
+
+        toggle_period();
+        // dodson go
+        show_date_fin();
+
+        $("#softivendor_crmbundle_event_period").change(function() {
+            show_date_fin();
+        });
+
+        function show_date_fin() {
+            var check = $("#softivendor_crmbundle_event_period").get(0).checked,
+                ds = $(".simple-date"),
+                dp = $(".period-date"),
+                input1 = $("#softivendor_crmbundle_event_dateBeginTemp1"),
+                input2 = $("#softivendor_crmbundle_event_dateBeginTemp2");
+            input3 = $("#softivendor_crmbundle_event_dateEnd");
+            nbPlace = $("#softivendor_crmbundle_event_nbPlace"),
+                nbPlaceParent = $('.nb-place');
+            if (check === true) {
+                ds.removeClass('is_visible')
+                dp.addClass('is_visible');
+                input1.removeAttr('required');
+                input2.attr('required', 'required');
+                input3.attr('required', 'required');
+                // dodson 20190311
+                (nbPlace.val().trim() == '') ? nbPlace.val(0): nbPlace.val(nbPlace.val());
+                nbPlace.prop('disabled', true);
+                nbPlaceParent.hide();
+
+            } else {
+                dp.removeClass('is_visible')
+                ds.addClass('is_visible');
+                input1.attr('required', 'required');
+                input2.removeAttr('required');
+                input3.removeAttr('required');
+                // dodson 20190311
+                (nbPlace.val().trim() == '') ? nbPlace.val(0): nbPlace.val(nbPlace.val());
+                nbPlace.prop('disabled', false);
+                nbPlaceParent.show();
+            }
+        }
+
+
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var stringDate = $("#softivendor_crmbundle_event_dateBeginTemp2").val();
+        var stringDateOk = getDateInFormat(stringDate);
+        var d = new Date(stringDateOk);
+
+        $("#softivendor_crmbundle_event_eventPlaces label").each(function(index) {
+            var j = (d.getDate() < 10) ? '0' + d.getDate() : d.getDate();
+            var x = d.getMonth() + 1;
+            var m = (x < 10) ? '0' + x : x;
+            var Y = d.getFullYear();
+            var date_format1 = (j + '/' + m + '/' + Y);
+            var date_format2 = Y + '-' + m + '-' + j;
+            var inputDate = $(this).parent().next();
+
+            var value = inputDate.val().replace(/__date_value__/g, date_format2);
+            var label = $(this).text().replace(/__date__/g, date_format1);
+            $(this).text(label);
+            inputDate.val(value);
+            d.setDate(d.getDate() + 1);
+        });
+
+        // tableau mois
+        function getDateInFormat(date, format = '') {
+            var monthsArray = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            var tabDate = date.split(" ");
+            var d = tabDate[0];
+            var x = parseInt(jQuery.inArray(tabDate[1], monthsArray));
+            var m = (x + 1) < 10 ? '0' + (x + 1) : x + 1;
+            var Y = tabDate[2];
+            if (format == 'dd/mm/YYYY') {
+                return d + '/' + m + '/' + Y;
+            }
+            return Y + '-' + m + '-' + d;
+        }
+
+        // remplir dtp_input2 et dtp_input3
+        // var val1 = $("#softivendor_crmbundle_event_dateBeginTemp2").val();
+        // var val2 = $("#softivendor_crmbundle_event_dateEnd").val();
+
+        // if(val1 != '')
+        // {
+        //   $("#dtp_input3").val(getDateInFormat(val1));
+        // }
+        // if(val2 != '')
+        // {
+        //   $("#dtp_input2").val(getDateInFormat(val2));
+        // }
+
+
+        $('.date_form').on('change', function() {
+            var val1 = $("#softivendor_crmbundle_event_dateBeginTemp2").val();
+            var val2 = $("#softivendor_crmbundle_event_dateEnd").val();
+            if (val1 != '') {
+                $("#dtp_input3").val(getDateInFormat(val1));
+            }
+            if (val2 != '') {
+                $("#dtp_input2").val(getDateInFormat(val2));
+            }
+            var startDate = $("#dtp_input3").val();
+            var endDate = $("#dtp_input2").val();
+            var msgErrorEventPlace = $(".error-event-place");
+            if (startDate != '' && endDate != '') {
+                var startDate = new Date(startDate);
+                var endDate = new Date(endDate);
+                var millisecondsPerDay = 1000 * 60 * 60 * 24;
+                var millisBetween = endDate.getTime() - startDate.getTime();
+                var days = millisBetween / millisecondsPerDay;
+                var nbj = Math.floor(days);
+                if (nbj >= 0) {
+                    nbj = nbj + 1;
+                    var $container = $('div#softivendor_crmbundle_event_eventPlaces');
+                    index = 0;
+                    $container.find('>div').each(function() {
+                        $(this).remove();
+                    });
+                    for (i = 1; i <= nbj; i++) {
+                        if (i == 1)
+                            startDate.setDate(startDate.getDate() + 0);
+                        else
+                            startDate.setDate(startDate.getDate() + 1);
+
+                        var j = (startDate.getDate() < 10) ? '0' + startDate.getDate() : startDate.getDate();
+                        var x = startDate.getMonth() + 1;
+                        var m = (x < 10) ? '0' + x : x;
+                        var Y = startDate.getFullYear();
+                        var date_format1 = (j + '/' + m + '/' + Y);
+                        var date_format2 = Y + '-' + m + '-' + j;
+
+                        var template = $container.attr('data-prototype')
+                            .replace(/__date__/g, date_format1)
+                            .replace(/__date_value__/g, date_format2)
+                            .replace(/__name__/g, index);
+                        var $prototype = $(template);
+                        $container.append($prototype);
+                        index++;
+                    }
+                    msgErrorEventPlace.text('');
+                }
+                $("#softivendor_crmbundle_event_setDate").val(1);
+            }
+        });
+
+
+    });
+</script>
+
+
+
+{% endblock %}

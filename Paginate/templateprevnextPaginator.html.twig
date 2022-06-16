@@ -1,0 +1,31 @@
+{# 
+{% if pageCount > 1 %}
+<div class="pagination">
+    {% if previous is defined %}
+        <span class="bouton btn-precedent">
+            <a class="bouton btn-precedent" href="{{ path(route, query|merge({(pageParameterName): previous})) }}">&lt;</a>
+        </span>
+    {% endif %}
+
+    {% if next is defined %}
+        <span class="bouton btn-suivant">
+            <a class="bouton btn-suivant" href="{{ path(route, query|merge({(pageParameterName): next})) }}">&gt;</a>
+        </span>
+    {% endif %}
+</div>
+{% endif %} #}
+
+
+{% if pageCount > 1 %}
+    {# items {{ firstItemNumber }} to {{ lastItemNumber }} of {{totalCount}} #}
+    {% if previous is defined %}
+            <li><a type="button" title="FICHE PRECEDENTE" class="bouton btn-precedent" rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+    {% else %}
+        <li><button type="button" class="bouton btn-precedent" hidden="hidden"><i class="fa fa-backward"></i>FICHE PRECEDENTE</button></li>
+    {% endif %}
+    {% if next is defined %}
+            <li><a type="button" class="bouton btn-suivant" title ="FICHE SUIVANTE" rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}"> FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+    {% else %}
+        <button type="button" class="bouton btn-suivant" hidden="hidden"> FICHE SUIVANTE<i class="fa fa-forward"></i> </button> 
+    {% endif %}
+{% endif %}

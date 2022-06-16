@@ -1,0 +1,875 @@
+{% extends ':crm:layout.html.twig' %} {% block header %}
+<style type="text/css">
+
+</style>
+
+{% include "SoftivendorCRMBundle:InClub:header.html.twig" %} {% endblock %} {% block body %} 
+
+{{ form_start(form,{'attr':{novalidate:'novalidate',class:'row formulaire-add'}}) }}
+
+<input type="hidden" id="id_business" value="{{business.id}}">
+
+
+<div class="container-fluid">
+    <div class="row formulaire-add'">
+        <div class="col-lg-12 main-chart">
+            <div class="row">
+                <div class="col-sm-3 pl-5 pt-3">
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail">
+
+                            {% if business.logo %}
+                            <img src=" {{app.request.basepath}}/img/logo/{{business.logo}}"> {% else %}
+                            <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+                        </div>
+                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                        <div>
+
+                            <span class="btn btn-theme02 btn-file">
+                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span> {{ form_widget(form.fileLogo) }}
+                            </span>
+                            <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9 pt-3">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="showback">
+                                <h2>{{ business.societe }}</h2>
+                            </div>
+                            {{ activeHeaderContrat(business.id) }}
+                        </div>
+                        <div class="col-lg-5">
+                            <article>
+                                <div class="bouton_crud">
+                                    <div class="checkbox">
+                                        <label>
+                                            {# {{ form_widget(form.partenaire) }} #}
+                                            {% if business.Partenaire != 0 %}
+                                            <span class="checkbox_case">
+                                                <input type="checkbox" id="partenaire" name="partenaire" checked>
+                                                    <span class="check"></span>
+                                                </span>
+                                            {% else %}
+                                                <span class="checkbox_case">
+                                                <input type="checkbox" id="partenaire" name="partenaire">
+                                                    <span class="check"></span>
+                                                </span>
+                                            {% endif %}
+                                            Partenaire
+                                            </label>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="row right-column-top none-md">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-3">
+
+                            <div class="pt-2 lg-3 bloc-right" style="">
+                                <div class="list-group historique">
+                                       <h4> date signature</h4>
+                                  {% if dateSignature is empty %} Aucun contrat signé {% else %} {% for date in dateSignature %} {{date.dateSignature|date("d/m/Y")}} {% endfor %} {% endif %}
+
+                                <h4> date Fin d'adhésion</h4>
+                                  {% if dateSignature is empty %} Aucun contrat signé {% else %} {% for date in dateFinAdhesion %} {{date.dateFinAdhesion|date("d/m/Y")}} {% endfor %} {% endif %}
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="bloc-right">
+                                <div class="list-group">
+
+                                    <article>
+                                        <h4> Référent commercial</h4>
+                                       {# <form name="form_commercial" action="{{path('softivendor_crm_business_fiche_inclub',{next : business.id })}}" method="post"> 
+ #}                                         
+                                         <select name="userCommercial" class="form-control" id="userCommercial">
+                                           {% set centralId = "" %}
+                                           {% set inclubId = "" %}
+                                           {% for user in listCommercial %}
+                                               {% set centralId = user.central  %}
+                                               {% set inclubId = user.inclub  %}
+                                           {% endfor %}
+                                       
+                                               <option value=""></option>
+                                           {% for Commercial in userCommercial %}
+                                               {% if Commercial.id == inclubId  %}
+                                               <option value="{{Commercial.id}}" {% if Commercial.id == inclubId  %}selected{% endif %}>{{Commercial.nom}}</option>
+                                               {% else %}
+                                               <option value="{{Commercial.id}}" {% if  Commercial.id == inclubId and Commercial.id == centralId %}selected{% endif %}>{{Commercial.nom}}</option>
+                                               {% endif %}
+                                           {% endfor %}
+                                           
+                                       </select> 
+                                    {# </form> #}
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {% for key, messages in app.session.flashbag.all() %} {#
+            <div class="ui alert-{{ key }} alert alert-success slide-right">
+                {% for message in messages %} - {{ message }} <br /> {% endfor %}
+            </div>
+            <div class="clearing ui divider"></div> #}
+
+            <div class="modal-contrat-suppr-2">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %} {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <i class="fa fa-check-circle true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+            <div class="row">
+                <div class="col-lg-7 pt-3">
+
+                    {% if business.userBusiness is empty %} {% else %}
+                    <h3><i class="fa fa-angle-right"></i> Liste des membres in club</h3>
+                    {% endif %}
+
+
+
+                    <ul class="tags" data-prototype="<li>
+
+                    <div class=&quot;form-panel pt-3 liste-collaborateur&quot;>
+                  
+                        <div class=&quot;row&quot;>
+
+                            <div class=&quot;col-md-2&quot;>
+                                <div class=&quot;fileupload fileupload-new&quot; data-provides=&quot;fileupload&quot;>
+                                    <div class=&quot;fileupload-new thumbnail&quot;>
+                                    
+                                    <input type=&quot;hidden&quot; name=&quot;id_input__name__&quot; value=&quot;__name__&quot;>
+
+                                                                                <img src=&quot;/web/crm/img/nologo.png&quot; alt=&quot;&quot;> 
+                                    </div>
+                                    <div class=&quot;fileupload-preview fileupload-exists thumbnail&quot; style=&quot;max-width: 2__name____name__px; max-height: 15__name__px; line-height: 2__name__px;&quot;></div>
+                                    <div>
+                                        <span class=&quot;btn btn-theme02 btn-file&quot;>
+                                <span class=&quot;fileupload-new&quot;><i class=&quot;fa fa-paperclip&quot;></i> Select image</span>
+                                        <span class=&quot;fileupload-exists&quot;><i class=&quot;fa fa-undo&quot;></i> Change</span> <input type=&quot;file&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___fileAvatar&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][fileAvatar]&quot; required=&quot;required&quot; class=&quot;&quot;>
+                                        </span>
+                                        <a href=&quot;#&quot; title=&quot;Remove&quot; class=&quot;btn btn-theme04 fileupload-exists&quot; data-dismiss=&quot;fileupload&quot;><i class=&quot;fa fa-trash-o&quot;></i> Supprimer</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=&quot;col-md-10 form-horizontal style-form&quot;>
+
+                                <div class=&quot;form-group mt-3&quot;>
+
+                                    <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Entreprise</label>
+                                    <div class=&quot;col-sm-4&quot;>
+                                        <select class=&quot;form-control&quot; disabled=&quot;&quot;>
+                                <option>{{ business.societe }}</option>
+                              </select>
+
+                                    </div>
+
+                                    <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Type</label>
+                                    <div class=&quot;col-sm-4&quot;>
+
+                                        <select id=&quot;softivendor_crmbundle_business_userBusiness___name___type&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][type]&quot; class=&quot;form-control&quot;><option value=&quot;1&quot;>Utilisateur</option><option value=&quot;2&quot; selected=&quot;selected&quot;>Collaborateur</option></select>
+
+                                        <div class=&quot;error&quot;>
+                                            
+                                            <span class=&quot;error-nom error&quot;></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class=&quot;form-group mt-3&quot;>
+
+                                    <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Nom</label>
+                                    <div class=&quot;col-sm-4&quot;>
+                                        <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___nom&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][nom]&quot; required=&quot;required&quot; class=&quot;form-control&quot; value=&quot;&quot;>
+                                        <div class=&quot;error&quot;>
+                                            
+                                            <span class=&quot;error-nom-__name__ error&quot;></span>
+                                        </div>
+                                    </div>
+
+                                    <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Prénom</label>
+                                    <div class=&quot;col-sm-4&quot;>
+                                        <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___prenom&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][prenom]&quot; required=&quot;required&quot; class=&quot;form-control&quot; value=&quot;&quot;>
+                                        <div class=&quot;error&quot;>
+                                            
+                                            <span class=&quot;error-prenom-__name__ error&quot;></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class=&quot;fade-out-andrianina&quot;>
+                                    <div class=&quot;form-group&quot;>
+
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Civilité</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <select id=&quot;softivendor_crmbundle_business_userBusiness___name___civilite&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][civilite]&quot; required=&quot;required&quot; class=&quot;form-control&quot;><option value=&quot;&quot; selected=&quot;selected&quot;>Selectionnez</option><option value=&quot;M&quot; >Monsieur</option><option value=&quot;F&quot;>Madame</option><option value=&quot;P&quot;>Madamoiselle</option></select>
+                                            <div class=&quot;error&quot;>
+                                                
+                                                <span class=&quot;error-civilite-__name__ error&quot;></span>
+                                            </div>
+                                        </div>
+
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Tél</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___tel&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][tel]&quot; required=&quot;required&quot; class=&quot;form-control&quot; value=&quot;&quot;>
+                                            <div class=&quot;error&quot;>
+                                                
+                                                <span class=&quot;error-tel-__name__ error&quot;></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class=&quot;form-group&quot;>
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Email</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___email&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][email]&quot; required=&quot;required&quot; class=&quot;form-control&quot; value=&quot;&quot;>
+                                            <div class=&quot;error&quot;>
+                                                
+                                                <span class=&quot;error-email-__name__ error&quot;></span>
+                                            </div>
+                                        </div>
+
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Fonction</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___fonction&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][fonction]&quot; required=&quot;required&quot; class=&quot;form-control&quot; value=&quot;&quot;>
+                                            <div class=&quot;error&quot;>
+                                                
+                                                <span class=&quot;error-fonction-__name__ error&quot;></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=&quot;form-group&quot;>
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Date d'abonnement</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <div data-date-minviewmode=&quot;months&quot; data-date-viewmode=&quot;years&quot; data-date-format=&quot;dd/MM/yyyy&quot; data-date=&quot;&quot; class=&quot;input-append date dpMonths&quot;>
+                                                <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___dateInscription&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][dateInscription]&quot; required=&quot;required&quot; class=&quot;form-control form-control-inline input-medium default-date-picker&quot; size=&quot;16&quot; value=&quot;&quot;>
+                                                <div class=&quot;error&quot;>
+                                                    
+                                                    <span class=&quot;error-dateInscription-__name__ error&quot;></span>
+                                                </div>
+                                                <span class=&quot;input-group-btn add-on&quot;>
+                                  <button class=&quot;btn btn-theme&quot; type=&quot;button&quot;><i class=&quot;fa fa-calendar&quot;></i></button>
+                                  </span>
+                                            </div>
+                                        </div>
+
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Ville</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___ville&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][ville]&quot; required=&quot;required&quot; class=&quot;form-control&quot; value=&quot;&quot;>
+                                        </div>
+
+                                    </div>
+                                    <div class=&quot;form-group&quot;>
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Mot de passe</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <input type=&quot;password&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___pass&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][pass]&quot; required=&quot;required&quot; class=&quot;form-control&quot;>
+                                            <div class=&quot;error&quot;>
+                                                
+                                                <span class=&quot;error-pass-__name__ error&quot;></span>
+                                            </div>
+                                        </div>
+
+                                        <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Confirmation mot de passe</label>
+                                        <div class=&quot;col-sm-4&quot;>
+                                            <input type=&quot;password&quot; name=&quot;confirm_pass&quot; id=&quot;confirm_pass-__name__&quot; class=&quot;form-control&quot;>
+
+                                        </div>
+                                    </div>
+
+                                    <div class=&quot;form-group&quot;>
+                                        <div class=&quot;col-sm-6&quot;>
+                                            <div class=&quot;bouton_crud&quot;>
+                                                <div class=&quot;checkbox&quot;>
+                                                    <label>
+                                    <span class=&quot;switch&quot;>
+                                                 <input type=&quot;checkbox&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___actif&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][actif]&quot; class=&quot;btn btn-default&quot; value=&quot;1&quot; checked=&quot;checked&quot;>
+                                        
+                                                <span class=&quot;slider round&quot;></span>
+                                            </span>&nbsp;Status (actif ou pas)
+                                  </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class=&quot;col-sm-6&quot;>
+                                            <div class=&quot;bouton_crud&quot;>
+                                                <div class=&quot;checkbox&quot;>
+                                                    <label>
+
+                                                    <span class=&quot;switch&quot;>
+                                                    <input type=&quot;checkbox&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___blocage&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][blocage]&quot; class=&quot;btn btn-default&quot; value=&quot;1&quot;>
+                                  <span class=&quot;slider round&quot;></span>
+                                            </span>&nbsp;Blocage (bloquer ou pas)
+
+
+                                  </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class=&quot;row&quot;>
+                            <div class=&quot;col-lg-12&quot;>
+                                <article>
+                                    <div class=&quot;text-right&quot; data-id=&quot;__name__&quot;>
+                                        <input type=&quot;hidden&quot; value=&quot;__name__&quot;>
+                                        <button type=&quot;button&quot; class=&quot;btn btn-theme edit&quot; title=&quot;Editer&quot; style=&quot;display: none;&quot;>Editer</button> <button type=&quot;button&quot; id=&quot;softivendor_crmbundle_business_userBusiness___name___enregistrer&quot; name=&quot;softivendor_crmbundle_business[userBusiness][__name__][enregistrer]&quot; class=&quot;btn btn-theme hideme&quot; label=&quot;Editer&quot; style=&quot;&quot;>Enregistrer</button>
+                                      
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                     
+               
+
+            </li>
+</ul>">
+
+                        {% for user in form.userBusiness %}
+                        <li>
+                            <input type="hidden" name="userId" data-user="{{  user.vars['value'].id }}" value="{{  user.vars['value'].id }}">
+                            <div id="list-id-{{  user.vars['value'].id}}" class="form-panel pt-3 liste-collaborateur">
+                                <span class="dropdown-toggle btn-drop-2"><i class="fa fa-plus"></i></span>
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <div class="fileupload-new thumbnail">
+
+                                                {% if user.vars['value'].avatar != null %}
+                                                <img src="{{ asset('img/avatar/') }}{{  user.vars['value'].avatar }}" style="width:100px;height:100px" /> {% else %}
+                                                <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+
+                                            </div>
+                                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                            <div>
+                                                <span class="btn btn-theme02 btn-file">
+                                <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                                <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span> {{ form_widget(user.fileAvatar) }}
+                                                </span>
+                                                <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+
+
+                                            </div>
+                                            <div class="error">
+                                                {{ form_errors(user.fileAvatar) }}
+                                                <span class="error-fileAvatar-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10 form-horizontal style-form">
+
+                                        <div class="form-group mt-3">
+
+                                            <label class="col-sm-2 col-sm-2 control-label">Entreprise</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" disabled=disabled>
+                                <option>{{ business.societe }}</option>
+                              </select>
+
+                                            </div>
+
+                                            <label class="col-sm-2 col-sm-2 control-label">Type</label>
+                                            <div class="col-sm-4">
+
+                                                {{ form_widget(user.type) }}
+
+                                                <div class="error">
+                                                    {{ form_errors(user.type) }}
+                                                    <span class="error-nom error"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+
+                                            <label class="col-sm-2 col-sm-2 control-label">Nom</label>
+                                            <div class="col-sm-4">
+                                                {{ form_widget(user.nom) }}
+                                                <div class="error">
+                                                    {{ form_errors(user.nom) }}
+                                                    <span class="error-nom-{{ loop.index - 1 }} error"></span>
+                                                </div>
+                                            </div>
+
+                                            <label class="col-sm-2 col-sm-2 control-label">Prénom</label>
+                                            <div class="col-sm-4">
+                                                {{ form_widget(user.prenom) }}
+                                                <div class="error">
+                                                    {{ form_errors(user.prenom) }}
+                                                    <span class="error-prenom-{{ loop.index - 1 }} error"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="fade-out">
+                                            <div class="form-group">
+
+                                                <label class="col-sm-2 col-sm-2 control-label">Civilité</label>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(user.civilite) }}
+                                                    <div class="error">
+                                                        {{ form_errors(user.civilite) }}
+                                                        <span class="error-civilite-{{ loop.index - 1 }} error"></span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-sm-2 col-sm-2 control-label">Tél</label>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(user.tel) }}
+                                                    <div class="error">
+                                                        {{ form_errors(user.tel) }}
+                                                        <span class="error-tel-{{ loop.index - 1 }} error"></span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-2 control-label">Email</label>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(user.email) }}
+                                                    <div class="error">
+                                                        {{ form_errors(user.email) }}
+                                                        <span class="error-email-{{ loop.index - 1 }} error"></span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-sm-2 col-sm-2 control-label">Fonction</label>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(user.fonction) }}
+                                                    <div class="error">
+                                                        {{ form_errors(user.fonction) }}
+                                                        <span class="error-fonction-{{ loop.index - 1 }} error"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-2 control-label">Date d'abonnement</label>
+                                                <div class="col-sm-4">
+                                                    <div data-date-minviewmode="months" data-date-viewmode="years" data-date-format="dd/mm/yyyy" data-date="" class="input-append date dpMonths">
+                                                        {{ form_widget(user.dateInscription, {'attr': { 'class': 'form-control form-control-inline input-medium default-date-picker', 'size': '16'}}) }}
+
+                                                        <div class="error">
+                                                            {{ form_errors(user.dateInscription) }}
+                                                            <span class="error-dateInscription-{{ loop.index - 1 }} error"></span>
+                                                        </div>
+                                                        <span class="input-group-btn add-on">
+                                  <button class="btn btn-theme" type="button"><i class="fa fa-calendar"></i></button>
+                                  </span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-sm-2 col-sm-2 control-label">Ville</label>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(user.ville) }}
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-sm-2 control-label">Mot de passe</label>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(user.pass) }}
+                                                    <span style="display:none;">{{ form_widget(user.passOld,{'attr': { 'value': user.vars['value'].pass}}) }}</span>
+                                                    <input type="hidden" name="old_pass{{ loop.index - 1 }}" value="{{user.vars['value'].pass  }}">
+                                                    <div class="error">
+                                                        {{ form_errors(user.pass) }}
+                                                        <span class="error-pass-{{ loop.index - 1 }} error"></span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-sm-2 col-sm-2 control-label">Confirmation mot de passe</label>
+                                                <div class="col-sm-4">
+                                                    <input type="password" name="confirm_pass" id="confirm_pass-{{ loop.index - 1 }}" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-6">
+                                                    <div class="bouton_crud">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                    <span class="switch">
+                                                 {{ form_widget(user.actif)}}
+                                                <span class="slider round"></span>
+                                            </span>&nbsp;Status (actif ou pas)
+                                  </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <div class="bouton_crud">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                    <span class="switch">
+                                                 {{ form_widget(user.blocage)}}
+                                                <span class="slider round"></span>
+                                            </span>&nbsp;Blocage (bloquer ou pas)
+                                  </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <article>
+                                            <div class="text-right" data-id="{{ loop.index - 1 }}">
+                                                <input type="hidden" value="{{ loop.index - 1 }}">
+                                                <button type="button" class="btn btn-theme  editdynamique edit" title="Editer">Editer</button> {{ form_widget(user.enregistrer) }}
+                                                <button type="button" data-id="{{user.vars['value'].id}}" class="btn btn-theme" data-toggle="modal" data-target="#myModalSuppression{{loop.index - 1}}" title="Supprimer">Supprimer</button>
+                                            </div>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# </div> #} {# modal #}
+
+                <div class="modal fade" id="myModalSuppression{{loop.index - 1}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                            </div>
+                            <div class="modal-body">
+                                Voulez-vous vraiment supprimer cet utilisateur ?
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{{path("softivendor_crm_business_fiche_delete_inclub",{id :user.vars["value"].id,idEntreprise : business.id}) }}" class="btn btn-default delete">Oui</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-5  pt-3  right-column">
+                <div class="row">
+                    <div class="col-lg-6">
+
+                        <div class="bloc-right">
+                            <div class="list-group">
+                                <h4> Suivi "automatique" du contact</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bloc-right">
+                            <div class="list-group">
+                                <h4> Infos / Suivi</h4>
+                                <article>
+
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- /col-lg-3 -->
+</div>
+</div>
+
+{{ form_rest(form) }} {{ form_end(form) }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.formulaire-add input').prop('disabled', true);
+        $('.formulaire-add select').prop('disabled', true);
+        $('.hideme').css('display', 'none');
+        $('#partenaire').prop('disabled', false);
+        $('#userCommercial').prop('disabled', false);
+
+        $('.editdynamique').on('click', function() {
+            id = $(this).parent().parent().parent().parent().parent().attr('id');
+            nexid = $(this).next().attr('id');
+
+            $("#" + id + " :input").attr("disabled", false);
+            $('#' + nexid).show();
+            $(this).hide();
+            if (!$(this).parent().parent().parent().parent().parent().find('.fade-out').is(':visible')) {
+                $(this).parent().parent().parent().parent().parent().find('.btn-drop-2').trigger('click')
+            }
+
+        });
+
+        $('.modal-contrat-suppr-2').each(function() {
+            if (!$(this).is(':visible')) {
+                $(this).fadeIn(800).delay(2000).fadeOut(800)
+            }
+        })
+
+
+        $('#userCommercial').on('change', function(){
+            $('form[name="softivendor_crmbundle_business"]').submit();
+        })
+
+    });
+</script>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        // var partenaire =$("input[name='checkbox-partenaire']:checked").val();
+        $('#partenaire').click(function() {
+            var iscked = $(this).is(':checked');
+            var id = $('#id_business').val();
+            $.ajax({
+
+                method: "POST",
+                url: "{{ path('softivendor_crm_business_fiche_ajaxByBusness') }}",
+                data: {
+                    id: id,
+                    checked: iscked
+                }
+
+            }).done(function() {
+                console.log("ok");
+            })
+
+
+        });
+
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    var $collectionHolder;
+
+    // setup an "add a tag" link
+    var $addTagButton = $('<button type="button" class="add_tag_link">Ajouter un  Utilisateur</button>');
+    var $newLinkLi = $('<li></li>').append($addTagButton);
+
+    jQuery(document).ready(function() {
+        // Get the ul that holds the collection of tags
+        $collectionHolder = $('ul.tags');
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find('input').length);
+
+        $addTagButton.on('click', function(e) {
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+
+            $('.default-date-picker').datepicker();
+        });
+    });
+
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        var prototype = $collectionHolder.data('prototype');
+        var index = $collectionHolder.data('index');
+        var newForm = prototype;
+        newForm = newForm.replace(/__name__/g, index);
+        $collectionHolder.data('index', index + 1);
+        var $newFormLi = $('<li></li>').append(newForm);
+        $newLinkLi.before($newFormLi);
+    }
+</script>
+
+
+
+{# validation #}
+
+<script>
+    $(document).on('click', '.hideme', function() {
+
+        var id = $(this).parent().data('id');
+
+
+        //fiileAvatar
+        var validefileAvatar = 1;
+        var fileAvatar = $('#softivendor_crmbundle_business_userBusiness_' + id + '_fileAvatar ');
+        var errorfileAvatar = $('.error-fileAvatar-' + id);
+        var fileName = fileAvatar.val(),
+            idxDot = fileName.lastIndexOf(".") + 1,
+            extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || fileName == "") {
+            // fileAvatar.value = "";
+        } else {
+            validefileAvatar = 0;
+            errorfileAvatar.text('Veuillez ajouter un fichier de type .jpg ou .jpeg ou .png ');
+            // fileAvatar.value = "";  // Reset the input so no files are uploaded
+        }
+
+        //nom
+        var valideNom = 1;
+        var nom = $('#softivendor_crmbundle_business_userBusiness_' + id + '_nom ');
+        var errorNom = $('.error-nom-' + id);
+        if (nom.val().trim() == "") {
+            valideNom = 0;
+            errorNom.text('Veuillez completez le champ Nom s\'il vous plait');
+        } else {
+            errorNom.text('');
+        }
+
+        //validation prenom
+        var validePrenom = 1;
+        var prenom = $('#softivendor_crmbundle_business_userBusiness_' + id + '_prenom');
+        var errorPrenom = $('.error-prenom-' + id);
+        if (prenom.val().trim() == "") {
+            validePrenom = 0;
+            errorPrenom.text('Veuillez completez le champ Prénom s\'il vous plait');
+        } else {
+            errorPrenom.text('');
+        }
+
+        //   //           //validation email 
+        var valideEmail = 1
+        var email = $('#softivendor_crmbundle_business_userBusiness_' + id + '_email');
+        var errorMail = $('.error-email-' + id);
+        var regexMail = /^[\w\-\+]+(\.[\w\-]+)*@[\w\-]+(\.[\w\-]+)*\.[\w\-]{2,19}$/;
+        if (email.val().trim() == "") {
+            valideEmail = 0;
+            errorMail.text('Veuillez completez le champ email s\'il vous plait');
+        } else if (!(email.val()).match(regexMail)) {
+            valideEmail = 0;
+            errorMail.text('Veuillez entrez un email valide s\'il vous plait');
+        } else {
+            valideEmail = 1;
+            errorMail.text('');
+        }
+
+        //     //tel
+        var valideTel = 1;
+        var tel = $('#softivendor_crmbundle_business_userBusiness_' + id + '_tel');
+        var msgErrorTel = $('.error-tel-' + id);
+        var regexTel = /(^\+|\d|\s)+$/;
+
+        if (tel.val().trim() == "") {
+            valideTel = 0;
+            msgErrorTel.text('Veuillez completez le champ Portable s\'il vous plait ex: 06 50 40 88 45');
+        } else if (!(tel.val()).match(regexTel)) {
+            valideTel = 0;
+            msgErrorTel.text('Veuillez entrez un numeros de téléphone exact s\'il vous plait  ex:06 50 40 88 45');
+        } else {
+            valideTel = 1;
+            msgErrorTel.text('');
+        }
+
+
+        //             //           //validation mot de passe 
+
+        var validePass = 1;
+        var pass = $('#softivendor_crmbundle_business_userBusiness_' + id + '_pass');
+        var confirmPass = $('#confirm_pass-' + id);
+        var erroPass = $('.error-pass-' + id);
+        if (pass.val() != confirmPass.val()) {
+            validePass = 0;
+            erroPass.css('color', 'red');
+            erroPass.text('les mots de passe doivent correspondres');
+        } else {
+            erroPass.text('');
+        }
+
+        //
+
+        if (valideTel == 0 || validePrenom == 0 || valideNom == 0 || valideEmail == 0 || validePass == 0 || validefileAvatar == 0) {
+            console.log(valideTel);
+            console.log(validePrenom);
+            console.log(valideNom);
+            console.log(validePass);
+            console.log(valideEmail);
+            console.log(validefileAvatar);
+            console.log(id);
+
+            return false;
+        }
+        //enabled all input 
+
+        $('form[name="softivendor_crmbundle_business"] :input').each(function() {
+            var input = $(this);
+            input.prop('disabled', false);
+        });
+        $('form[name="softivendor_crmbundle_business"]').submit();
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        $('.btn-drop-2').click(function() {
+
+            let drop = $(this).parent().find('.fade-out');
+
+            if (!drop.is(':visible')) {
+                console.log('true')
+                $('.fade-out').slideUp(600)
+                $('.btn-drop-2').children().removeClass('fa-minus')
+                $('.btn-drop-2').children().addClass('fa-plus')
+                drop.slideDown();
+                $(this).children().removeClass('fa-plus')
+                $(this).children().addClass('fa-minus')
+
+            } else {
+                console.log('false')
+                drop.slideUp();
+                $(this).children().addClass('fa-plus')
+                $(this).children().removeClass('fa-minus')
+            }
+        })
+
+    })
+</script>
+
+{% endblock %}

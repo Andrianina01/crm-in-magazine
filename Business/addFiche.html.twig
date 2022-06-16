@@ -1,0 +1,574 @@
+{% extends ':crm:layout.html.twig' %}
+
+{% block header %}
+
+          <!--logo end-->
+      <div class="nav notify-row" id="top_menu">
+        <ul class="nav top-menu">
+{#             <li><button type="button"  class="btn btn-theme02" title="Enregistrer" ><a class="list-entreprise" href="{{ path('softivendor_crm_business_fiche_central') }}">Retourner vers la fiche centrale </a></button>&nbsp &nbsp &nbsp &nbsp &nbsp</li> #}
+            <li><a class="list-entreprise" href="{{ path('softivendor_crm_business_fiche_central') }}">
+                  <i class="fa fa-text-o"></i>
+                  Retourner vers la fiche centrale
+                </a>
+            </li>
+        </ul>
+      </div> 
+
+
+ {% endblock %}
+
+ {% block body %}
+
+ 	<div class="container-fluid">
+ 	    <div class="row formulaire-add">
+ 	        <h3 class="col-md-6"><i class="fa fa-angle-right"></i> Ajouter un nouveau entreprise</h3>
+ 	        <div class="col-lg-8 main-chart">
+ 	      {{ form_start(form,{'attr': {novalidate:'novalidate',id:'softivendor_crmbundle_business', class:"form-horizontal style-form"}}) }}
+ 	            <div class="row">
+ 	              <div class="col-md-4 pl-5 pt-3">
+ 	                  <div class="fileupload fileupload-new" data-provides="fileupload">
+ 	                      <div class="fileupload-new thumbnail">
+
+ 	                        {% if business.logo %}
+ 	                        <img src=" {{app.request.basepath}}/img/logo/{{business.logo}}" >
+ 	                        
+ 	                        {% else %}
+ 	                            <img src="{{asset('/web/crm/img/nologo.png')}}" alt="">
+ 	                        {% endif %}
+ 	                          
+ 	                          <div class="error">
+ 	                              {{ form_errors(form.fileLogo) }}
+ 	                              <span class="error-logo"></span>    
+ 	                          </div>
+ 	                        </div>
+ 	                        <div class="delete_img">
+ 	                        {{ form_label(form.supprimerLogo)}}
+ 	                        
+ 	                        <span class="checkbox_case">
+ 	                            {{ form_widget(form.supprimerLogo)}}
+ 	                            <span class="check"></span>
+ 	                        </span>
+ 	                        </div>
+ 	                        
+ 	                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+ 	                        <div class="float-left">
+
+ 	                          <span class="btn btn-theme02 btn-file">
+
+ 	                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+ 	                          <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+
+ 	                          {{ form_widget(form.fileLogo)}}
+ 	                          
+ 	                          
+ 	                          </span>
+ 	                          
+ 	                        </div>
+ 	                  </div>
+ 	              </div>
+ 	              
+ 	              <div class="col-md-8 pt-3">
+ 	                <div><h2 class="title">{{ form_widget(form.societe,{attr:{class:"showback"}})}}</h2></div>
+
+ 	              </div>
+ 	            </div>
+
+ 	            <div class="row">
+ 	              <div class="col-lg-12 pt-3">
+ 	                <h3><i class="fa fa-angle-right"></i> Coordonnées & infos</h3>
+ 	                <div class="form-panel pt-3">
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Activités</label>
+ 	                      <div class="col-sm-10">
+
+ 	                        <select name="activity[]" id="activity" multiple="" class="form-control Selectactif" >
+ 	                        {% for activity in allActivity %}
+ 	                            
+ 	                            {% if activitySelected(business.id,activity.id) %}
+ 	                                <option value="{{ activity.id }}" selected>
+ 	                                    {{ activity.name }}
+ 	                                </option>
+ 	                                {% else %}
+ 	                                <option  value="{{ activity.id }}">{{ activity.name }}</option>
+ 	                            {% endif %}
+ 	                            {% for otherUnderActivity in otherUnderActivity(activity.id)  %}
+ 	                                {% if activitySelected(business.id,otherUnderActivity.id)  %}
+ 	                                    <option value="{{ otherUnderActivity.id }}" selected>------{{ otherUnderActivity.name }}</option>
+ 	                                    {% else %}
+ 	                                    <option value="{{ otherUnderActivity.id }}">------{{ otherUnderActivity.name }}</option>
+ 	                                {% endif %}
+ 	                            {% endfor %}
+ 	                        {% endfor %}    
+ 	                      </select>
+
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Enseigne</label>
+ 	                      <div class="col-sm-10">
+ 	                        {{ form_widget(form.enseigne,{attr:{class:"form-control"}})}}
+ 	                        <div class="error">
+ 	                              {{ form_errors(form.enseigne) }}
+ 	                              <span class="error-enseigne error"></span>    
+ 	                        </div>
+ 	                      </div>
+
+ 	                    </div>
+
+ 	                    <div class="form-group">
+
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Numeros siret</label>
+ 	                      <div class="col-sm-10">
+ 	                        {{ form_widget(form.numSiret,{attr:{class:"form-control"}})}}
+ 	                          <div class="error">
+ 	                              {{ form_errors(form.numSiret) }}
+ 	                              <span class="error-siret"></span>    
+ 	                          </div>
+ 	                      </div>
+
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Adresse</label>
+ 	                      <div class="col-sm-10">
+ 	                        {{ form_widget(form.adresse,{attr:{class:"form-control"}})}}
+ 	                        <div class="error">
+ 	                              {{ form_errors(form.adresse) }}
+ 	                              <span class="error-adresse"></span>    
+ 	                          </div>
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Code postale</label>
+
+ 	                      <div class="col-sm-10">
+ 	                      <div class="row">
+ 	                        <div class="col-sm-3">
+
+ 	                            {{ form_widget(form.codePostal,{attr:{class:"form-control"}})}}
+
+ 	                              <div class="error">
+ 	                              {{ form_errors(form.codePostal) }}
+ 	                              <span class="error-codePostal"></span>    
+ 	                              </div>
+ 	                        </div>
+ 	                        <div class="col-sm-1 text-center">
+ 	                        <label class="control-label">Ville</label>
+ 	                        </div>
+ 	                        <div class="col-sm-8">
+ 	                        {{ form_widget(form.ville,{attr:{class:"form-control"}})}}
+ 	                              <div class="error">
+ 	                                {{ form_errors(form.ville) }}
+ 	                                <span class="error-ville"></span>    
+ 	                              </div>
+ 	                        </div>
+ 	                      </div>
+ 	                      </div>
+
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Pays</label>
+ 	                      <div class="col-sm-4">
+ 	                        <select name="country" class="form-control">
+ 	                          {% for country in country %}
+ 	                          <option value="{{ country.nomFrFr }}">{{ country.nomFrFr }}</option>
+ 	                          {% if country.nomFrFr == "France" %}
+ 	                              <option value="{{ country.nomFrFr }}" selected>{{ country.nomFrFr }}</option>
+ 	                          {% endif %}
+ 	                          {% endfor %}
+ 	                        </select>
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Code APE</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.codeApe)}}
+ 	                        <div class="error">
+ 	                            {{ form_errors(form.adresse) }}
+ 	                            <span class="error-adresse"></span>    
+ 	                        </div>
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Tél</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.tel)}}
+ 	                            <div class="error">
+ 	                                {{ form_errors(form.tel) }}
+ 	                                <span class="error-telephone "></span>    
+ 	                            </div>
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Mail</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.email)}}
+ 	                          <div class="error">
+ 	                            {{ form_errors(form.email) }}
+ 	                            <span class="error-email"></span>    
+ 	                          </div>
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Fax</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.fax)}}
+ 	                          <div class="error">
+ 	                            {{ form_errors(form.fax) }}
+ 	                            <span class="error-tel "></span>    
+ 	                        </div>
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">site</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.siteWeb)}}
+ 	                        <div class="error">
+ 	                            {{ form_errors(form.siteWeb) }}
+ 	                            <span class="error-siteWeb"></span>    
+ 	                        </div>
+ 	                      </div>
+ 	                    </div>
+
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label" >Latitude</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.latitude)}}
+ 	                          <div class="error">
+ 	                            {{ form_errors(form.latitude) }}
+ 	                            <span class="error-latitude"></span>    
+ 	                        </div>
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Longitude</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.longitude)}}
+ 	                          <div class="error">
+ 	                            {{ form_errors(form.longitude) }}
+ 	                            <span class="error-longitude"></span>    
+ 	                        </div>
+ 	                      </div>
+ 	                    </div>
+
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Vidéo</label>
+
+ 	                      <div class="col-sm-2 edit_video">
+
+ 	                        <div class="fileupload fileupload-new" data-provides="fileupload">
+ 	                      <span class="btn btn-theme02 btn-file">
+
+ 	                        <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select file</span>
+ 	                      <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+ 	                    
+ 	                    {{ form_widget(form.videos)}}
+ 	                          
+ 	                      </span>
+ 	                      <span class="fileupload-preview" style="margin-left:5px;"></span>
+ 	                      
+ 	                    </div>
+ 	                      </div>
+ 	                      <div class="col-lg-8 video">
+ 	                      
+ 	                          
+ 	                          {%  if business.videos is defined and business.videos is not null %}
+ 	                              {{ html_videos("/img/videos",business.videos) }}    
+ 	                          {% endif %}
+
+ 	                          <div class="error">
+ 	                                  {{ form_errors(form.videos) }}
+ 	                                <span class="error-logo"></span>    
+ 	                              </div>
+
+ 	                      <div class="delete">{{ form_label(form.supprimerVideo)}}     
+
+ 	                      <span class="checkbox_case">
+ 	                                         {{ form_widget(form.supprimerVideo)}}
+ 	                                         <span class="check"></span>
+ 	                                        <span></div>
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Image Bandeau</label>
+ 	                      <div class="col-sm-10">
+ 	                      <div class="fileupload fileupload-new" data-provides="fileupload">
+ 	                      <div class="fileupload-new thumbnail" style="width: 100%; height: 150px;">
+ 	                          {% if business.bandeau %}
+ 	                            <img src="{{app.request.basepath}}/img/bandeau/{{business.bandeau}}">
+ 	                          {% else %}
+ 	                          <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+ 	                        {% endif %}
+ 	                        
+ 	                      </div>
+ 	                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+ 	                      <div>{{ form_label(form.supprimerBandeau)}}
+ 	                      
+ 	                      <span class="checkbox_case">
+ 	                                         {{ form_widget(form.supprimerBandeau)}}
+ 	                                         <span class="check"></span>
+ 	                                        <span></div>
+ 	                      <div>
+
+ 	                        <span class="btn btn-theme02 btn-file">
+
+ 	                          <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+ 	                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+ 	                        
+ 	                        {{ form_widget(form.fileBandeau)}}
+ 	                        
+ 	                        </span>
+ 	                        
+ 	                      </div>
+ 	                    </div>
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Présentation</label>
+ 	                      <div class="col-sm-10 presentation " >
+ 	                        {{ form_widget(form.presentation)}}
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group link_social">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Url facebook</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.urlFacebook)}} 
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Url twitter</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.urlTwitter)}}
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Url instagram</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.urlInstagram)}}  
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Url youtube</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.urlYoutube)}}
+ 	                      </div>
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Url linkedin</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.urlLinkedin)}}  
+ 	                      </div>
+ 	                    </div>
+
+ 	                    <div class="form-group">
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Meta title</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.metaTitle)}}
+ 	                      </div> 
+ 	                      <label class="col-sm-2 col-sm-2 control-label">Meta description</label>
+ 	                      <div class="col-sm-4">
+ 	                        {{ form_widget(form.metaDescription)}}
+ 	                      </div>
+	                    </div>
+
+	                    <div class="form-group">
+	                      <label class="col-sm-2 col-sm-2 control-label">Status</label>
+	                      <div class="col-sm-4">
+	                        <span class="checkbox_case">
+	                          {{ form_widget(form.actif)}}
+	                           <span class="check"></span>
+	                        <span>
+	                      </div>
+	                    </div>  
+
+ 	              
+ 	                {{ form_end(form) }}   
+ 	                </div>
+ 	              </div>
+ 	            </div>
+ 	        </div>
+
+ 	        <div class="col-lg-4 ds pt-3">
+ 	            <article>
+ 	              <div class="bouton_crud">
+ 	                <button type="button" id="add" class="btn btn-theme" title="Enregistrer" >Enregistrer</button> 
+ 	             </div>
+ 	            </article>
+ 	        </div>
+
+ 	      </div> 
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $('#add').on('click', function(){
+    $('form[name="softivendor_crmbundle_business"]').submit();
+  })
+
+})
+</script> 	    
+
+
+<script type="text/javascript">
+
+
+
+ //fonction pour l'api google maps
+     function initMap() {
+        var input = (document.getElementById('softivendor_crmbundle_business_adresse'));
+        var ville = (document.getElementById('softivendor_crmbundle_business_ville'));
+
+        var types = document.getElementById('type-selector');
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        var autocompleteville = new google.maps.places.Autocomplete(ville);
+        autocomplete.addListener('place_changed', function() {
+          var placess = autocomplete.getPlace();
+          var latss = placess.geometry.location.lat();
+          var lngss = placess.geometry.location.lng();
+          var inputlat = $('#softivendor_crmbundle_business_latitude');
+          var inputlong = $('#softivendor_crmbundle_business_longitude');
+
+          inputlat.val(latss);
+          inputlong.val(lngss);
+        });
+        //autocomplete ville 
+        autocompleteville.addListener('place_changed', function() {
+          var addr = document.getElementById('softivendor_crmbundle_business_adresse');
+          var inputlat = document.getElementById('softivendor_crmbundle_business_latitude');
+          var inputlong = document.getElementById('softivendor_crmbundle_business_longitude')
+          if ( 
+                inputlat.value == ""  ||
+                inputlong.value == "" ||
+                addr.value == ""
+            ){
+                var placess = autocompleteville.getPlace();
+                var latss = placess.geometry.location.lat();
+                var lngss = placess.geometry.location.lng();
+                $('#softivendor_crmbundle_business_latitude').val(latss);
+                $('#softivendor_crmbundle_business_longitude').val(lngss);
+          }  
+          
+        });
+
+      }
+
+     //validation js
+        $('document').ready(function() {
+             $('form[name="softivendor_crmbundle_business"]').on('submit', function(e) {
+                //validation adresse
+                var valideAddr = 1;
+                var addr = $('#softivendor_crmbundle_business_adresse');
+                var msgErrorAddr =$('.error-adresse');
+
+                if ( addr.val().trim() == "" ){
+                    valideAddr = 1;
+                    msgErrorAddr.text('');
+                }else{
+                    valideAddr = 1;
+                    msgErrorAddr.text('');
+                }    
+                //validation enseigne
+                var valideEnseigne = 1;
+                var enseigne = $('#softivendor_crmbundle_business_enseigne');
+                var msgErrorEnseigne = $('.error-enseigne');
+                if ( enseigne.val().trim() == "" ){
+                    valideEnseigne = 1;
+                    msgErrorEnseigne.text('');
+                }else{
+                    valideEnseigne = 1;
+                    msgErrorEnseigne.text('');
+                }
+                //validation num siret 
+                var valideNumS = 1;
+                var numSiret = $('#softivendor_crmbundle_business_numSiret');
+                var msgErrorSiret = $('.error-siret');
+                var regeSiret = /[ 0-9]{9,14}/;
+                if (numSiret.val().trim() == ""){
+                    valideNumS = 1;
+                    msgErrorSiret.text('');
+                }
+                else if(!(numSiret.val()).match(regeSiret)){
+                    valideNumS = 0;
+                    msgErrorSiret.text('Veuillez entrez un numerso de Siret exact s\'il vous plait ex:14254114214547');
+                }else{
+                    valideNumS = 1;
+                    msgErrorSiret.text('');
+                }
+                //validation Ville
+                var valideVille = 1;
+                var ville = $('#softivendor_crmbundle_business_ville');
+                var msgErrorVille =$('.error-ville');
+
+                if ( ville.val().trim() == "" ){
+                    valideVille = 1;
+                    // msgErrorVille.text('Veuillez completez le champ Ville s\'il vous plait');
+                }else{
+                    valideVille = 1;
+                    msgErrorVille.text('');
+                }
+                //validattion telephone portable
+
+                //fin #}
+                //validation protable/*
+                var valideTel = 1;
+                var tel = $('#softivendor_crmbundle_business_tel');
+                var msgErrorTel = $('.error-telephone');
+                var regexTel = /(^\+|\d|\s)+$/;
+                console.log('tel');
+                console.log(tel.val());
+                if ( tel.val().trim() == "" ){
+                    valideTel = 1;
+                    msgErrorTel.text('');
+                    console.log('valide tel');
+                    // msgErrorTel.text('Veuillez completez le champ Portable s\'il vous plait ');
+                } else if(!(tel.val().trim()).match(regexTel)){
+                    valideTel = 0;
+                    msgErrorTel.text('Veuillez entrez un numeros de téléphone exact s\'il vous plait  ex:06 50 40 88 45');
+                }else{
+                    valideTel = 1;
+                    msgErrorTel.text('');
+                }
+                //validation email
+                var valideEmail = 1;
+                var email = $('#softivendor_crmbundle_business_email');
+                var msgErrorEmail = $('.error-email');
+                var regexMail = /^[\w\-\+]+(\.[\w\-]+)*@[\w\-]+(\.[\w\-]+)*\.[\w\-]{2,4}$/;
+                if ( email.val().trim() == "" ){
+                    valideEmail = 1;
+                    msgErrorEmail.text('');
+                }
+                else if(!(email.val()).match(regexMail)){
+                    valideEmail = 0;
+                    msgErrorEmail.text('Veuillez entrez un Email valide s\'il vous plait');
+                }else{
+                    valideEmail = 1;
+                    msgErrorEmail.text('');
+                }
+
+                if (valideEnseigne == 0 || valideNumS == 0 || valideVille == 0 || valideTel == 0 || valideEmail == 0 || valideAddr == 0 
+
+                    ){
+                    $('.global-error').css('display','block');
+                    
+                    return false;
+                }else{
+                    $('.global-error').css('display','none');
+                }
+             });
+             jQuery('#activity option').mousedown(function(e) {
+                e.preventDefault();
+                jQuery(this).toggleClass('selected');
+                jQuery(this).prop('selected', !jQuery(this).prop('selected'));
+                return false;
+            });
+
+            $('.modal-contrat-suppr-2').each(function(){
+       if(!$(this).is(':visible')){
+           $(this).fadeIn(800).delay(2000).fadeOut(800)
+       }
+   })
+        });
+</script>
+ {{ tinymce_init() }}    	
+
+ {% endblock %}

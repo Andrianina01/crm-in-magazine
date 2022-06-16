@@ -1,0 +1,658 @@
+{% extends ':crm:layout.html.twig' %} {% block header %}
+<style type="text/css">
+
+</style>
+
+    <div class="nav notify-row" id="top_menu">
+        <ul class="nav top-menu">
+            <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+            <li class="dropdown">
+                <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_ingames') }}">
+                    <i class="fa fa-file-text-o"></i> FICHE
+                </a>
+            </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_business_list',{type:'in_games'}) }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+        </ul>
+    </div>
+
+    <div class="top-menu fiche_btn">
+        <ul class="nav pull-left top-menu">
+            {% if prev != false %}
+            <li><a href="{{path('softivendor_crm_business_fiche_ingames')}}?prev={{prev}}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+            {% endif %} {% if next != false %}
+            <li><a href="{{path('softivendor_crm_business_fiche_ingames')}}?next={{next}}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+
+
+{% endblock %} 
+
+{% block body %}
+
+    <input type="hidden" id="id_business" value="{{business.id}}">
+    <input type="hidden" id="currentDate" value="{{datet}}">
+    
+
+    <div class="container-fluid">
+        <div class="row formulaire-add'">
+            <div class="col-lg-12 main-chart">
+                <div class="row formulaire-add">
+                    <div class="col-sm-3 pl-5 pt-3">
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div class="fileupload-new thumbnail">
+
+                                {% if business.logo %}
+                                <img src=" {{app.request.basepath}}/img/logo/{{business.logo}}"> {% else %}
+                                <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-9 pt-3">
+                       <div class="row">
+                       <div class="col-lg-8">
+                        <div class="showback ">
+                            <h2>{{ business.societe }}</h2>
+                        </div>
+                        {{ activeHeaderContrat(business.id) }}
+                       </div>
+                       <div class="col-lg-4">
+                        <article>
+                            <div class="bouton_crud">
+                                <div class="checkbox">
+                                    <label>
+                                        {# {{ form_widget(form.partenaire) }} #}
+                                        {% if business.Partenaire != 0 %}
+                                        <span class="checkbox_case">
+                                            <input type="checkbox" id="partenaire" name="partenaire" checked>
+                                            <span class="check"></span>
+                                        </span>
+                                        {% else %}
+                                        <span class="checkbox_case">
+                                            <input type="checkbox" id="partenaire" name="partenaire">
+                                            <span class="check"></span>
+                                        </span>
+                                        {% endif %}
+                                        Partenaire
+                                        </label>
+                                </div>
+                            </div>
+                            </article>
+                       </div>
+                       </div>
+                       <div class="row right-column-top none-md">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-3">
+
+                            <div class="pt-2 lg-3 bloc-right" style="">
+                                <div class="list-group historique">
+                                   <h4><i class="fa fa-angle-right"></i> date signature</h4>
+                                  {% if dateSignature is empty %} Aucun contrat signé {% else %} {% for date in dateSignature %} {{date.dateSignature|date("d/m/Y")}} {% endfor %} {% endif %}
+
+                                <h4><i class="fa fa-angle-right"></i> date Fin d'adhésion</h4>
+                                  {% if dateSignature is empty %} Aucun contrat signé {% else %} {% for date in dateFinAdhesion %} {{date.dateFinAdhesion|date("d/m/Y")}} {% endfor %} {% endif %}
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="bloc-right">
+                                <div class="list-group">
+
+                                    <article>
+                                        <h4> Référent commercial</h4>
+                                      <form name="form_commercial" action="{{path('softivendor_crm_business_fiche_ingames',{next : business.id })}}" method="post"> 
+                                         <select name="userCommercial" class="form-control" id="userCommercial">
+                                           {% set centralId = "" %}
+                                           {% set inGameId = "" %}
+                                           {% for user in listCommercial %}
+                                               {% set centralId = user.central  %}
+                                               {% set inGameId = user.ingames  %}
+                                           {% endfor %}
+                                       
+                                               <option value=""></option>
+                                           {% for Commercial in userCommercial %}
+                                               {% if Commercial.id == inGameId  %}
+                                               <option value="{{Commercial.id}}" {% if Commercial.id == inGameId  %}selected{% endif %}>{{Commercial.nom}}</option>
+                                               {% else %}
+                                               <option value="{{Commercial.id}}" {% if  Commercial.id == inGameId and Commercial.id == centralId %}selected{% endif %}>{{Commercial.nom}}</option>
+                                               {% endif %}
+                                           {% endfor %}
+                                           
+                                       </select> 
+                                      </form>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <h3><i class="fa fa-angle-right"></i> Filtre :</h3>
+                <div class="filtre row">
+                 <div class="col-sm-3">
+                   <label class="control-label">Année</label>
+                  <div class="filtre_date">
+                    <form action="{{path("softivendor_crm_business_fiche_ingames",{next : business.id, selectDate : datet }) }}" method="get" name="form_date">
+
+                    <input type="hidden" name="next" value="{{business.id}}">
+
+                    <select class="form-control date" name="selectDate" {# onChange="this.form.submit() "#}>
+
+                        <option  value="{{ dateBegin  }}" {% if datet == dateBegin%}selected{% endif %}>{{ dateBegin }}</option>
+                        <option  value="{{ dateEnd|date("Y") }}" {% if datet == dateEnd|date("Y")%}selected{% endif %}>{{ dateEnd|date("Y") }}</option>
+                          
+                    </select>
+
+                    </form>
+
+                  </div>
+                 </div>
+
+                 
+                </div>
+
+                 <div class="row">
+                  <div class="col-lg-3">
+
+                   <h3><i class="fa fa-angle-right"></i> Sponsoring</h3>
+
+
+                      <div class="partenariat"> 
+                        <select class="form-control sponsoring"  >
+
+                        {% for key,spons in dataSpons %}
+                           {% if sponsoring is not empty %}
+                            {% if key == sponsoring[0].typeSponsoring  %}
+                                <option value="{{key}}" selected>{{ spons }}</option>
+                              {% else %}
+                                <option value="{{key}}">{{ spons }}</option>
+                            {% endif %}
+                            {% else %}
+                              <option value="{{key}}" {% if key ==0 %}selected{% endif %}>{{ spons }}</option>
+                          {% endif %}
+                        {% endfor %} 
+
+                        </select>
+                      </div>
+
+                     
+                   </div>
+                </div>
+
+
+
+              
+        {{ form_start(form,{'attr':{novalidate:'novalidate',class:'formulaire-add'}}) }}
+
+                <div class="row">
+                  <div class="col-lg-7 pt-1">
+
+                   <h3><i class="fa fa-angle-right"></i> Liste des membres in Games &nbsp &nbsp &nbsp
+                        <label class="control-label">Nombre d'inscrit &nbsp  : <span>{{UserByDate.count}}</span></label>
+                   </h3>
+                   
+                 
+                  
+                    <ul class="tags" data-prototype=" <li>
+
+                      <input type=&quot;hidden&quot; name=&quot;daterecent&quot; value=&quot;{{ datet }}&quot;>
+                      <div class=&quot;form-panel pt-3 liste-collaborateur form-horizontal&quot;>
+                        <div class=&quot;row&quot;>
+                          <div class=&quot;col-md-2&quot;>
+                            <div class=&quot;fileupload fileupload-new&quot; data-provides=&quot;fileupload&quot;>
+                                <div class=&quot;fileupload-new thumbnail&quot;>
+                                    <img src=&quot;/web/crm/img/nologo.png&quot; alt=&quot;&quot;> 
+                                </div>
+
+                                  <div class=&quot;fileupload-preview fileupload-exists thumbnail&quot; style=&quot;max-width: 2__name____name__px; max-height: 15__name__px; line-height: 2__name__px;&quot;></div>
+                                  <div>
+                                    <span class=&quot;btn btn-theme02 btn-file&quot;>
+                                      <span class=&quot;fileupload-new&quot;><i class=&quot;fa fa-paperclip&quot;></i> Select image</span>
+                                    <span class=&quot;fileupload-exists&quot;><i class=&quot;fa fa-undo&quot;></i> Change</span>
+                                    <input type=&quot;file&quot; id=&quot;softivendor_crmbundle_gamebusiness_userGames___name___fileAvatar&quot; name=&quot;softivendor_crmbundle_gamebusiness[userGames][__name__][fileAvatar]&quot; required=&quot;required&quot; class=&quot;&quot;>
+                                    </span>
+                                    <a href=&quot;#&quot; title=&quot;Remove&quot; class=&quot;btn btn-theme04 fileupload-exists&quot; data-dismiss=&quot;fileupload&quot;><i class=&quot;fa fa-trash-o&quot;></i> Supprimer</a>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=&quot;col-md-10&quot;>
+                            
+                              <div class=&quot;form-group mt-3&quot;>
+                                <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Nom</label>
+                                <div class=&quot;col-sm-4&quot;>
+                                    <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_gamebusiness_userGames___name___nom&quot; name=&quot;softivendor_crmbundle_gamebusiness[userGames][__name__][nom]&quot; required=&quot;required&quot; class=&quot;form-control&quot; />
+                                    <div class=&quot;error&quot;>
+                                      
+                                        <span class=&quot;error-nom-__name__ error&quot;></span>
+                                    </div>
+                                </div>
+
+                                  <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Prénom</label>
+                                <div class=&quot;col-sm-4&quot;>
+                                    <input type=&quot;text&quot; id=&quot;softivendor_crmbundle_gamebusiness_userGames___name___prenom&quot; name=&quot;softivendor_crmbundle_gamebusiness[userGames][__name__][prenom]&quot; required=&quot;required&quot; class=&quot;form-control&quot; />
+                                    <div class=&quot;error&quot;>
+                                      
+                                        <span class=&quot;error-nom-__name__ error&quot;></span>
+                                    </div>
+                                </div>
+
+                              </div>
+                              <div class=&quot;form-group mt-3&quot;>
+
+                              <label class=&quot;col-sm-2 col-sm-2 control-label&quot;>Civilité</label>
+                              <div class=&quot;col-sm-4&quot;>
+                                  <select id=&quot;softivendor_crmbundle_gamebusiness_userGames___name___civilite&quot; name=&quot;softivendor_crmbundle_gamebusiness[userGames][__name__][civilite]&quot; required=&quot;required&quot; class=&quot;form-control&quot;><option value=&quot;&quot; selected=&quot;selected&quot;>Selectionnez</option>
+                                                        <option value=&quot;Mr&quot;>Monsieur</option>
+                                                        <option value=&quot;Mme&quot;>Madame</option>
+                                                        <option value=&quot;Mlle&quot;>Mademoiselle</option></select>
+                                  <div class=&quot;error&quot;>
+                                
+                                      <span class=&quot;error-civilite-__name__error&quot;></span>
+                                  </div>
+                              </div>
+                              </div>
+
+                            
+                          </div>
+                        </div>
+                        <div class=&quot;row&quot;>
+                          <div class=&quot;col-lg-12&quot;>
+                            <article>
+                              <div class=&quot;text-right&quot;>
+                              {#  <button type=&quot;button&quot; class=&quot;btn btn-theme edit&quot; title=&quot;Editer&quot;>Editer</button> #}
+                                {# <button type=&quot;button&quot; id=&quot;softivendor_crmbundle_gamebusiness_userGames___name___enregistrer&quot; name=&quot;softivendor_crmbundle_gamebusiness[userGames][__name__][enregistrer]&quot; class=&quot;btn btn-theme hideme&quot; label=&quot;Editer&quot; style=&quot;&quot;>Enregistrer</button> #}
+
+                                <button type=&quot;button&quot; id=&quot;softivendor_crmbundle_gamebusiness_userGames___name___enregistrer&quot; name=&quot;softivendor_crmbundle_gamebusiness[userGames][___name___][enregistrer]&quot; class=&quot;btn btn-theme hideme&quot; label=&quot;Editer&quot; style=&quot;&quot;>Enregistrer</button>
+
+                              {#  <button type=&quot;button&quot; class=&quot;btn btn-theme&quot; data-toggle=&quot;modal&quot; title=&quot;&quot; data-target=&quot;#myModalSuppression&quot;>Supprimer</button> #}
+                            </div>
+                            </article>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                      ">
+                      
+                        {% for user in form.userGames %}
+
+
+                        
+                          <li class="user"  {% if user.vars["value"].dateInscription | date('Y') != datet %}style="display:none;"{% endif %}>
+                          <input type="hidden" name="userId" data-user = "{{  user.vars['value'].id }}" value="{{  user.vars['value'].id }}">
+                                <div id="list-id-{{  user.vars['value'].id}}" class="form-panel pt-3 liste-collaborateur list-id-{{  user.vars['value'].id }} form-horizontal">
+                                  <div class="row">
+                                    <div class="col-md-2">
+                                      <div class="fileupload fileupload-new" data-provides="fileupload">
+                                          <div class="fileupload-new thumbnail">
+                                              {% if user.vars['value'].avatar != null %}
+                                                <img src="{{ asset('img/avatar/') }}{{  user.vars['value'].avatar }}" style="width:100px;height:100px" /> {% else %}
+                                                <img src="{{asset('/web/crm/img/nologo.png')}}" alt=""> {% endif %}
+                                            </div>
+
+                                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                            <div>
+                                              <span class="btn btn-theme02 btn-file">
+                                                <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                              <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                              {{ form_widget(user.fileAvatar) }}
+                                              </span>
+                                              <a href="#" title="Remove" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                      
+                                        <div class="form-group mt-3">
+                                          <label class="col-sm-2 col-sm-2 control-label">Nom</label>
+                                          <div class="col-sm-4">
+                                              {{ form_widget(user.nom) }}
+                                              <div class="error">
+                                                  {{ form_errors(user.nom) }}
+                                                  <span class="error-nom-{{ loop.index - 1 }} error"></span>
+                                              </div>
+                                          </div>
+
+                                            <label class="col-sm-2 col-sm-2 control-label">Prénom</label>
+                                          <div class="col-sm-4">
+                                              {{ form_widget(user.prenom) }}
+                                              <div class="error">
+                                                  {{ form_errors(user.prenom) }}
+                                                  <span class="error-nom-{{ loop.index - 1 }} error"></span>
+                                              </div>
+                                          </div>
+
+                                        </div>
+                                        <div class="form-group mt-3">
+
+                                        <label class="col-sm-2 col-sm-2 control-label">Civilité</label>
+                                        <div class="col-sm-4">
+                                            {{ form_widget(user.civilite) }}
+                                            <div class="error">
+                                                {{ form_errors(user.civilite) }}
+                                                <span class="error-civilite-{{ loop.index - 1 }} error"></span>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                      
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-lg-12">
+                                    
+                                    {% if user.vars['value'].type != null  %}
+                                    <label class="col-sm-2 col-sm-2 control-label" >Remplaçant</label>
+                                    {% endif %}
+
+                                      <article>
+                                        <div class="text-right">
+                                          <button type="button" class="btn btn-theme edit editdynamique editwithId__{{user.vars['value'].id}}" title="Editer">Editer</button>
+                                          {{ form_widget(user.enregistrer, {attr:{'class': 'btn btn-theme hideme btn-save '}}) }}
+                                          <button type="button" class="btn btn-theme" data-toggle="modal" title="" data-target="#myModalSuppression{{user.vars["value"].id}}">Supprimer</button>
+                                      </div>
+                                      </article>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                                <div class="modal fade" id="myModalSuppression{{user.vars["value"].id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                Voulez-vous vraiment supprimer cet utilisateur ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{path("softivendor_crm_business_fiche_delete_usergames",{id :user.vars["value"].id,idEntreprise : business.id, selectDate : datet }) }}" class="btn btn-default delete">Oui</a>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                          </li>
+
+                        
+                        {% endfor %}
+
+                    </ul>
+                  </div>
+                  <div class="col-lg-5  pt-3  right-column">
+                <div class="row">
+                    <div class="col-lg-6">
+
+                        <div class="bloc-right">
+                            <div class="list-group">
+                                <h4><i class="fa fa-angle-right"></i> Suivi "automatique" du contact</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bloc-right">
+                            <div class="list-group">
+                                <h4><i class="fa fa-angle-right"></i> Infos / Suivi</h4>
+                                <article>
+
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+
+
+                {{ form_end(form) }}
+
+
+            </div>
+           
+
+
+                {% for key, messages in app.session.flashbag.all() %}
+
+
+                <div class="modal-contrat-suppr-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title" id="myModalLabel"> {% for message in messages %}  {{ message }} <br /> {% endfor %}</h4>
+                        </div>
+                        <div class="modal-body">
+                                <i class="fa fa-check-circle true"></i>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
+                {% endfor %}
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        // $('.user').each(function(){
+
+        //   var idUser = $(this).find('input').attr('data-user'); 
+
+        //   $('.list-id-'+idUser+' input').prop('disabled', true);
+        //   $('.list-id-'+idUser+' select').prop('disabled', true);
+        //   $('.hideme').css('display', 'none');
+        //   $('#partenaire').prop('disabled', false);
+          
+
+        //   // $('.editwithId__'+idUser).on('click', function() {
+
+        //   //     $('.list-id-' + idUser + ' input').prop('disabled', false);
+        //   //     $('.list-id-'+ idUser + ' select').prop('disabled', false);
+        //   //     $('.hideme').show();
+        //   //     $('.editwithId__'+idUser).hide();
+        //   // })
+          
+
+        // });
+
+        $('.formulaire-add input').prop('disabled', true);
+        $('.formulaire-add select').prop('disabled', true);
+        $('.hideme').css('display', 'none');
+        $('#partenaire').prop('disabled', false);
+
+      $('.editdynamique').on('click', function() {
+        id = $(this).parent().parent().parent().parent().parent().attr('id');
+        nexid = $(this).next().attr('id');
+       
+        $("#"+ id +" :input").attr("disabled", false);
+        $('#'+nexid).show();
+        $(this).hide();
+        
+
+      });
+
+
+
+        $(document).on('click','.hideme',function(){
+
+          $('form[name="softivendor_crmbundle_gamebusiness"] :input').each(function(){
+              var input = $(this);
+              input.prop('disabled', false);
+          });
+
+         $('form[name="softivendor_crmbundle_gamebusiness"]').submit();
+        })
+         $('.modal-contrat-suppr-2').each(function(){
+       if(!$(this).is(':visible')){
+           $(this).fadeIn(800).delay(2000).fadeOut(800)
+       }
+   })
+
+
+
+
+         $('#userCommercial').prop('disabled', false);
+
+         $('#userCommercial').on('change', function(){
+            $('form[name="form_commercial"]').submit();
+          })
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        // var partenaire =$("input[name='checkbox-partenaire']:checked").val();
+        $('#partenaire').click(function() {
+            var iscked = $(this).is(':checked');
+            var id = $('#id_business').val();
+            $.ajax({
+
+                method: "POST",
+                url: "{{ path('softivendor_crm_business_fiche_ajaxByBusness') }}",
+                data: {
+                    id: id,
+                    checked: iscked
+                }
+
+            }).done(function() {
+                console.log("ok");
+            })
+
+
+        });
+ 
+
+    });
+</script>
+
+<script type="application/javascript">
+ {#  
+ $(document).ready(function(){
+    $('.date').on('change', function(){
+      var date = $('.date').val();
+      var id = $('#id_business').val();
+      $.ajax({
+                method: "POST",
+                url: "{{ path('softivendor_crm_filtre_date_user') }}",
+                data: {date: date, id : id}
+
+            }).done(function() {
+                console.log(date)
+                $('.liste-collaborateur').each(function(){
+                  $('.user').remove();
+                });
+            })
+    })
+ })
+#}
+
+$(document).ready(function(){
+    $('.date').on('change', function(){
+      $('form[name="form_date"]').submit();
+    })
+
+
+    $('.sponsoring').on('change', function(){
+          
+        var value = $('.sponsoring').val();
+        var id = $('#id_business').val();
+        var date = $('.date').val();
+
+
+        $.ajax({
+                  method: "POST",
+                  url: "{{ path('softivendor_crm_add_sponsoring_user_games') }}",
+                  data: {date: date, id : id , value : value}
+
+              }).done(function() {
+                  console.log("ok");
+                  
+              })
+
+    })
+
+      // $(document).on('change','.date',function(){
+
+        var d = new Date();
+
+        var date = $('.date').val();
+        //var currenDate = $('#currentDate').val();
+        var currenDate = d.getFullYear();
+      
+        if(date < currenDate) {
+         setTimeOut(function(){
+            $('.tags li:last-child .add_tag_link').hide();
+         }, 1500)
+        }
+
+
+       // })
+
+ })
+</script> 
+
+
+
+<script type="text/javascript">
+
+var $collectionHolder;
+
+// setup an "add a tag" link
+var $addTagButton = $('<button type="button" class="add_tag_link">Ajouter un Utilisateur</button>');
+var $newLinkLi = $('<li></li>').append($addTagButton);
+
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of tags
+    $collectionHolder = $('ul.tags');
+
+    // add the "add a tag" anchor and li to the tags ul
+    $collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find('input').length);
+
+    $addTagButton.on('click', function(e) {
+        // add a new tag form (see next code block)
+        addTagForm($collectionHolder, $newLinkLi);
+
+          $('.default-date-picker').datepicker();
+    });
+});
+
+
+function addTagForm($collectionHolder, $newLinkLi) {
+    var prototype = $collectionHolder.data('prototype');
+    var index = $collectionHolder.data('index');
+    var newForm = prototype;
+    newForm = newForm.replace(/__name__/g, index);
+    $collectionHolder.data('index', index + 1);
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+}
+
+
+
+</script>
+
+{% endblock %} 

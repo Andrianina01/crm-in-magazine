@@ -1,0 +1,26 @@
+<div class="nav notify-row" id="top_menu">
+    <ul class="nav top-menu">
+        <li class="titre-affichage"><span class="text-center">Affichage :</span></li>
+
+        <li class="dropdown">
+            <a class="list-entreprise" title="FICHE" href="{{ path('softivendor_crm_business_fiche_inclub') }}">
+                <i class="fa fa-file-text-o"></i> FICHE
+            </a>
+        </li>
+        <li class="dropdown">
+            <a class="list-entreprise" href="{{ path('softivendor_crm_business_list',{type:'in_club'}) }}" title="LISTE">
+                <i class="fa fa-list-ul"></i> LISTE
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="top-menu fiche_btn">
+    <ul class="nav pull-left top-menu">
+        {% if prev != false %}
+        <li><a href="{{path('softivendor_crm_business_fiche_inclub')}}?prev={{prev}}" class="bouton btn-precedent" title="FICHE PRECEDENTE"><i class="fa fa-backward"></i>FICHE PRECEDENTE</a></li>
+        {% endif %} {% if next != false %}
+        <li><a href="{{path('softivendor_crm_business_fiche_inclub')}}?next={{next}}" class="bouton btn-suivant" title="FICHE SUIVANTE">FICHE SUIVANTE<i class="fa fa-forward"></i></a></li>
+        {% endif %}
+    </ul>
+</div>
